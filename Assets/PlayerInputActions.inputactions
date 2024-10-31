@@ -51,7 +51,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "ChangeRectangle",
+                    "name": "ChangeSquare",
                     "type": "Button",
                     "id": "34d6ac3f-c14d-4719-896d-0ca9ccb9c4f8",
                     "expectedControlType": "",
@@ -108,7 +108,7 @@
                 {
                     "name": "",
                     "id": "a8cf70c1-23d0-41af-a885-f19a9a7a545c",
-                    "path": "<Keyboard>/z",
+                    "path": "<Mouse>/leftButton",
                     "interactions": "",
                     "processors": "",
                     "groups": ";PC",
@@ -145,7 +145,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";PC",
-                    "action": "ChangeRectangle",
+                    "action": "ChangeSquare",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

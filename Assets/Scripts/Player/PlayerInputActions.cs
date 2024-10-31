@@ -73,7 +73,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""ChangeRectangle"",
+                    ""name"": ""ChangeSquare"",
                     ""type"": ""Button"",
                     ""id"": ""34d6ac3f-c14d-4719-896d-0ca9ccb9c4f8"",
                     ""expectedControlType"": """",
@@ -130,7 +130,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""a8cf70c1-23d0-41af-a885-f19a9a7a545c"",
-                    ""path"": ""<Keyboard>/z"",
+                    ""path"": ""<Mouse>/leftButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";PC"",
@@ -167,7 +167,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";PC"",
-                    ""action"": ""ChangeRectangle"",
+                    ""action"": ""ChangeSquare"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -200,7 +200,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_PlayerActions_Special = m_PlayerActions.FindAction("Special", throwIfNotFound: true);
         m_PlayerActions_ChangeCircle = m_PlayerActions.FindAction("ChangeCircle", throwIfNotFound: true);
         m_PlayerActions_ChangeTriangle = m_PlayerActions.FindAction("ChangeTriangle", throwIfNotFound: true);
-        m_PlayerActions_ChangeRectangle = m_PlayerActions.FindAction("ChangeRectangle", throwIfNotFound: true);
+        m_PlayerActions_ChangeSquare = m_PlayerActions.FindAction("ChangeSquare", throwIfNotFound: true);
     }
 
     ~@PlayerInputActions()
@@ -272,7 +272,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_PlayerActions_Special;
     private readonly InputAction m_PlayerActions_ChangeCircle;
     private readonly InputAction m_PlayerActions_ChangeTriangle;
-    private readonly InputAction m_PlayerActions_ChangeRectangle;
+    private readonly InputAction m_PlayerActions_ChangeSquare;
     public struct PlayerActionsActions
     {
         private @PlayerInputActions m_Wrapper;
@@ -282,7 +282,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         public InputAction @Special => m_Wrapper.m_PlayerActions_Special;
         public InputAction @ChangeCircle => m_Wrapper.m_PlayerActions_ChangeCircle;
         public InputAction @ChangeTriangle => m_Wrapper.m_PlayerActions_ChangeTriangle;
-        public InputAction @ChangeRectangle => m_Wrapper.m_PlayerActions_ChangeRectangle;
+        public InputAction @ChangeSquare => m_Wrapper.m_PlayerActions_ChangeSquare;
         public InputActionMap Get() { return m_Wrapper.m_PlayerActions; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -307,9 +307,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @ChangeTriangle.started += instance.OnChangeTriangle;
             @ChangeTriangle.performed += instance.OnChangeTriangle;
             @ChangeTriangle.canceled += instance.OnChangeTriangle;
-            @ChangeRectangle.started += instance.OnChangeRectangle;
-            @ChangeRectangle.performed += instance.OnChangeRectangle;
-            @ChangeRectangle.canceled += instance.OnChangeRectangle;
+            @ChangeSquare.started += instance.OnChangeSquare;
+            @ChangeSquare.performed += instance.OnChangeSquare;
+            @ChangeSquare.canceled += instance.OnChangeSquare;
         }
 
         private void UnregisterCallbacks(IPlayerActionsActions instance)
@@ -329,9 +329,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @ChangeTriangle.started -= instance.OnChangeTriangle;
             @ChangeTriangle.performed -= instance.OnChangeTriangle;
             @ChangeTriangle.canceled -= instance.OnChangeTriangle;
-            @ChangeRectangle.started -= instance.OnChangeRectangle;
-            @ChangeRectangle.performed -= instance.OnChangeRectangle;
-            @ChangeRectangle.canceled -= instance.OnChangeRectangle;
+            @ChangeSquare.started -= instance.OnChangeSquare;
+            @ChangeSquare.performed -= instance.OnChangeSquare;
+            @ChangeSquare.canceled -= instance.OnChangeSquare;
         }
 
         public void RemoveCallbacks(IPlayerActionsActions instance)
@@ -365,6 +365,6 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         void OnSpecial(InputAction.CallbackContext context);
         void OnChangeCircle(InputAction.CallbackContext context);
         void OnChangeTriangle(InputAction.CallbackContext context);
-        void OnChangeRectangle(InputAction.CallbackContext context);
+        void OnChangeSquare(InputAction.CallbackContext context);
     }
 }
