@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Cinemachine;
 
 public class PlayerController : MonoBehaviour
 {
@@ -12,56 +13,74 @@ public class PlayerController : MonoBehaviour
     public float maxSpeed = 100;
     public float jumpPower = 10;
     float moveInput;
+    public bool canMove = true;
 
-    public ShapeStat shapeStat;
-    public GameObject shape = null;
+    public Shape shapeInfo = null;
 
-    private void Awake()
+    public CinemachineVirtualCamera vcam;
+
+    private void Start()
     {
-        SetShapeType("Circle");
-
+        // 키 입력과 함수 연결
+        #region key Input
         playerInputActions = new();
         playerInputActions.Enable();
 
         playerInputActions.PlayerActions.Move.started += (x) => moveInput = x.ReadValue<float>();
         playerInputActions.PlayerActions.Move.canceled += (x) => moveInput = x.ReadValue<float>();
 
-        playerInputActions.PlayerActions.Jump.performed += OnJump;                                                      
+        playerInputActions.PlayerActions.Jump.performed += OnJump;
 
-        playerInputActions.PlayerActions.ChangeCircle.performed += (x) => SetShapeType("Circle");                                               
+        playerInputActions.PlayerActions.ChangeCircle.performed += (x) => SetShapeType("Circle");
         playerInputActions.PlayerActions.ChangeSquare.performed += (x) => SetShapeType("Square");
         playerInputActions.PlayerActions.ChangeTriangle.performed += (x) => SetShapeType("Triangle");
+
+        playerInputActions.PlayerActions.Special.started += OnSpecialStarted;
+        playerInputActions.PlayerActions.Special.canceled += OnSpecialCanceled;
+        #endregion
+
+        SetShapeType("Circle");
     }
 
+    /// <summary>
+    /// 도형의 종류를 바꾸는 함수
+    /// </summary>
+    /// <param name="shapeName"> 도형의 이름</param>
     public void SetShapeType(string shapeName)
     {
-        string shapeStatPath = "Player/ShapeInitStat/" + shapeName;
-        shapeStat = Resources.Load<ShapeStat>(shapeStatPath);
+        if (shapeInfo != null && shapeInfo.name == shapeName)
+            return;
 
-        speed = shapeStat.Speed;
-        maxSpeed = shapeStat.MaxSpeed;
-        jumpPower = shapeStat.JumpPower;
+        string shapeStatPath = "Player/" + shapeName;
+        var newShapeInfo = Resources.Load<Shape>(shapeStatPath);
 
+        speed = newShapeInfo.speed;
+        maxSpeed = newShapeInfo.maxSpeed;
+        jumpPower = newShapeInfo.jumpForce;
 
-        GameObject prefab = Resources.Load<GameObject>("Player/" + shapeStat.PrefabName);
-        GameObject newShape = Instantiate(prefab, transform.position, Quaternion.identity, transform);
+        var newShape = Instantiate(newShapeInfo, transform.position, Quaternion.identity, transform);
+        newShape.Init(this);
+        Vector3 vel = Vector3.zero;
 
-        if (shape != null)
+        if (shapeInfo != null)
         {
-            newShape.transform.position = shape.transform.position;
-            DestroyImmediate(shape);
-            shape = null;
+            vel = rb.velocity;
+            newShape.transform.position = shapeInfo.transform.position;
+
+            DestroyImmediate(shapeInfo.gameObject);
         }
 
-        shape = newShape;
-        rb = newShape.GetComponent<Rigidbody2D>();
+        shapeInfo = newShape;
 
+        rb = newShape.GetComponent<Rigidbody2D>();
+        rb.velocity = vel;
+        vcam.Follow = shapeInfo.transform;
     }
 
     private void FixedUpdate()
     {
 
-        if (moveInput != 0)
+        if (canMove & moveInput != 0)
         {
             rb.AddForce(new Vector2(moveInput * speed, 0));
         }
@@ -70,12 +89,21 @@ public class PlayerController : MonoBehaviour
         {
             rb.velocity = new Vector2(maxSpeed, rb.velocity.y);
         }
-        
+
     }
 
     void OnJump(InputAction.CallbackContext context)
     {
-        if (rb.velocity.y < 0.1f)
+        if (shapeInfo.canJump)
+        {
             rb.AddForce(new Vector2(0, jumpPower), ForceMode2D.Impulse);
+            shapeInfo.canJump = false;
+        }
+
     }
+
+    void OnSpecialStarted(InputAction.CallbackContext context) => shapeInfo.OnSpecialStarted();
+
+    void OnSpecialCanceled(InputAction.CallbackContext context) => shapeInfo.OnSpecialCanceled();
+
 }

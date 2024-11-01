@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1560061950413672272}
   - component: {fileID: 2526856456224418770}
   - component: {fileID: 4109669795273251481}
+  - component: {fileID: -7342840877343945621}
   m_Layer: 0
   m_Name: Square
   m_TagString: Untagged
@@ -158,3 +159,25 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &-7342840877343945621
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 676715661003515430}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e49da784b33af444baf278ea5659d9fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 2
+  maxSpeed: 50
+  jumpForce: 20
+  attack: 10
+  defense: 5
+  cooldown: 10
+  specialPower: 10
+  rb: {fileID: 0}
+  canJump: 1
+  canSpecial: 1
