@@ -174,13 +174,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d656c8b5e1dabf4da22ded7fb402f62, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 5
+  speed: 7
   maxSpeed: 75
   jumpForce: 5
   attack: 2
   defense: 2
-  cooldown: 10
+  cooldown: 2
   specialPower: 10
   rb: {fileID: 0}
-  canJump: 1
-  canSpecial: 1

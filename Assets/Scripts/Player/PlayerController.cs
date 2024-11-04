@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Cinemachine;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -13,11 +14,19 @@ public class PlayerController : MonoBehaviour
     public float maxSpeed = 100;
     public float jumpPower = 10;
     float moveInput;
-    public bool canMove = true;
+
+    // 도형에 저장하면 도형 바꿀 시 없어짐   
+    // 점프가 가능한지
+    public bool canJump = true;
+    // 특수 능력 사용이 가능한지
+    public bool canSpecial = true;
+    // 적과 부딫히면 공격인지 피해 받음인지
+    public bool isAttacking = false;
 
     public Shape shapeInfo = null;
 
     public CinemachineVirtualCamera vcam;
+    public Image image;
 
     private void Start()
     {
@@ -48,7 +57,7 @@ public class PlayerController : MonoBehaviour
     /// <param name="shapeName"> 도형의 이름</param>
     public void SetShapeType(string shapeName)
     {
-        if (shapeInfo != null && shapeInfo.name == shapeName)
+        if (shapeInfo != null && shapeInfo.name == shapeName && isAttacking == false)
             return;
 
         string shapeStatPath = "Player/" + shapeName;
@@ -75,12 +84,22 @@ public class PlayerController : MonoBehaviour
         rb = newShape.GetComponent<Rigidbody2D>();
         rb.velocity = vel;
         vcam.Follow = shapeInfo.transform;
+
     }
 
     private void FixedUpdate()
     {
 
-        if (canMove & moveInput != 0)
+        if (canSpecial)
+        {
+            image.color = new Color(1, 1, 1, 1);
+        }
+        else
+        {
+            image.color = new Color(1, 1, 1, 0.5f);
+        }
+
+        if (moveInput != 0)
         {
             rb.AddForce(new Vector2(moveInput * speed, 0));
         }
@@ -94,16 +113,32 @@ public class PlayerController : MonoBehaviour
 
     void OnJump(InputAction.CallbackContext context)
     {
-        if (shapeInfo.canJump)
+        if (canJump)
         {
             rb.AddForce(new Vector2(0, jumpPower), ForceMode2D.Impulse);
-            shapeInfo.canJump = false;
+            canJump = false;
         }
 
     }
 
+
+    // 특수 능력 쿨타임
+    protected IEnumerator WaitSpecialCooldown(float time)
+    {
+        canSpecial = false;
+        yield return new WaitForSeconds(time);
+        Debug.Log("쿨타임 종료");
+        canSpecial = true;
+    }
+
     void OnSpecialStarted(InputAction.CallbackContext context) => shapeInfo.OnSpecialStarted();
 
-    void OnSpecialCanceled(InputAction.CallbackContext context) => shapeInfo.OnSpecialCanceled();
+    void OnSpecialCanceled(InputAction.CallbackContext context)
+    {
+        shapeInfo.OnSpecialCanceled();
+        StartCoroutine(WaitSpecialCooldown(shapeInfo.cooldown));
+    }
+
+
 
 }
