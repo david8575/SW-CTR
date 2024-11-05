@@ -28,14 +28,10 @@ public class obtuseTriangleEnemy : MonoBehaviour
 
         float distanceToPlayer = Vector2.Distance(transform.position, player.position);
         
-        if (distanceToPlayer <= detectionRange)
-        {
-            // 주인공을 향해 돌진
+        if (distanceToPlayer <= detectionRange) {
             transform.position = Vector2.MoveTowards(transform.position, player.position, chargeSpeed * Time.deltaTime);
         }
-        else
-        {
-            // 느린 이동 로직 (좌우 이동)
+        else {
             transform.Translate(Vector2.right * speed * Time.deltaTime);
             if (transform.position.x > 3.0f || transform.position.x < -3.0f) {
                 speed = -speed; 
