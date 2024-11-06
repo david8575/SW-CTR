@@ -179,6 +179,6 @@ MonoBehaviour:
   jumpForce: 5
   attack: 2
   defense: 2
-  cooldown: 2
+  cooldown: 0.5
   specialPower: 10
   rb: {fileID: 0}

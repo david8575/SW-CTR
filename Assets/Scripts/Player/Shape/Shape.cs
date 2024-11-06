@@ -6,7 +6,6 @@ public abstract class Shape : MonoBehaviour
 {
     // 도형의 능력치
     public float speed;
-    public float maxSpeed;
     public float jumpForce;
     public float attack;
     public float defense;
@@ -16,18 +15,20 @@ public abstract class Shape : MonoBehaviour
     // 이동 관련 컴포넌트
     public Rigidbody2D rb;
     protected PlayerController controller;
+    protected SpriteRenderer spriteRenderer;
 
     // 초기화
     public void Init(PlayerController con)
     {
         rb = GetComponent<Rigidbody2D>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
         controller = con;
     }
 
     // 특수 능력 추상 함수
     public abstract void OnSpecialStarted();
 
-    public abstract void OnSpecialCanceled();
+    public virtual void OnSpecialCanceled() { }
 
     // 땅 접촉시 점프 가능
     protected virtual void OnCollisionEnter2D(Collision2D collision)

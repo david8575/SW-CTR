@@ -10,6 +10,8 @@ public class PlayerController : MonoBehaviour
     PlayerInputActions playerInputActions;
     Rigidbody2D rb;
 
+    public int hp = 100;
+
     public float speed = 10;
     public float maxSpeed = 100;
     public float jumpPower = 10;
@@ -57,28 +59,33 @@ public class PlayerController : MonoBehaviour
     /// <param name="shapeName"> 도형의 이름</param>
     public void SetShapeType(string shapeName)
     {
-        if (shapeInfo != null && shapeInfo.name == shapeName && isAttacking == false)
+        if (shapeInfo != null && shapeInfo.name == shapeName || isAttacking == true)
             return;
 
+        // 도형 로드
         string shapeStatPath = "Player/" + shapeName;
         var newShapeInfo = Resources.Load<Shape>(shapeStatPath);
 
+        // 자주쓰는 능력치 저장
         speed = newShapeInfo.speed;
-        maxSpeed = newShapeInfo.maxSpeed;
+        maxSpeed = newShapeInfo.speed * 2;
         jumpPower = newShapeInfo.jumpForce;
 
+        // 도형 생성
         var newShape = Instantiate(newShapeInfo, transform.position, Quaternion.identity, transform);
         newShape.Init(this);
         Vector3 vel = Vector3.zero;
 
         if (shapeInfo != null)
         {
+            // 도형 정보 이동 및 예전 도형 삭제
             vel = rb.velocity;
             newShape.transform.position = shapeInfo.transform.position;
 
             DestroyImmediate(shapeInfo.gameObject);
         }
 
+        // 도형 정보 저장
         shapeInfo = newShape;
 
         rb = newShape.GetComponent<Rigidbody2D>();
@@ -90,6 +97,7 @@ public class PlayerController : MonoBehaviour
     private void FixedUpdate()
     {
 
+        // 특수 능력 사용 가능 여부에 따라 이미지 투명도 조절 (임시 구현)
         if (canSpecial)
         {
             image.color = new Color(1, 1, 1, 1);
@@ -99,18 +107,29 @@ public class PlayerController : MonoBehaviour
             image.color = new Color(1, 1, 1, 0.5f);
         }
 
+        // 좌우 이동
         if (moveInput != 0)
         {
-            rb.AddForce(new Vector2(moveInput * speed, 0));
-        }
-
-        if (rb.velocity.x > maxSpeed)
-        {
-            rb.velocity = new Vector2(maxSpeed, rb.velocity.y);
+            if (moveInput > 0)
+            {
+                // 만약 최대 속도보다 크다면 속도를 증가하지 않음
+                if (rb.velocity.x < maxSpeed)
+                {
+                    rb.AddForce(new Vector2(moveInput * speed, 0));
+                }
+            }
+            else if (moveInput < 0)
+            {
+                if (rb.velocity.x > -maxSpeed)
+                {
+                    rb.AddForce(new Vector2(moveInput * speed, 0));
+                }
+            }
         }
 
     }
 
+    // 점프 키를 눌렀을 때
     void OnJump(InputAction.CallbackContext context)
     {
         if (canJump)
@@ -131,11 +150,13 @@ public class PlayerController : MonoBehaviour
         canSpecial = true;
     }
 
+    // 스페셜 능력은 도형에게 맡기기
     void OnSpecialStarted(InputAction.CallbackContext context) => shapeInfo.OnSpecialStarted();
 
     void OnSpecialCanceled(InputAction.CallbackContext context)
     {
         shapeInfo.OnSpecialCanceled();
+        // 쿨타임은 여기서 돌리기
         StartCoroutine(WaitSpecialCooldown(shapeInfo.cooldown));
     }
 
