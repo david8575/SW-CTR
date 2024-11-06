@@ -19,21 +19,15 @@ public class Square : Shape
         spriteRenderer.color = Color.red;
     }
 
-    protected override void OnCollisionEnter2D(Collision2D collision)
+    protected override void ActiveJump()
     {
-        base.OnCollisionEnter2D(collision);
+        base.ActiveJump();
 
-        // 땅에 내려가면 공격 종료
-        if (collision.gameObject.CompareTag("Ground"))
+        // 공격 중이면 공격 종료
+        if (controller.isAttacking)
         {
-            if (collision.transform.position.y < transform.position.y)
-            {
-                if (controller.isAttacking)
-                {
-                    controller.isAttacking = false;
-                    spriteRenderer.color = Color.white;
-                }
-            }
+            controller.isAttacking = false;
+            spriteRenderer.color = Color.black;
         }
     }
 }
