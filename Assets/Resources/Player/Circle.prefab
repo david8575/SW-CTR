@@ -96,6 +96,7 @@ GameObject:
   - component: {fileID: 6780511908157737433}
   - component: {fileID: 6141415395616270903}
   - component: {fileID: 1612589542305480753}
+  - component: {fileID: -6836600905712518007}
   m_Layer: 0
   m_Name: Circle
   m_TagString: Untagged
@@ -233,3 +234,23 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
+--- !u!114 &-6836600905712518007
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7427117618333868018}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1327d5b52daa2142956e0aac6f43d58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 10
+  maxSpeed: 100
+  jumpForce: 10
+  attack: 0
+  defense: 0
+  cooldown: 0.5
+  specialPower: 20
+  rb: {fileID: 0}

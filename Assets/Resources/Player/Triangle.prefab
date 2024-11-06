@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3145661116603535235}
   - component: {fileID: 5820476805666119938}
   - component: {fileID: 2234002477146428574}
+  - component: {fileID: -3491462352531228040}
   m_Layer: 0
   m_Name: Triangle
   m_TagString: Untagged
@@ -161,3 +162,23 @@ PolygonCollider2D:
       - {x: -0.5, y: -0.28866667}
       - {x: 0.5, y: -0.28866667}
   m_UseDelaunayMesh: 0
+--- !u!114 &-3491462352531228040
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2975922954031985482}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d656c8b5e1dabf4da22ded7fb402f62, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 7
+  maxSpeed: 75
+  jumpForce: 5
+  attack: 2
+  defense: 2
+  cooldown: 0.5
+  specialPower: 10
+  rb: {fileID: 0}
