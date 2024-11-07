@@ -7,6 +7,21 @@ using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
+    // Singleton (어디서든 접근 가능)
+    private static PlayerController instance;
+    public static PlayerController Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = FindObjectOfType<PlayerController>();
+            }
+            return instance;
+        }
+    }
+
+
     PlayerInputActions playerInputActions;
     Rigidbody2D rb;
 
@@ -25,10 +40,24 @@ public class PlayerController : MonoBehaviour
     // 적과 부딫히면 공격인지 피해 받음인지
     public bool isAttacking = false;
 
-    public Shape shapeInfo = null;
+    public Shape ShapeInfo { get; private set; } = null;
 
     public CinemachineVirtualCamera vcam;
     public Image image;
+
+    // 싱글톤 등록
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            DestroyImmediate(gameObject);
+        }
+    }
 
     private void Start()
     {
@@ -53,13 +82,10 @@ public class PlayerController : MonoBehaviour
         SetShapeType("Circle");
     }
 
-    /// <summary>
-    /// 도형의 종류를 바꾸는 함수
-    /// </summary>
-    /// <param name="shapeName"> 도형의 이름</param>
+    // 도형의 종류를 바꾸는 함수
     public void SetShapeType(string shapeName)
     {
-        if (shapeInfo != null && shapeInfo.name == shapeName || isAttacking == true)
+        if (ShapeInfo != null && ShapeInfo.name == shapeName || isAttacking == true)
             return;
 
         // 도형 로드
@@ -76,21 +102,21 @@ public class PlayerController : MonoBehaviour
         newShape.Init(this);
         Vector3 vel = Vector3.zero;
 
-        if (shapeInfo != null)
+        if (ShapeInfo != null)
         {
             // 도형 정보 이동 및 예전 도형 삭제
             vel = rb.velocity;
-            newShape.transform.position = shapeInfo.transform.position;
+            newShape.transform.position = ShapeInfo.transform.position;
 
-            DestroyImmediate(shapeInfo.gameObject);
+            DestroyImmediate(ShapeInfo.gameObject);
         }
 
         // 도형 정보 저장
-        shapeInfo = newShape;
+        ShapeInfo = newShape;
 
         rb = newShape.GetComponent<Rigidbody2D>();
         rb.velocity = vel;
-        vcam.Follow = shapeInfo.transform;
+        vcam.Follow = ShapeInfo.transform;
 
     }
 
@@ -151,15 +177,13 @@ public class PlayerController : MonoBehaviour
     }
 
     // 스페셜 능력은 도형에게 맡기기
-    void OnSpecialStarted(InputAction.CallbackContext context) => shapeInfo.OnSpecialStarted();
+    void OnSpecialStarted(InputAction.CallbackContext context) => ShapeInfo.OnSpecialStarted();
 
     void OnSpecialCanceled(InputAction.CallbackContext context)
     {
-        shapeInfo.OnSpecialCanceled();
+        ShapeInfo.OnSpecialCanceled();
         // 쿨타임은 여기서 돌리기
-        StartCoroutine(WaitSpecialCooldown(shapeInfo.cooldown));
+        StartCoroutine(WaitSpecialCooldown(ShapeInfo.cooldown));
     }
-
-
 
 }

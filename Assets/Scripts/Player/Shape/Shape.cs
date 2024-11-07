@@ -4,7 +4,7 @@ using UnityEngine;
 
 public abstract class Shape : MonoBehaviour
 {
-    // µµÇüÀÇ ´É·ÂÄ¡
+    // ë„í˜•ì˜ ëŠ¥ë ¥ì¹˜
     public float speed;
     public float jumpForce;
     public float attack;
@@ -12,12 +12,12 @@ public abstract class Shape : MonoBehaviour
     public float cooldown;
     public float specialPower;
 
-    // ÀÌµ¿ °ü·Ã ÄÄÆ÷³ÍÆ®
+    // ì´ë™ ê´€ë ¨ ì»´í¬ë„ŒíŠ¸
     public Rigidbody2D rb;
     protected PlayerController controller;
     protected SpriteRenderer spriteRenderer;
 
-    // ÃÊ±âÈ­
+    // ì´ˆê¸°í™”
     public void Init(PlayerController con)
     {
         rb = GetComponent<Rigidbody2D>();
@@ -25,20 +25,41 @@ public abstract class Shape : MonoBehaviour
         controller = con;
     }
 
-    // Æ¯¼ö ´É·Â Ãß»ó ÇÔ¼ö
+    // íŠ¹ìˆ˜ ëŠ¥ë ¥ ì¶”ìƒ í•¨ìˆ˜
     public abstract void OnSpecialStarted();
 
     public virtual void OnSpecialCanceled() { }
 
-    // ¶¥ Á¢ÃË½Ã Á¡ÇÁ °¡´É
-    protected virtual void OnCollisionEnter2D(Collision2D collision)
+    // ë•… ì ‘ì´‰ì‹œ 
+    void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Ground"))
+        if (collision.gameObject.CompareTag("Enemy"))
         {
-            if (collision.transform.position.y < transform.position.y)
+            if (controller.isAttacking)
             {
-                controller.canJump = true;
+                collision.gameObject.GetComponent<AcuteTriangleEnmey>().TakeDamage();
+            }
+            else
+            {
+
             }
         }
+
+        if (collision.gameObject.CompareTag("Ground") || collision.gameObject.CompareTag("Enemy"))
+        {
+            var contact = collision.GetContact(0);
+            if (contact.point.y < transform.position.y)
+            {
+                ActiveJump();
+            }
+        }
+
+
+    }
+
+    // ë•… ìœ„ì—ì„œ ì ‘ì´‰ì‹œ ë°œë™í•˜ëŠ” í•¨ìˆ˜
+    protected virtual void ActiveJump()
+    {
+        controller.canJump = true;
     }
 }

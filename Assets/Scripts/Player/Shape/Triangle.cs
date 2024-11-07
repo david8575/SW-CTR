@@ -31,7 +31,7 @@ public class Triangle : Shape
         controller.isAttacking = true;
         spriteRenderer.color = Color.red;
         yield return new WaitForSeconds(time);
-        spriteRenderer.color = Color.white;
+        spriteRenderer.color = Color.black;
         controller.isAttacking = false;
     }
 }
