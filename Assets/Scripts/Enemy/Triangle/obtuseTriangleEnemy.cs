@@ -2,58 +2,57 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class obtuseTriangleEnemy : MonoBehaviour
+public class obtuseTriangleEnemy : EnemyBase
 {
-    public float speed = 1.0f; 
-    public float detectionRange = 5.0f; 
-    public float chargeSpeed = 4.0f; 
-    public int maxHealth = 2; 
-
-    private Transform player;
-    private int currentHealth;
-    private bool isAlive = true;
+    public float dashSpeed = 20f;
 
     // Start is called before the first frame update
     void Start()
     {
-        currentHealth = maxHealth;
-        player = GameObject.FindGameObjectWithTag("Player").transform;
+        health = 30f;
+        attackPower = 10f;
+        defense = 5f;
+        moveSpeed = 10f;
+        jumpPower = 1f;
+        attackCoolDown = 5f;    
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (!isAlive)
-            return;
-
-        float distanceToPlayer = Vector2.Distance(transform.position, player.position);
-        
-        if (distanceToPlayer <= detectionRange) {
-            transform.position = Vector2.MoveTowards(transform.position, player.position, chargeSpeed * Time.deltaTime);
+        if (health <= 0)
+        {
+            Die();
         }
-        else {
-            transform.Translate(Vector2.right * speed * Time.deltaTime);
-            if (transform.position.x > 3.0f || transform.position.x < -3.0f) {
-                speed = -speed; 
+        else
+        {
+            DetectPlayer();
+
+            if (isPlayerInRange)
+            {
+                ApproachPlayer();
+                if (canAttack)
+                {
+                    StartCoroutine(Attack());
+                }
+            }
+            else
+            {
+                Patrol();
             }
         }
     }
 
-    public void TakeDamage(){
-        currentHealth--;
-        if (!isAlive){
-            return;
-        }
+    protected override IEnumerator Attack()
+    {
+        canAttack = false;
 
-        if (currentHealth <= 0){
-            isAlive = false;
-            Destroy(gameObject); 
-        }
-    }
+        yield return new WaitForSeconds(1f);
 
-    private void OnTriggerEnter2D(Collider2D collision){
-        if (collision.CompareTag("Player")){
-            TakeDamage();
-        }
+        Vector2 direction = (player.transform.position - transform.position).normalized;
+        GetComponent<Rigidbody2D>().AddForce(direction * dashSpeed, ForceMode2D.Impulse);
+
+        yield return new WaitForSeconds(attackCoolDown);
+        canAttack = true;
     }
 }

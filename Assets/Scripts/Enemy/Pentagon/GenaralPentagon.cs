@@ -2,82 +2,82 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GenaralPentagon : MonoBehaviour
+public class GenaralPentagon : EnemyBase
 {
-    public float speed = 2.0f;
-    public float detectionRange = 7.0f;
-    public float chargeDuration = 1.0f;
-    public float dashSpeed = 15.0f;
-    public float attackCooldown = 3.0f;
+    public float dashSpeed = 40f;
+    public float rotateSpeed = 360f;
+    private SpriteRenderer spriteRenderer;
+    private Color originalColor;
 
-    private Transform player;
-    private bool isCharging = false;
-    private bool isDashing = false;
-    private float nextAttackTime = 0;
-    private Vector2 dashDirection;
     // Start is called before the first frame update
     void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player").transform;
+        health = 30f;
+        attackPower = 10f;
+        defense = 5f;
+        moveSpeed = 10f;
+        jumpPower = 1f;
+        attackCoolDown = 5f;
+
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        originalColor = spriteRenderer.color; 
     }
 
     // Update is called once per frame
     void Update()
     {
-       if (isCharging || isDashing)
-            return;
-
-        float distanceToPlayer = Vector2.Distance(transform.position, player.position);
-
-        if (distanceToPlayer <= detectionRange && Time.time >= nextAttackTime)
+       if (health <= 0)
         {
-            StartCoroutine(ChargeAndDash());
-            nextAttackTime = Time.time + attackCooldown;
+            Die();
         }
         else
         {
-            Patrol();
-        } 
-    }
+            DetectPlayer();
 
-    private void Patrol()
-    {
-        // 좌우로 순찰
-        transform.Translate(Vector2.right * speed * Time.fixedDeltaTime);
-        if (transform.position.x > 3.0f || transform.position.x < -3.0f)
-        {
-            speed = -speed; // 방향 전환
+            if (isPlayerInRange)
+            {
+                ApproachPlayer();
+                if (canAttack)
+                {
+                    StartCoroutine(Attack());
+                }
+            }
+            else
+            {
+                Patrol();
+            }
         }
     }
 
-    private IEnumerator ChargeAndDash()
+    protected override IEnumerator Attack()
     {
-        isCharging = true;
+        canAttack = false;
 
-        // 차징 상태 (차징 동안 일정 시간 대기)
-        dashDirection = (player.position - transform.position).normalized;
-        yield return new WaitForSeconds(chargeDuration);
+        spriteRenderer.color = Color.yellow;
+        StartCoroutine(RotateWhileDashing());
 
-        // 차징 후 돌진
-        isDashing = true;
-        float dashTime = 0.5f;  // 돌진 지속 시간
-        float startTime = Time.time;
+        yield return new WaitForSeconds(1f);
 
-        while (Time.time < startTime + dashTime)
+        Vector2 direction = (player.transform.position - transform.position).normalized;
+        GetComponent<Rigidbody2D>().AddForce(direction * dashSpeed, ForceMode2D.Impulse);
+
+        yield return new WaitForSeconds(attackCoolDown);
+
+        spriteRenderer.color = originalColor; 
+        canAttack = true;
+    }
+
+    private IEnumerator RotateWhileDashing()
+    {
+        float dashDuration = 1f;
+        float elapsedTime = 0f;
+
+        while (elapsedTime < dashDuration)
         {
-            transform.Translate(dashDirection * dashSpeed * Time.deltaTime);
+            transform.Rotate(0, 0, rotateSpeed * Time.deltaTime);
+            elapsedTime += Time.deltaTime;
             yield return null;
         }
-
-        isCharging = false;
-        isDashing = false;
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.CompareTag("Player"))
-        {
-            // 플레이어에게 데미지를 주는 로직을 추가
-        }
-    }
 }

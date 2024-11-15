@@ -2,15 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GeneralRectangle : EnemyBase
+public class Octagon : EnemyBase
 {
+    
+    private bool DefendBoost = false;
     // Start is called before the first frame update
     void Start()
     {
-        health = 50f;
-        attackPower = 20f;
-        defense = 20f;
-        moveSpeed = 1f;
+        health = 100f;
+        attackPower = 15f;
+        defense = 10f;
+        moveSpeed = 3f;
         jumpPower = 1f;
         attackCoolDown = 5f;
     }
@@ -22,25 +24,24 @@ public class GeneralRectangle : EnemyBase
         {
             Die();
         }
-        else
+        else if (health <= 0.5 * 100 && !DefendBoost)
         {
-            DetectPlayer();
+            DefenseBoost();
+        }
 
-            if (isPlayerInRange)
-            {
-                if (canAttack)
-                {
-                    StartCoroutine(Attack());
-                }
-            }
-            else
-            {
-                Patrol();
-            }
+        BasicAttack();
+    
+    }
+
+    private void BasicAttack()
+    {
+        if (canAttack)
+        {
+            StartCoroutine(BasicAttackRoutine());
         }
     }
 
-    protected override IEnumerator Attack()
+    private IEnumerator BasicAttackRoutine()
     {
         canAttack = false;
 
@@ -52,5 +53,12 @@ public class GeneralRectangle : EnemyBase
 
         yield return new WaitForSeconds(attackCoolDown);
         canAttack = true;
-    }  
+    }
+
+    private void DefenseBoost()
+    {
+        DefendBoost = true;
+        float originalDefense = defense;
+        defense *= 2;
+    }
 }

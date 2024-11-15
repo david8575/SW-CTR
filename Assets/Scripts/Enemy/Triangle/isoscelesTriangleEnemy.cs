@@ -2,70 +2,64 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class isoscelesTriangleEnemy : MonoBehaviour
+public class isoscelesTriangleEnemy : EnemyBase
 {
-    public float speed = 2.0f;
-    public float detectionRange = 5.0f;
-    public float missileCoolTime = 3.0f;
     public GameObject missilePrefab;
-    public Transform firePoint;
-
-    private Transform player;
-    private bool isAlive = true;
-    private float lastMissileTime;
 
     // Start is called before the first frame update
     void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player").transform;
+        health = 30f;
+        attackPower = 10f;
+        defense = 5f;
+        moveSpeed = 5f;
+        jumpPower = 5f;
+        attackCoolDown = 5f;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (!isAlive)
-            return;
+        if (health <= 0)
+        {
+            Die();
+        }
+        else
+        {
+            DetectPlayer();
 
-        float distanceToPlayer = Vector2.Distance(transform.position, player.position);
-        
-        if (distanceToPlayer <= detectionRange) {
-            // 플레이어를 향해 이동
-            transform.position = Vector2.MoveTowards(transform.position, player.position, speed * Time.deltaTime);
-
-            // 미사일 발사 조건 확인
-            if (Time.time > lastMissileTime + missileCoolTime) {
-                FireMissile();
+            if (isPlayerInRange)
+            {
+                ApproachPlayer();
+                if (canAttack)
+                {
+                    StartCoroutine(Attack());
+                }
+            }
+            else
+            {
+                Patrol();
             }
         }
-        else {
-            // 좌우 이동 로직
-            transform.Translate(Vector2.right * speed * Time.deltaTime);
-            if (transform.position.x > 3.0f || transform.position.x < -3.0f) {
-                speed = -speed; 
-            }
-        }
     }
 
-    void FireMissile() {
-        lastMissileTime = Time.time;
-        
-        // 미사일 생성 및 발사
-        GameObject missile = Instantiate(missilePrefab, firePoint.position, Quaternion.identity);
-        Vector2 direction = (player.position - firePoint.position).normalized;
-        missile.GetComponent<Rigidbody2D>().velocity = direction * 5.0f;
+    protected override IEnumerator Attack()
+    {
+        canAttack = false;
+
+        FireMissile();
+
+        yield return new WaitForSeconds(attackCoolDown);
+        canAttack = true;
     }
 
-    public void TakeDamage() {
-        if (!isAlive){
-            return;
-        }
-        isAlive = false;
-        Destroy(gameObject); 
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision) {
-        if (collision.CompareTag("Player")){
-            TakeDamage();
+    private void FireMissile()
+    {
+        if (missilePrefab != null)
+        {
+            GameObject missile = Instantiate(missilePrefab, transform.position, Quaternion.identity);
+            Vector2 direction = (player.transform.position - transform.position).normalized;
+            missile.GetComponent<Rigidbody2D>().velocity = direction * 10f; 
         }
     }
 }
