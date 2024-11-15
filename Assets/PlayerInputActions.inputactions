@@ -150,6 +150,45 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "DialougeActions",
+            "id": "78d18030-a4b6-4aff-bde3-cdaaf1c44ac4",
+            "actions": [
+                {
+                    "name": "NextDialouge",
+                    "type": "Button",
+                    "id": "9f978ef9-2596-4f2e-8645-c79ad8c65f61",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "25337caf-39fc-449a-afd5-d72d95231a2b",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "NextDialouge",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "0e179a8c-057a-40c2-b833-0093666f1aff",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "NextDialouge",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": [
