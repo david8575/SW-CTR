@@ -10,6 +10,8 @@ public class Circle : Shape
 
     public override void OnSpecialStarted()
     {
+        if (controller.canSpecial == false)
+            return;
 
         // 특수능력키 누르면 차징 시작
         isCharging = true;

@@ -172,45 +172,6 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
-        },
-        {
-            ""name"": ""DialougeActions"",
-            ""id"": ""78d18030-a4b6-4aff-bde3-cdaaf1c44ac4"",
-            ""actions"": [
-                {
-                    ""name"": ""NextDialouge"",
-                    ""type"": ""Button"",
-                    ""id"": ""9f978ef9-2596-4f2e-8645-c79ad8c65f61"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                }
-            ],
-            ""bindings"": [
-                {
-                    ""name"": """",
-                    ""id"": ""25337caf-39fc-449a-afd5-d72d95231a2b"",
-                    ""path"": ""<Mouse>/leftButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""NextDialouge"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""0e179a8c-057a-40c2-b833-0093666f1aff"",
-                    ""path"": ""<Keyboard>/space"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""NextDialouge"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                }
-            ]
         }
     ],
     ""controlSchemes"": [
@@ -240,15 +201,11 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_PlayerActions_ChangeCircle = m_PlayerActions.FindAction("ChangeCircle", throwIfNotFound: true);
         m_PlayerActions_ChangeTriangle = m_PlayerActions.FindAction("ChangeTriangle", throwIfNotFound: true);
         m_PlayerActions_ChangeSquare = m_PlayerActions.FindAction("ChangeSquare", throwIfNotFound: true);
-        // DialougeActions
-        m_DialougeActions = asset.FindActionMap("DialougeActions", throwIfNotFound: true);
-        m_DialougeActions_NextDialouge = m_DialougeActions.FindAction("NextDialouge", throwIfNotFound: true);
     }
 
     ~@PlayerInputActions()
     {
         UnityEngine.Debug.Assert(!m_PlayerActions.enabled, "This will cause a leak and performance issues, PlayerInputActions.PlayerActions.Disable() has not been called.");
-        UnityEngine.Debug.Assert(!m_DialougeActions.enabled, "This will cause a leak and performance issues, PlayerInputActions.DialougeActions.Disable() has not been called.");
     }
 
     public void Dispose()
@@ -392,52 +349,6 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         }
     }
     public PlayerActionsActions @PlayerActions => new PlayerActionsActions(this);
-
-    // DialougeActions
-    private readonly InputActionMap m_DialougeActions;
-    private List<IDialougeActionsActions> m_DialougeActionsActionsCallbackInterfaces = new List<IDialougeActionsActions>();
-    private readonly InputAction m_DialougeActions_NextDialouge;
-    public struct DialougeActionsActions
-    {
-        private @PlayerInputActions m_Wrapper;
-        public DialougeActionsActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
-        public InputAction @NextDialouge => m_Wrapper.m_DialougeActions_NextDialouge;
-        public InputActionMap Get() { return m_Wrapper.m_DialougeActions; }
-        public void Enable() { Get().Enable(); }
-        public void Disable() { Get().Disable(); }
-        public bool enabled => Get().enabled;
-        public static implicit operator InputActionMap(DialougeActionsActions set) { return set.Get(); }
-        public void AddCallbacks(IDialougeActionsActions instance)
-        {
-            if (instance == null || m_Wrapper.m_DialougeActionsActionsCallbackInterfaces.Contains(instance)) return;
-            m_Wrapper.m_DialougeActionsActionsCallbackInterfaces.Add(instance);
-            @NextDialouge.started += instance.OnNextDialouge;
-            @NextDialouge.performed += instance.OnNextDialouge;
-            @NextDialouge.canceled += instance.OnNextDialouge;
-        }
-
-        private void UnregisterCallbacks(IDialougeActionsActions instance)
-        {
-            @NextDialouge.started -= instance.OnNextDialouge;
-            @NextDialouge.performed -= instance.OnNextDialouge;
-            @NextDialouge.canceled -= instance.OnNextDialouge;
-        }
-
-        public void RemoveCallbacks(IDialougeActionsActions instance)
-        {
-            if (m_Wrapper.m_DialougeActionsActionsCallbackInterfaces.Remove(instance))
-                UnregisterCallbacks(instance);
-        }
-
-        public void SetCallbacks(IDialougeActionsActions instance)
-        {
-            foreach (var item in m_Wrapper.m_DialougeActionsActionsCallbackInterfaces)
-                UnregisterCallbacks(item);
-            m_Wrapper.m_DialougeActionsActionsCallbackInterfaces.Clear();
-            AddCallbacks(instance);
-        }
-    }
-    public DialougeActionsActions @DialougeActions => new DialougeActionsActions(this);
     private int m_PCSchemeIndex = -1;
     public InputControlScheme PCScheme
     {
@@ -455,9 +366,5 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         void OnChangeCircle(InputAction.CallbackContext context);
         void OnChangeTriangle(InputAction.CallbackContext context);
         void OnChangeSquare(InputAction.CallbackContext context);
-    }
-    public interface IDialougeActionsActions
-    {
-        void OnNextDialouge(InputAction.CallbackContext context);
     }
 }
