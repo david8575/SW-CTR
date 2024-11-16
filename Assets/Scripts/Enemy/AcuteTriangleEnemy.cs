@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class AcuteTriangleEnmey : MonoBehaviour
 {
-    public float speed = 5.0f;
+    public float speed = 4.0f;
     public float detectionRange = 5.0f;
     public float attackCoolTime = 2.0f;
 
