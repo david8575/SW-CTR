@@ -12,6 +12,8 @@ public abstract class Shape : MonoBehaviour
     public float cooldown;
     public float specialPower;
 
+    public bool IsInvincible = false;
+
     // 이동 관련 컴포넌트
     public Rigidbody2D rb;
     protected PlayerController controller;
@@ -30,18 +32,41 @@ public abstract class Shape : MonoBehaviour
 
     public virtual void OnSpecialCanceled() { }
 
-    // 땅 접촉시 
+    // 접촉시
     void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Enemy"))
         {
-            if (controller.isAttacking)
-            {
-                collision.gameObject.GetComponent<AcuteTriangleEnmey>().TakeDamage();
-            }
-            else
-            {
+            EnemyBase enemy = collision.gameObject.GetComponent<EnemyBase>();
 
+            Vector2 dir = (enemy.transform.position - transform.position).normalized;
+            //Debug.DrawRay(transform.position, dir, Color.red, 1f);
+
+            if (defense > 0)
+                rb.AddForce(1f * (enemy.attackPower / defense) * -dir, ForceMode2D.Impulse);
+            else
+                rb.AddForce(1f * enemy.attackPower * -dir, ForceMode2D.Impulse);
+
+            enemy.AddForce(1f * (attack) * dir);
+
+            if (controller.isAttacking && enemy.isAttacking)
+            {
+                if (attack >= enemy.attackPower)
+                {
+                    enemy.TakeDamage(attack);
+                }
+                else
+                {
+                    TakeDamage(enemy.attackPower);
+                }
+            }
+            else if (controller.isAttacking)
+            {
+                enemy.TakeDamage(attack);
+            }
+            else if (enemy.isAttacking)
+            {
+                TakeDamage(enemy.attackPower);
             }
         }
 
@@ -61,5 +86,32 @@ public abstract class Shape : MonoBehaviour
     protected virtual void ActiveJump()
     {
         controller.canJump = true;
+    }
+
+    IEnumerator Invincible(float time)
+    {
+        IsInvincible = true;
+        spriteRenderer.color = new Color(1, 1, 1, 0.5f);
+
+        yield return new WaitForSeconds(time);
+
+        spriteRenderer.color = new Color(1, 1, 1, 1);
+        IsInvincible = false;
+    }
+
+    public void TakeDamage(float damage)
+    {
+        if (IsInvincible)
+            return;
+
+        Debug.Log("피격 " + damage + " 데미지");
+
+        StartCoroutine(Invincible(1.0f));
+
+        controller.hp -= damage;
+        if (controller.hp <= 0)
+        {
+            controller.ShapeDead();
+        }
     }
 }
