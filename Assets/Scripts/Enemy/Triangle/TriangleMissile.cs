@@ -38,4 +38,16 @@ public class TriangleMissile : BulletBase
         yield return new WaitForSeconds(1f);
         move = 1;
     }
+
+    protected override void OnCollisionEnter2D(Collision2D collision)
+    {
+        base.OnCollisionEnter2D(collision);
+
+        if (collision.gameObject.CompareTag("Bullet") == false)
+        {
+            gameObject.SetActive(false);
+            Destroy(gameObject);
+        }
+
+    }
 }

@@ -41,12 +41,12 @@ GameObject:
   m_Component:
   - component: {fileID: 808423403467289931}
   - component: {fileID: 1655175186717796}
-  - component: {fileID: 5349716672212208409}
   - component: {fileID: 509355744548932707}
-  - component: {fileID: 6969105046927186513}
+  - component: {fileID: 5634899211572937233}
+  - component: {fileID: 3541534028804622216}
   m_Layer: 0
   m_Name: equilateralTriangle
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -121,8 +121,62 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!61 &5349716672212208409
-BoxCollider2D:
+--- !u!50 &509355744548932707
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4182914065839536841}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
+--- !u!114 &5634899211572937233
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4182914065839536841}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52c8d9e8fe1e07342a797aa6e0534737, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 100
+  attackPower: 10
+  jumpPower: 5
+  moveSpeed: 2
+  defense: 5
+  attackCoolDown: 1.5
+  detectionRange: 100
+  attackRange: 60
+  isAttacking: 0
+  distance: 0
+  step: 3
+  bounceMaterial: {fileID: 6200000, guid: 60d4dfe2374460342b61f197e2ee0a52, type: 2}
+  normalSpawnPoint: {fileID: 7644735291549006271}
+  normalTriangle: {fileID: 5777377913229524524, guid: 5d1902576ac2e9c4e86c6d48271a2e24, type: 3}
+  shockWave: {fileID: 2722420902006617240, guid: 6e4e7d81a23c2584ea5203ea86e012ee, type: 3}
+--- !u!60 &3541534028804622216
+PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -157,61 +211,18 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 6.4, y: 5.07}
+    oldSize: {x: 1.28, y: 1.014}
     newSize: {x: 6.4, y: 5.07}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 6.4, y: 5.07}
-  m_EdgeRadius: 0
---- !u!50 &509355744548932707
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4182914065839536841}
-  m_BodyType: 0
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 0
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 0
---- !u!114 &6969105046927186513
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4182914065839536841}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ba6d4f2c0e9e6274ea5514ccfe7d545f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxHealth: 100
-  speed: 1
-  chargeSpeed: 6
-  miniTrianglePrefab: {fileID: 5777377913229524524, guid: 5d1902576ac2e9c4e86c6d48271a2e24, type: 3}
-  shockwavePrefab: {fileID: 2722420902006617240, guid: 6e4e7d81a23c2584ea5203ea86e012ee, type: 3}
-  laserPrefab: {fileID: 3445093249843193829, guid: b01d64b3435f75747a522b5e04e2da08, type: 3}
-  rightTrianglePrefab: {fileID: 0}
+  m_Points:
+    m_Paths:
+    - - {x: -0.63426286, y: -0.5013798}
+      - {x: 0.64314824, y: -0.5043384}
+      - {x: 0.0040251315, y: 0.508313}
+  m_UseDelaunayMesh: 0
 --- !u!1 &5702262841635576708
 GameObject:
   m_ObjectHideFlags: 0
@@ -237,7 +248,7 @@ Transform:
   m_GameObject: {fileID: 5702262841635576708}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.16, y: -2.41, z: 0}
+  m_LocalPosition: {x: -0.15, y: 1.07, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

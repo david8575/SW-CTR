@@ -25,7 +25,7 @@ public abstract class EnemyBase : MonoBehaviour
 
     protected Rigidbody2D rb;
 
-    private void Start()
+    protected virtual void Start()
     {
         rb = GetComponent<Rigidbody2D>();
     }
@@ -81,7 +81,7 @@ public abstract class EnemyBase : MonoBehaviour
         canAttack = true;
     }
 
-    public void TakeDamage(float damage)
+    public virtual void TakeDamage(float damage)
     {
         Debug.Log("공격 " + damage + " 데미지");
 

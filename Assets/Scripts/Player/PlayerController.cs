@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 using Cinemachine;
 using UnityEngine.UI;
 using System;
+using UnityEngine.InputSystem.XR;
 
 public class PlayerController : MonoBehaviour
 {
@@ -43,6 +44,7 @@ public class PlayerController : MonoBehaviour
     Rigidbody2D rb;
 
     public float hp = 100;
+    public float maxHp = 100;
     public float attack = 10;
     public float defense = 10;
     public float speed = 10;
@@ -60,6 +62,8 @@ public class PlayerController : MonoBehaviour
     // 적과 부딫히면 공격인지 피해 받음인지
     public bool isAttacking = false;
 
+    public bool IsInvincible = false;
+
     public Shape ShapeInfo { get; private set; } = null;
 
     [SerializeField]
@@ -73,7 +77,7 @@ public class PlayerController : MonoBehaviour
     }
 
     public CinemachineVirtualCamera vcam;
-    public Image image;
+    public PlayerUIManager uIManager;
 
 
 
@@ -96,8 +100,10 @@ public class PlayerController : MonoBehaviour
         playerInputActions.PlayerActions.Special.started += OnSpecialStarted;
         playerInputActions.PlayerActions.Special.canceled += OnSpecialCanceled;
         #endregion
-
+        
         hp += hp * ((float)DataManager.Instance.SaveData.healthStat / GameData.maxStatPoint);
+        maxHp = hp;
+        uIManager.UpdateHPBar(hp, maxHp);
         SetStat();
 
         for (int i = 0; i < shapes.Length; i++)
@@ -173,17 +179,6 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-
-        // 특수 능력 사용 가능 여부에 따라 이미지 투명도 조절 (임시 구현)
-        if (canSpecial)
-        {
-            image.color = new Color(1, 1, 1, 1);
-        }
-        else
-        {
-            image.color = new Color(1, 1, 1, 0.5f);
-        }
-
         // 좌우 이동
         if (moveInput != 0)
         {
@@ -210,7 +205,15 @@ public class PlayerController : MonoBehaviour
     protected IEnumerator WaitSpecialCooldown(float time)
     {
         canSpecial = false;
-        yield return new WaitForSeconds(time);
+        float t = 0;
+        float maxCooldown = time;
+        while (t < maxCooldown)
+        {
+            t += Time.deltaTime;
+            uIManager.UpdateCooldown(t, maxCooldown);
+            yield return null;
+        }
+ 
         Debug.Log("쿨타임 종료");
         canSpecial = true;
     }
@@ -247,6 +250,7 @@ public class PlayerController : MonoBehaviour
 
     #endregion
 
+    // 조작 활성화/비활성화
     public void SetInputSystem(bool OnOff)
     {
         if (OnOff)
@@ -259,11 +263,31 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    // 도형의 위치 반환
     public Transform GetShapeTransform() => ShapeInfo.transform;
 
+    // 도형 사망
     public void ShapeDead()
     {
         ShapeInfo.gameObject.SetActive(false);
         playerInputActions.Disable();
+    }
+
+    public void TakeDamage(float damage)
+    {
+        if (IsInvincible)
+            return;
+
+        Debug.Log("피격 " + damage + " 데미지");
+
+        StartCoroutine(ShapeInfo.Invincible(1.0f));
+
+        hp -= damage;
+        if (hp <= 0)
+        {
+            ShapeDead();
+        }
+
+        uIManager.UpdateHPBar(hp, maxHp);
     }
 }

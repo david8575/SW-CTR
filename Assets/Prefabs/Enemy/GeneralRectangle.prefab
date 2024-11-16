@@ -97,7 +97,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d4fde4d7f3cc69468ebb7403f71a770, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 2
+  health: 100
+  attackPower: 10
+  jumpPower: 5
+  moveSpeed: 2
+  defense: 5
+  attackCoolDown: 1.5
   detectionRange: 5
-  jumpHeight: 5
-  jumpAttackCooldown: 3

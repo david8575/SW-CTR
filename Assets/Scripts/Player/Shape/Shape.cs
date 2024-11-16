@@ -57,7 +57,7 @@ public abstract class Shape : MonoBehaviour
                 }
                 else
                 {
-                    TakeDamage(enemy.attackPower);
+                    controller.TakeDamage(enemy.attackPower);
                 }
             }
             else if (controller.isAttacking)
@@ -66,7 +66,7 @@ public abstract class Shape : MonoBehaviour
             }
             else if (enemy.isAttacking)
             {
-                TakeDamage(enemy.attackPower);
+                controller.TakeDamage(enemy.attackPower);
             }
         }
 
@@ -88,7 +88,7 @@ public abstract class Shape : MonoBehaviour
         controller.canJump = true;
     }
 
-    IEnumerator Invincible(float time)
+    public IEnumerator Invincible(float time)
     {
         IsInvincible = true;
         spriteRenderer.color = new Color(1, 1, 1, 0.5f);
@@ -97,21 +97,5 @@ public abstract class Shape : MonoBehaviour
 
         spriteRenderer.color = new Color(1, 1, 1, 1);
         IsInvincible = false;
-    }
-
-    public void TakeDamage(float damage)
-    {
-        if (IsInvincible)
-            return;
-
-        Debug.Log("피격 " + damage + " 데미지");
-
-        StartCoroutine(Invincible(1.0f));
-
-        controller.hp -= damage;
-        if (controller.hp <= 0)
-        {
-            controller.ShapeDead();
-        }
     }
 }

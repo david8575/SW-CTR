@@ -13,16 +13,13 @@ public class BulletBase : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    protected virtual void OnCollisionEnter2D(Collision2D collision)
     {
         //Debug.Log(collision.gameObject.name);
 
         if (collision.gameObject.CompareTag("Player"))
         {
-            PlayerController.Instance.ShapeInfo.TakeDamage(damage);
+            PlayerController.Instance.TakeDamage(damage);
         }
-
-        gameObject.SetActive(false);
-        Destroy(gameObject);
     }
 }

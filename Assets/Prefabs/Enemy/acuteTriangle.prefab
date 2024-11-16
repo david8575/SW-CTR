@@ -109,6 +109,7 @@ MonoBehaviour:
   attackRange: 2
   isAttacking: 0
   distance: 0
+  attackForce: 5
 --- !u!61 &4311942557276285456
 BoxCollider2D:
   m_ObjectHideFlags: 0
