@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BossPentagon : EnemyBase
+public class BossPentagon : EnemyBase_old
 {
     public GameObject miniPentagonPrefab;     
     public GameObject missilePrefab;           

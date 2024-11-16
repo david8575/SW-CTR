@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEditor.SearchService;
 using UnityEngine;
 
-public class equilateralTriangleEnemy : EnemyBase
+public class equilateralTriangleEnemy : EnemyBase_old
 {
     // 여기 프리팹들에 대해서 스크립트를 따로 만들어야 하는지 
     // 아님 여기서 구현하면 되는지

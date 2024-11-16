@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RhombusRectangle : EnemyBase
+public class RhombusRectangle : EnemyBase_old
 {
     // Start is called before the first frame update
     void Start()

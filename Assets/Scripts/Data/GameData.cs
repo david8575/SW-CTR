@@ -22,6 +22,8 @@ public class GameData
     public bool UnlockSquare = false;
 
     public int leftStatPoint = 0;
+
+    public const int maxStatPoint = 10;
     public int healthStat = 0;
     public int attackStat = 0;
     public int defenseStat = 0;

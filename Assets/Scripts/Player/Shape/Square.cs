@@ -7,8 +7,6 @@ public class Square : Shape
 {
     public override void OnSpecialStarted()
     {
-        if (controller.canSpecial == false)
-            return;
 
         // 특수 능력 누르자마자 밑으로 강한 힘 부여
         rb.velocity = Vector2.zero;
@@ -27,7 +25,7 @@ public class Square : Shape
         if (controller.isAttacking)
         {
             controller.isAttacking = false;
-            spriteRenderer.color = Color.black;
+            spriteRenderer.color = Color.white;
         }
     }
 }

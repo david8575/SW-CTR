@@ -1,10 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using System.Threading;
 using UnityEngine;
 
-public class EnemyBase : MonoBehaviour
+public abstract class EnemyBase : MonoBehaviour
 {
     public float health = 100f;
     public float attackPower = 10f;
@@ -12,55 +10,49 @@ public class EnemyBase : MonoBehaviour
     public float moveSpeed = 2f;
     public float defense = 5f;
     public float attackCoolDown = 1.5f;
-    public float detectionRange = 5f;
+    public float detectionRange = 8f;
+    public float attackRange = 4f;
+    public bool isAttacking = false;
 
-    protected bool isPlayerInRange = false;
-    protected float attackTimer = 0f;
-    protected float patrolTimer = 0f;
     protected float patrolInterval = 3f;
+    protected float patrolTimer = 0f;
     protected int moveDirection = 1;
-    protected GameObject player;
     protected bool canAttack = true;
 
-    // Start is called before the first frame update
-    void Start()
+    protected Transform player;
+    [SerializeField]
+    protected float distance;
+
+    protected Rigidbody2D rb;
+
+    private void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player");
+        rb = GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-           if (health <= 0)
-           {
-                Die();
-           }
+        player = PlayerController.Instance.GetShapeTransform();
 
-           else
-           {
-                if (isPlayerInRange)
-                {
-                    Attack();
-                }
-
-                else
-                {
-                    Patrol();
-                }
-           }
-    }
-
-    protected void DetectPlayer()
-    {
-        if (player != null)
+        distance = Vector2.Distance(transform.position, player.transform.position);
+        if (distance <= detectionRange)
         {
-            // ì´ë°©ì‹ì´ ë§žëŠ” ì§€ ìž˜ ëª¨ë¥´ê² ìŠµë‹ˆë‹¤
-            float distanceToPlayer = Vector2.Distance(transform.position, player.transform.position);
-            isPlayerInRange = distanceToPlayer <= detectionRange;
+            ApproachPlayer();
+
+            if (distance <= attackRange && canAttack)
+            {
+                StartCoroutine(AttackDecorator());
+            }
         }
+        else
+        {
+            Patrol();
+        }
+        
     }
 
-    protected void ApproachPlayer()
+    protected virtual void ApproachPlayer()
     {
         Vector2 direction = (player.transform.position - transform.position).normalized;
         transform.Translate(direction * moveSpeed * Time.deltaTime);
@@ -70,7 +62,7 @@ public class EnemyBase : MonoBehaviour
     {
         patrolTimer += Time.deltaTime;
 
-        if(patrolTimer >= patrolInterval)
+        if (patrolTimer >= patrolInterval)
         {
             moveDirection *= -1;
             patrolTimer = 0f;
@@ -79,17 +71,35 @@ public class EnemyBase : MonoBehaviour
         transform.Translate(Vector2.right * moveSpeed * moveDirection * Time.deltaTime);
     }
 
-    protected virtual IEnumerator Attack()
+    protected abstract IEnumerator Attack();
+
+    IEnumerator AttackDecorator()
     {
         canAttack = false;
-        
+        yield return StartCoroutine(Attack());
         yield return new WaitForSeconds(attackCoolDown);
         canAttack = true;
     }
-    
+
     public void TakeDamage(float damage)
     {
-        health -= damage;
+        Debug.Log("°ø°Ý " + damage + " µ¥¹ÌÁö");
+
+        if (damage > defense)
+            health -= (damage - defense);
+
+        if (health <= 0)
+        {
+            Die();
+        }
+    }
+
+    public void AddForce(Vector2 force)
+    {
+        if (defense > 0)
+            rb.AddForce(force / defense, ForceMode2D.Impulse);
+        else
+            rb.AddForce(force, ForceMode2D.Impulse);
     }
 
     protected void Die()
@@ -97,4 +107,3 @@ public class EnemyBase : MonoBehaviour
         Destroy(gameObject);
     }
 }
-

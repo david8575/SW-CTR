@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StarPentagon : EnemyBase
+public class StarPentagon : EnemyBase_old
 {
     public float dashSpeed = 40f;
     // Start is called before the first frame update

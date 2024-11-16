@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Octagon : EnemyBase
+public class Octagon : EnemyBase_old
 {
     
     private bool DefendBoost = false;

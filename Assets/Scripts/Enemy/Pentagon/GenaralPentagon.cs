@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GenaralPentagon : EnemyBase
+public class GenaralPentagon : EnemyBase_old
 {
     public float dashSpeed = 40f;
     public float rotateSpeed = 360f;

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Dodecagon : EnemyBase
+public class Dodecagon : EnemyBase_old
 {
     public GameObject flamePrefab;
     public float flameDuration = 3f;

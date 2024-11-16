@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Numerics;
 using UnityEngine;
 
-public class OblongRectangle : EnemyBase
+public class OblongRectangle : EnemyBase_old
 {
     
 

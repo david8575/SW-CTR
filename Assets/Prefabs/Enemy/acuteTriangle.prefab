@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 5189377992017718149}
   m_Layer: 0
   m_Name: acuteTriangle
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -99,9 +99,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83a1eb172bcae48419a1bbbf97977195, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 2
+  health: 10
+  attackPower: 1
+  jumpPower: 5
+  moveSpeed: 2
+  defense: 0
+  attackCoolDown: 1
   detectionRange: 5
-  attackCoolTime: 2
+  attackRange: 2
+  isAttacking: 0
+  distance: 0
 --- !u!61 &4311942557276285456
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -162,7 +169,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 0
+  m_GravityScale: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
