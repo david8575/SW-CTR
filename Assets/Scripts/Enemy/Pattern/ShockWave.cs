@@ -4,10 +4,12 @@ using UnityEngine;
 
 public class ShockWave : MonoBehaviour
 {
-    
+    public float maxScale = 1.5f;
 
-    void Start()
+    public void Appear(Vector3 pos)
     {
+        transform.position = pos;
+
         StartCoroutine(Animation());
     }
 
@@ -15,7 +17,7 @@ public class ShockWave : MonoBehaviour
     {
         // 점점 커지는 애니메이션
         float scale = 0.1f;
-        while (scale < 1.5f)
+        while (scale < maxScale)
         {
             scale *= 2;
             transform.localScale = new Vector3(scale, scale, 1);
@@ -33,7 +35,6 @@ public class ShockWave : MonoBehaviour
         }
 
         gameObject.SetActive(false);
-        Destroy(gameObject);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
