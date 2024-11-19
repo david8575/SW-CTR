@@ -186,16 +186,4 @@ public class PlayerController : MonoBehaviour
         StartCoroutine(WaitSpecialCooldown(ShapeInfo.cooldown));
     }
 
-    public void SetInputSystem(bool OnOff)
-    {
-        if (OnOff)
-        {
-            playerInputActions.Enable();
-        }
-        else
-        {
-            playerInputActions.Disable();
-        }
-    }
-
 }
