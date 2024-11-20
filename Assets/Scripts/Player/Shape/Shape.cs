@@ -18,12 +18,14 @@ public abstract class Shape : MonoBehaviour
     public Rigidbody2D rb;
     protected PlayerController controller;
     protected SpriteRenderer spriteRenderer;
+    protected Color color;
 
     // 초기화
     public void Init(PlayerController con)
     {
         rb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        color = spriteRenderer.color;
         controller = con;
     }
 
@@ -38,6 +40,7 @@ public abstract class Shape : MonoBehaviour
         if (collision.gameObject.CompareTag("Enemy"))
         {
             EnemyBase enemy = collision.gameObject.GetComponent<EnemyBase>();
+            bool isKill = false;
 
             Vector2 dir = (enemy.transform.position - transform.position).normalized;
             //Debug.DrawRay(transform.position, dir, Color.red, 1f);
@@ -53,7 +56,7 @@ public abstract class Shape : MonoBehaviour
             {
                 if (attack >= enemy.attackPower)
                 {
-                    enemy.TakeDamage(attack);
+                    isKill = enemy.TakeDamage(attack);
                 }
                 else
                 {
@@ -62,11 +65,18 @@ public abstract class Shape : MonoBehaviour
             }
             else if (controller.isAttacking)
             {
-                enemy.TakeDamage(attack);
+                isKill = enemy.TakeDamage(attack);
             }
             else if (enemy.isAttacking)
             {
                 controller.TakeDamage(enemy.attackPower);
+            }
+
+            if (isKill)
+            {
+                controller.hp += enemy.healingAmount;
+                if (controller.hp > controller.maxHp)
+                    controller.hp = controller.maxHp;
             }
         }
 
@@ -91,11 +101,11 @@ public abstract class Shape : MonoBehaviour
     public IEnumerator Invincible(float time)
     {
         IsInvincible = true;
-        spriteRenderer.color = new Color(1, 1, 1, 0.5f);
+        spriteRenderer.color = new Color(color.r, color.g, color.b, 0.5f);
 
         yield return new WaitForSeconds(time);
 
-        spriteRenderer.color = new Color(1, 1, 1, 1);
+        spriteRenderer.color = color;
         IsInvincible = false;
     }
 }

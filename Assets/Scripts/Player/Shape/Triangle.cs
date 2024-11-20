@@ -7,8 +7,6 @@ public class Triangle : Shape
 {
     public override void OnSpecialStarted()
     {
-        if (controller.canSpecial == false)
-            return;
 
         // 특수 능력 누르자마자 마우스 방향으로 특수 능력 사용
         Vector2 target = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue()) - transform.position;
@@ -31,7 +29,7 @@ public class Triangle : Shape
         controller.isAttacking = true;
         spriteRenderer.color = Color.red;
         yield return new WaitForSeconds(time);
-        spriteRenderer.color = Color.black;
+        spriteRenderer.color = color;
         controller.isAttacking = false;
     }
 }

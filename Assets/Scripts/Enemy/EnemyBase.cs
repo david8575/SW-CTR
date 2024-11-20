@@ -14,6 +14,8 @@ public abstract class EnemyBase : MonoBehaviour
     public float attackRange = 4f;
     public bool isAttacking = false;
 
+    public float healingAmount;
+
     protected float patrolInterval = 3f;
     protected float patrolTimer = 0f;
     protected int moveDirection = 1;
@@ -28,6 +30,10 @@ public abstract class EnemyBase : MonoBehaviour
     protected virtual void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+
+        healingAmount = health * 0.1f;
+        if (healingAmount < 10)
+            healingAmount = 10;
     }
 
     // Update is called once per frame
@@ -89,7 +95,7 @@ public abstract class EnemyBase : MonoBehaviour
         canAttack = true;
     }
 
-    public virtual void TakeDamage(float damage)
+    public virtual bool TakeDamage(float damage)
     {
         Debug.Log("공격 " + damage + " 데미지");
 
@@ -99,7 +105,9 @@ public abstract class EnemyBase : MonoBehaviour
         if (health <= 0)
         {
             Die();
+            return true;
         }
+        return false;
     }
 
     public void AddForce(Vector2 force)
@@ -110,7 +118,7 @@ public abstract class EnemyBase : MonoBehaviour
             rb.AddForce(force, ForceMode2D.Impulse);
     }
 
-    protected void Die()
+    protected virtual void Die()
     {
         Destroy(gameObject);
     }

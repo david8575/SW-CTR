@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -13,9 +14,13 @@ public class BossTriangle : EnemyBase
     // 30% hp: Summon Right Triangle
     bool summonRightTriangle = false;
 
+    public bool startFight = false;
+
+    public event Action DeadEvent = null;
+
     [SerializeField]
     int step = 3;
-    float attackForce = 10f;
+    float attackForce = 12f;
     float maxHp;
 
     [SerializeField]
@@ -59,18 +64,22 @@ public class BossTriangle : EnemyBase
 
     protected override IEnumerator Attack()
     {
+        if (startFight == false)
+        {
+            yield return new WaitForSeconds(1f);
+            startFight = true;
+        }
+
         yield return new WaitForSeconds(0.5f);
 
-        int rnd = Random.Range(0, step);
+        int rnd = UnityEngine.Random.Range(0, step);
         float time;
 
         if (rnd == 0)
         {
             // wait
-            yield return new WaitForSeconds(1.0f);
+            yield return new WaitForSeconds(0.5f);
             Debug.Log("Wait");
-
-            yield break;
         }
         else if (rnd == 1)
         {
@@ -78,15 +87,13 @@ public class BossTriangle : EnemyBase
             Debug.Log("Summon");
             GameObject miniTriangle = Instantiate(normalTriangle, normalSpawnPoint.position, Quaternion.identity);
             yield return new WaitForSeconds(0.5f);
-
-            yield break;
         }
-
-        if (rnd == 2)
+        else if (rnd == 2)
         {
             // attack
             Debug.Log("Attack");
             rb.gravityScale = 1;
+
             Vector2 dir = (player.transform.position - transform.position).normalized;
             isAttacking = true;
             rb.AddForce(dir * attackForce, ForceMode2D.Impulse);
@@ -121,6 +128,7 @@ public class BossTriangle : EnemyBase
                 yield return null;
                 dir = (player.transform.position - transform.position);
             }
+            yield return new WaitForSeconds(0.2f);
             targetLaser.SetActive(false);
 
             rb.gravityScale = 1;
@@ -147,19 +155,23 @@ public class BossTriangle : EnemyBase
                 lasers[i].SetAlpha(0.3f);
             }
 
-            yield return new WaitForSeconds(0.7f);
+            rb.SetRotation(0);
+            rb.AddTorque(10f);
+
+            yield return new WaitForSeconds(1f);
             for (int i = 0; i < lasers.Length; i++)
             {
                 lasers[i].SetAlpha(1.0f);
                 lasers[i].isLaserAttack = true;
             }
+            
 
             yield return new WaitForSeconds(2f);
 
             laserParent.gameObject.SetActive(false);
         }
 
-        rb.gravityScale = 0;
+        rb.gravityScale = 0f;
         rb.velocity = Vector2.zero;
 
         gameObject.layer = LayerMask.NameToLayer("IgnoreAll");
@@ -169,8 +181,8 @@ public class BossTriangle : EnemyBase
             transform.position = Vector2.Lerp(transform.position, startPos, 0.1f);
             yield return new WaitForSeconds(0.05f);
 
-            time += Time.deltaTime;
-            if (time > 2.0f)
+            time += 0.05f;
+            if (time > 2.5f)
             {
                 break;
             }
@@ -183,9 +195,11 @@ public class BossTriangle : EnemyBase
 
     }
 
-    public override void TakeDamage(float damage)
+    public override bool TakeDamage(float damage)
     {
-        base.TakeDamage(damage);
+        bool r = base.TakeDamage(damage);
+
+        if (r) return true;
 
         if (step < 4 && health <= maxHp * 0.8f)
         {
@@ -199,12 +213,22 @@ public class BossTriangle : EnemyBase
         {
             summonRightTriangle = true;
 
-            Instantiate(rightTriangle, normalSpawnPoint.position, Quaternion.identity);
-            Instantiate(rightTriangle, normalSpawnPoint.position, Quaternion.identity);
+            attackCoolDown -= 0.5f;
+
+            Instantiate(rightTriangle, transform.position, Quaternion.identity);
+            Instantiate(rightTriangle, transform.position, Quaternion.identity);
 
         }
 
         hpBar.fillAmount = health / maxHp;
         hpText.text = health + " / " + maxHp;
+
+        return false;
+    }
+
+    override protected void Die()
+    {
+        DeadEvent?.Invoke();
+        base.Die();
     }
 }

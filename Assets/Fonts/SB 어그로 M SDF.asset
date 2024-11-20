@@ -118,7 +118,7 @@ Material:
     - _OutlineSoftness: 0
     - _OutlineUVSpeedX: 0
     - _OutlineUVSpeedY: 0
-    - _OutlineWidth: 0
+    - _OutlineWidth: 0.305
     - _PerspectiveFilter: 0.875
     - _Reflectivity: 10
     - _ScaleRatioA: 0.9
@@ -172,8 +172,8 @@ MonoBehaviour:
   material: {fileID: -6434892175793043997}
   materialHashCode: -1860067299
   m_Version: 1.1.0
-  m_SourceFontFileGUID: 08f338c2e279699489721e92419bd980
-  m_SourceFontFile_EditorRef: {fileID: 12800000, guid: 08f338c2e279699489721e92419bd980, type: 3}
+  m_SourceFontFileGUID: ef3ef7942d4175b4abf8cc6499a0fb8e
+  m_SourceFontFile_EditorRef: {fileID: 12800000, guid: ef3ef7942d4175b4abf8cc6499a0fb8e, type: 3}
   m_SourceFontFile: {fileID: 12800000, guid: 08f338c2e279699489721e92419bd980, type: 3}
   m_AtlasPopulationMode: 1
   m_FaceInfo:

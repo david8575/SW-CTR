@@ -9,7 +9,7 @@ public class Laser : MonoBehaviour
 
     SpriteRenderer spriteRenderer;
 
-    private void Start()
+    private void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
@@ -23,7 +23,7 @@ public class Laser : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     { 
-        Debug.Log("Laser Collision");
+        //Debug.Log("Laser Collision");
         if (collision.gameObject.CompareTag("Player"))
         {
             if (isLaserAttack)
