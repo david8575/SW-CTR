@@ -62,6 +62,7 @@ public class BossTriangle : EnemyBase
         yield return new WaitForSeconds(0.5f);
 
         int rnd = Random.Range(0, step);
+        float time;
 
         if (rnd == 0)
         {
@@ -104,7 +105,7 @@ public class BossTriangle : EnemyBase
             targetLaser.transform.position = pos;
             Vector2 dir = (player.transform.position - transform.position);
 
-            float time = 0;
+            time = 0;
             while (time < 1.0f)
             {
                 // 레이저 방향 : 플레이어 방향
@@ -162,10 +163,17 @@ public class BossTriangle : EnemyBase
         rb.velocity = Vector2.zero;
 
         gameObject.layer = LayerMask.NameToLayer("IgnoreAll");
+        time = 0;
         while (Vector2.Distance(transform.position, startPos) > 0.3f)
         {
             transform.position = Vector2.Lerp(transform.position, startPos, 0.1f);
             yield return new WaitForSeconds(0.05f);
+
+            time += Time.deltaTime;
+            if (time > 2.0f)
+            {
+                break;
+            }
         }
         transform.position = startPos;
         gameObject.layer = LayerMask.NameToLayer("Default");

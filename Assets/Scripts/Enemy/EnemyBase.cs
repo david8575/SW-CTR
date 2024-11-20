@@ -55,11 +55,19 @@ public abstract class EnemyBase : MonoBehaviour
     protected virtual void ApproachPlayer()
     {
         Vector2 direction = (player.transform.position - transform.position).normalized;
-        transform.Translate(direction * moveSpeed * Time.deltaTime);
+        rb.AddForce(direction * moveSpeed * 3f);
     }
 
     protected void Patrol()
     {
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 1.5f, LayerMask.GetMask("Wall"));
+        Debug.DrawRay(transform.position, Vector2.down, Color.red);
+        if (!hit)
+        {
+            moveDirection *= -1;
+            patrolTimer = 0;
+        }
+
         patrolTimer += Time.deltaTime;
 
         if (patrolTimer >= patrolInterval)
