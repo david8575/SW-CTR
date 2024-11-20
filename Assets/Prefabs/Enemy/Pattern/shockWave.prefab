@@ -133,4 +133,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aea7d7cc393a1dd48b192518f5018eb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+<<<<<<<< HEAD:Assets/Prefabs/Enemy/Pattern/shockWave.prefab
   maxScale: 1
+========
+  health: 100
+  attackPower: 10
+  jumpPower: 5
+  moveSpeed: 2
+  defense: 5
+  attackCoolDown: 1.5
+  detectionRange: 5
+>>>>>>>> features/player_and_enemy:Assets/Prefabs/Enemy/GeneralRectangle.prefab
