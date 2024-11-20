@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 13312, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: Stage1_Sky_tile
+  m_Name: Stage1_Tree_tile
   m_EditorClassIdentifier: 
-  m_Sprite: {fileID: 21300000, guid: 609ea112ec02ba04ca00f3155a0540c7, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 4ff06e1ce8e0a58418baba67eca27e2e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Transform:
     e00: 1
