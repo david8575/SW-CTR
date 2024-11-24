@@ -52,7 +52,18 @@ public abstract class Shape : MonoBehaviour
 
             enemy.AddForce(1f * (attack) * dir);
 
-            if (controller.isAttacking && enemy.isAttacking)
+            if (controller.isAttacking)
+            {
+                isKill = enemy.TakeDamage(attack);
+            }
+
+            if (enemy.IsAttacking)
+            {
+                controller.TakeDamage(enemy.attackPower);
+            }
+
+            /*
+            if (controller.isAttacking && enemy.IsAttacking)
             {
                 if (attack >= enemy.attackPower)
                 {
@@ -67,10 +78,11 @@ public abstract class Shape : MonoBehaviour
             {
                 isKill = enemy.TakeDamage(attack);
             }
-            else if (enemy.isAttacking)
+            else if (enemy.IsAttacking)
             {
                 controller.TakeDamage(enemy.attackPower);
             }
+            */
 
             if (isKill)
             {
@@ -101,9 +113,19 @@ public abstract class Shape : MonoBehaviour
     public IEnumerator Invincible(float time)
     {
         IsInvincible = true;
-        spriteRenderer.color = new Color(color.r, color.g, color.b, 0.5f);
+        Color first = new Color(color.r, color.g, color.b, 0.4f);
+        Color second = new Color(color.r, color.g, color.b, 0.7f);
+        var wait = new WaitForSeconds(0.05f);
+        bool idx = true;
 
-        yield return new WaitForSeconds(time);
+        float t = 0;
+        while (t < time)
+        {
+            spriteRenderer.color = idx ? first : second;
+            idx = !idx;
+            t += 0.05f;
+            yield return wait;
+        }
 
         spriteRenderer.color = color;
         IsInvincible = false;

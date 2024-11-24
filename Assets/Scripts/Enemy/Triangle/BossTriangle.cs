@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class BossTriangle : EnemyBase
 {
@@ -40,10 +39,6 @@ public class BossTriangle : EnemyBase
     [Header("Laser")]
     public Laser[] lasers;
     public Transform laserParent;
-
-    [Header("UI")]
-    public Image hpBar;
-    public TextMeshProUGUI hpText;
 
     protected override void Start()
     {
@@ -95,10 +90,11 @@ public class BossTriangle : EnemyBase
             rb.gravityScale = 1;
 
             Vector2 dir = (player.transform.position - transform.position).normalized;
-            isAttacking = true;
+            IsAttacking = true;
             rb.AddForce(dir * attackForce, ForceMode2D.Impulse);
             yield return new WaitForSeconds(1.5f);
-            isAttacking = false;
+            IsAttacking = false;
+
 
 
         }
@@ -137,11 +133,11 @@ public class BossTriangle : EnemyBase
             shockWave.gameObject.SetActive(true);
             shockWave.Appear(transform.position);
             dir = (player.transform.position - transform.position).normalized;
-            isAttacking = true;
+            IsAttacking = true;
             rb.AddForce(dir * attackForce * 4f, ForceMode2D.Impulse);
 
             yield return new WaitForSeconds(3f);
-            isAttacking = false;
+            IsAttacking = false;
             rb.sharedMaterial = null;
         }
         else if (rnd == 4)
@@ -219,9 +215,6 @@ public class BossTriangle : EnemyBase
             Instantiate(rightTriangle, transform.position, Quaternion.identity);
 
         }
-
-        hpBar.fillAmount = health / maxHp;
-        hpText.text = health + " / " + maxHp;
 
         return false;
     }

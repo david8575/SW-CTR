@@ -9,8 +9,7 @@ using UnityEngine.InputSystem.XR;
 
 public class PlayerController : MonoBehaviour
 {
-    #region Singlton
-    // Singleton (어디서든 접근 가능)
+    #region Static Instance
     private static PlayerController instance;
     public static PlayerController Instance
     {
@@ -21,20 +20,6 @@ public class PlayerController : MonoBehaviour
                 instance = FindObjectOfType<PlayerController>();
             }
             return instance;
-        }
-    }
-
-    // 싱글톤 등록
-    private void Awake()
-    {
-        if (instance == null)
-        {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            DestroyImmediate(gameObject);
         }
     }
     #endregion
@@ -103,7 +88,7 @@ public class PlayerController : MonoBehaviour
         
         hp += hp * ((float)DataManager.Instance.SaveData.healthStat / GameData.maxStatPoint);
         maxHp = hp;
-        uIManager.UpdateHPBar(hp, maxHp);
+        uIManager.SetHp(hp, maxHp);
         SetStat();
 
         for (int i = 0; i < shapes.Length; i++)
@@ -288,6 +273,6 @@ public class PlayerController : MonoBehaviour
             ShapeDead();
         }
 
-        uIManager.UpdateHPBar(hp, maxHp);
+        uIManager.UpdateHPBar(hp);
     }
 }

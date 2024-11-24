@@ -4,15 +4,25 @@ using UnityEngine;
 
 public abstract class EnemyBase : MonoBehaviour
 {
+    [Header("Enemy Stats")]
     public float health = 100f;
     public float attackPower = 10f;
     public float jumpPower = 5f;
     public float moveSpeed = 2f;
     public float defense = 5f;
     public float attackCoolDown = 1.5f;
-    public float detectionRange = 8f;
-    public float attackRange = 4f;
-    public bool isAttacking = false;
+    public float detectionRange = 9f;
+    public float attackRange = 5f;
+    bool isAttacking = false;
+    public bool IsAttacking {
+        get { return isAttacking; }
+        set
+        {
+            isAttacking = value;
+            if (attackImage != null)
+                attackImage.SetActive(isAttacking);
+        }
+    }
 
     public float healingAmount;
 
@@ -27,9 +37,16 @@ public abstract class EnemyBase : MonoBehaviour
 
     protected Rigidbody2D rb;
 
+    [Header("Other")]
+    public HpBar hpBar;
+    public GameObject attackImage;
+
     protected virtual void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        hpBar?.SetHp(health, health);
+
+
 
         healingAmount = health * 0.1f;
         if (healingAmount < 10)
@@ -101,6 +118,8 @@ public abstract class EnemyBase : MonoBehaviour
 
         if (damage > defense)
             health -= (damage - defense);
+
+        hpBar?.SetHp(health);
 
         if (health <= 0)
         {
