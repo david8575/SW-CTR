@@ -27,6 +27,7 @@ public abstract class EnemyBase : MonoBehaviour
 
     protected Rigidbody2D rb;
 
+
     protected virtual void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -97,7 +98,7 @@ public abstract class EnemyBase : MonoBehaviour
 
     public virtual bool TakeDamage(float damage)
     {
-        Debug.Log("°ø°Ý " + damage + " µ¥¹ÌÁö");
+        Debug.Log("ï¿½ï¿½ï¿½ï¿½ " + damage + " ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
 
         if (damage > defense)
             health -= (damage - defense);
