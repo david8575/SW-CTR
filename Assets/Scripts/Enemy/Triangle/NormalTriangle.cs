@@ -4,14 +4,17 @@ using UnityEngine;
 
 public class NormalTriangle : EnemyBase
 {
-    public float attackForce = 5f;
+    public float attackForce = 7f;
 
     protected override IEnumerator Attack()
     {
         Vector2 dir = (player.transform.position - transform.position).normalized;
-        isAttacking = true;
+        yield return new WaitForSeconds(0.3f);
+
+        IsAttacking = true;
         rb.AddForce(dir * attackForce, ForceMode2D.Impulse);
+
         yield return new WaitForSeconds(0.5f);
-        isAttacking = false;
+        IsAttacking = false;
     }
 }

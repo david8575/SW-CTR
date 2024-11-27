@@ -15,7 +15,7 @@ public class rightTriangleEnemy : EnemyBase
 
     IEnumerator wait()
     {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.1f);
         gameObject.layer = LayerMask.NameToLayer("Default");
     }
 
@@ -25,12 +25,12 @@ public class rightTriangleEnemy : EnemyBase
         rb.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
         yield return new WaitForSeconds(0.5f);
 
-        isAttacking = true; 
+        IsAttacking = true; 
 
         Vector2 direction = (player.transform.position - transform.position).normalized;
         rb.AddForce(direction * dashSpeed, ForceMode2D.Impulse);
         
         yield return new WaitForSeconds(0.5f);
-        isAttacking = false;
+        IsAttacking = false;
     }
 }
