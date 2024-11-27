@@ -7,7 +7,7 @@ public class Circle : Shape
 {
     bool isCharging = false;
     float power;
-
+    
     public override void OnSpecialStarted()
     {
 
@@ -22,6 +22,7 @@ public class Circle : Shape
         if (isCharging)
         {
             power *= 2;
+            PlayerController.Instance.uIManager.cooldownCircle.color = new Color(power / specialPower, 0, 0, 1);
 
             // 특수능력 스탯이 최대치
             if (power > specialPower)
@@ -33,9 +34,10 @@ public class Circle : Shape
 
     public override void OnSpecialCanceled()
     {
-        if (controller.canSpecial == false)
+        if (controller.canSpecial == false || isCharging == false)
             return;
         isCharging = false;
+        PlayerController.Instance.uIManager.cooldownCircle.color = Color.white;
 
         //rb.velocity = Vector2.zero;
 

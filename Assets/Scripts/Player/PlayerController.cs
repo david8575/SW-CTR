@@ -22,6 +22,19 @@ public class PlayerController : MonoBehaviour
             return instance;
         }
     }
+
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
     #endregion
 
 
@@ -49,7 +62,9 @@ public class PlayerController : MonoBehaviour
 
     public bool IsInvincible = false;
 
-    public Shape ShapeInfo { get; private set; } = null;
+    [SerializeField]
+    Shape shapeInfo = null;
+    public Shape ShapeInfo { get => shapeInfo; private set => shapeInfo = value; }
 
     [SerializeField]
     Shape[] shapes;
@@ -63,8 +78,6 @@ public class PlayerController : MonoBehaviour
 
     public CinemachineVirtualCamera vcam;
     public PlayerUIManager uIManager;
-
-
 
     private void Start()
     {
@@ -120,7 +133,12 @@ public class PlayerController : MonoBehaviour
             // 이렇게 true로 감지하는게 명확해서 가능하면 ||로 뺴줌
             || isAttacking == true 
             )
+        {
+            Debug.Log("이미 선택된 도형");
             return;
+        }
+
+        uIManager.UpdateShape(idx);
 
         // 도형 로드
         //string shapeStatPath = "Player/" + shapeName;
@@ -160,6 +178,7 @@ public class PlayerController : MonoBehaviour
         rb.velocity = vel;
         vcam.Follow = ShapeInfo.transform;
 
+        Debug.Log("도형 변경 완료");
     }
 
     private void FixedUpdate()

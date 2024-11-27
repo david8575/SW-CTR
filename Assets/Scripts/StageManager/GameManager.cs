@@ -6,18 +6,19 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance; 
 
-    private int starsCollected = 0;
+    public int starsCollected { get; private set; } = 0;
+    int enemieCount = 0;
 
-    // Start is called before the first frame update
-    void Start()
+    StageBase stage;
+    public StageBase CurrentStage
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        get { return stage; }
+        set
+        {
+            stage = value;
+            starsCollected = 0;
+            enemieCount = 0;
+        }
     }
 
     private void Awake()
@@ -32,34 +33,31 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
+    public void AddEnmey()
+    {
+        enemieCount++;
+    }
 
     public void CollectStar()
     {
         starsCollected++;
         Debug.Log("Star Collected! Total Stars: " + starsCollected);
+        CurrentStage.SetStarCount(starsCollected);
     }
 
-    public int GetStarsCollected()
+    public void StageClear()
     {
-        return starsCollected;
+        CurrentStage.StageClear();
     }
 
     public void CheckAllEnemiesDefeated()
     {
-        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
-        if (enemies.Length == 0)
+        //GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        enemieCount--;
+        if (enemieCount == 0)
         {
             Debug.Log("All enemies defeated! Activating Clear Point.");
-            ActivateClearPoint();
-        }
-    }
-
-    private void ActivateClearPoint()
-    {
-        GameObject clearPoint = GameObject.Find("ClearPoint");
-        if (clearPoint != null)
-        {
-            clearPoint.SetActive(true);
+            CurrentStage.EnableClearPoint();
         }
     }
 }

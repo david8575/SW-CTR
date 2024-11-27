@@ -80,7 +80,8 @@ public class BossTriangle : EnemyBase
         {
             // summon
             Debug.Log("Summon");
-            GameObject miniTriangle = Instantiate(normalTriangle, normalSpawnPoint.position, Quaternion.identity);
+            Instantiate(normalTriangle, normalSpawnPoint.position, Quaternion.identity);
+            Instantiate(normalTriangle, normalSpawnPoint.position, Quaternion.identity);
             yield return new WaitForSeconds(0.5f);
         }
         else if (rnd == 2)
@@ -145,14 +146,16 @@ public class BossTriangle : EnemyBase
             // laser
             Debug.Log("Laser Attack");
 
+            // 회전 비활성화
+            rb.angularVelocity = 0;
+
+            rb.AddTorque(2f);
+
             laserParent.gameObject.SetActive(true);
             for (int i = 0; i < lasers.Length; i++)
             {
                 lasers[i].SetAlpha(0.3f);
             }
-
-            rb.SetRotation(0);
-            rb.AddTorque(10f);
 
             yield return new WaitForSeconds(1f);
             for (int i = 0; i < lasers.Length; i++)

@@ -51,6 +51,8 @@ public abstract class EnemyBase : MonoBehaviour
         healingAmount = health * 0.1f;
         if (healingAmount < 10)
             healingAmount = 10;
+
+        GameManager.instance.AddEnmey();
     }
 
     // Update is called once per frame
@@ -83,8 +85,9 @@ public abstract class EnemyBase : MonoBehaviour
 
     protected void Patrol()
     {
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 1.5f, LayerMask.GetMask("Wall"));
-        Debug.DrawRay(transform.position, Vector2.down, Color.red);
+        Vector2 hitPos = new Vector2(transform.position.x + moveDirection * 0.2f, transform.position.y);
+        RaycastHit2D hit = Physics2D.Raycast(hitPos, Vector2.down, 1.5f, LayerMask.GetMask("Wall"));
+        Debug.DrawRay(hitPos, Vector2.down, Color.red);
         if (!hit)
         {
             moveDirection *= -1;
@@ -139,6 +142,15 @@ public abstract class EnemyBase : MonoBehaviour
 
     protected virtual void Die()
     {
+        if (GameManager.instance != null) // GameManager가 존재하는지 확인
+        {
+            GameManager.instance.CheckAllEnemiesDefeated();
+        }
+        else
+        {
+            Debug.LogWarning("GameManager instance not found!");
+        }
+
         Destroy(gameObject);
     }
 }

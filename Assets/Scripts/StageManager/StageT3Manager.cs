@@ -4,16 +4,20 @@ using UnityEngine;
 using Cinemachine;
 using UnityEngine.SceneManagement;
 
-public class StageTBManager : MonoBehaviour
+public class StageT3Manager : StageBase
 {
     public CinemachineVirtualCamera bossCam;
     public GameObject bossTriangle;
 
-    private void Start()
+    protected override void Start()
     {
-        StartCoroutine(StartCutscene());
+        base.Start();
 
-        bossTriangle.transform.GetChild(0).GetComponent<BossTriangle>().DeadEvent += () => StartCoroutine(StageClear());
+        isBoss = true;
+
+        bossTriangle.transform.GetChild(0).GetComponent<BossTriangle>().DeadEvent += GameManager.instance.StageClear;
+
+        StartCoroutine(StartCutscene());
     }
 
     IEnumerator StartCutscene()
@@ -37,14 +41,5 @@ public class StageTBManager : MonoBehaviour
 
         PlayerController.Instance.SetInputSystem(true);
 
-    }
-
-    IEnumerator StageClear()
-    {
-        PlayerController.Instance.SetInputSystem(false);
-
-        yield return new WaitForSeconds(1f);
-
-        SceneManager.LoadScene("StageSelect");
     }
 }

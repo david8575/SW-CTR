@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3092231006749689092}
   - component: {fileID: 2599117347960078512}
   - component: {fileID: 7658268528806519119}
+  - component: {fileID: 6729095367207034859}
   m_Layer: 0
   m_Name: spike
   m_TagString: Untagged
@@ -130,3 +131,16 @@ EdgeCollider2D:
   m_AdjacentEndPoint: {x: 0, y: 0}
   m_UseAdjacentStartPoint: 0
   m_UseAdjacentEndPoint: 0
+--- !u!114 &6729095367207034859
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2626729179522466660}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aae5752a5c8eedf478afefb71c21f22d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 10

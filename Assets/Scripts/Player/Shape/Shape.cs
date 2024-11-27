@@ -59,7 +59,8 @@ public abstract class Shape : MonoBehaviour
 
             if (enemy.IsAttacking)
             {
-                controller.TakeDamage(enemy.attackPower);
+                if (defense < enemy.attackPower)
+                    controller.TakeDamage(enemy.attackPower);
             }
 
             /*
