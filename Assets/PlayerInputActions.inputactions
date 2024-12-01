@@ -58,6 +58,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Enter",
+                    "type": "Button",
+                    "id": "aeea2133-6e33-4ba7-a75f-6821321976b0",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -107,6 +116,17 @@
                 },
                 {
                     "name": "",
+                    "id": "a04ef1c3-d18f-42d9-9320-82b90406318a",
+                    "path": "<Keyboard>/w",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "a8cf70c1-23d0-41af-a885-f19a9a7a545c",
                     "path": "<Mouse>/leftButton",
                     "interactions": "Hold",
@@ -146,6 +166,17 @@
                     "processors": "",
                     "groups": ";PC",
                     "action": "ChangeSquare",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "6df310a4-9a34-4fae-83cc-04206dd393de",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Enter",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

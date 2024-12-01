@@ -7,8 +7,10 @@ public class GameManager : MonoBehaviour
     public static GameManager instance; 
 
     public int starsCollected { get; private set; } = 0;
-    int enemieCount = 0;
+    public int enemieCount { get; set; } = 0;
+    public bool IsAllKill { get; private set; } = false;
 
+    [SerializeField]
     StageBase stage;
     public StageBase CurrentStage
     {
@@ -18,6 +20,7 @@ public class GameManager : MonoBehaviour
             stage = value;
             starsCollected = 0;
             enemieCount = 0;
+            IsAllKill = false;
         }
     }
 
@@ -33,10 +36,6 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    public void AddEnmey()
-    {
-        enemieCount++;
-    }
 
     public void CollectStar()
     {
@@ -45,19 +44,16 @@ public class GameManager : MonoBehaviour
         CurrentStage.SetStarCount(starsCollected);
     }
 
-    public void StageClear()
-    {
-        CurrentStage.StageClear();
-    }
-
     public void CheckAllEnemiesDefeated()
     {
         //GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
         enemieCount--;
-        if (enemieCount == 0)
+        
+        if (enemieCount == 0 && IsAllKill == false)
         {
-            Debug.Log("All enemies defeated! Activating Clear Point.");
-            CurrentStage.EnableClearPoint();
+            Debug.Log("All enemies defeated!");
+            IsAllKill = true;
+            CollectStar();
         }
     }
 }

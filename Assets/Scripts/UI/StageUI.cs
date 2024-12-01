@@ -14,7 +14,10 @@ public class StageUI : MonoBehaviour
     public TextMeshProUGUI[] timeTexts;
     public TextMeshProUGUI puzzleText;
 
-    public Button finishButton;
+    public GameObject[] GameoverObjects;
+    public TextMeshProUGUI GameoverTimeText;
+
+    public Button[] finishButtons;
 
     private void Start()
     {
@@ -24,7 +27,12 @@ public class StageUI : MonoBehaviour
                 stars[i].SetActive(false);
             clearObjects[i].SetActive(false);
         }
-        
+
+        for (int i = 0; i < GameoverObjects.Length; i++)
+        {
+            GameoverObjects[i].SetActive(false);
+        }
+
     }
 
     public IEnumerator StageCorutine()
@@ -38,12 +46,38 @@ public class StageUI : MonoBehaviour
             yield return wait;
         }
 
-        for (int j = 0; j < GameManager.instance.starsCollected; j++)
+        var saveData = DataManager.Instance.SaveData;
+        var stageInfo = saveData.Stages[GameManager.instance.CurrentStage.stageNumber];
+
+        if (stageInfo.isAllKill)
         {
-            stars[j].SetActive(true);
+            stars[0].SetActive(true);
+            yield return wait;
+        }
+
+        if (stageInfo.isPuzzleClear)
+        {
+            stars[1].SetActive(true);
+            yield return wait;
+        }
+
+        if (stageInfo.isTimeClear)
+        {
+            stars[2].SetActive(true);
             yield return wait;
         }
 
         clearObjects[i].SetActive(true);
+    }
+
+    public IEnumerator GameoverCorutine()
+    {
+        var wait = new WaitForSeconds(1f);
+
+        for (int i = 0; i < GameoverObjects.Length; i++)
+        {
+            GameoverObjects[i].SetActive(true);
+            yield return wait;
+        }
     }
 }

@@ -5,7 +5,6 @@ using UnityEngine.InputSystem;
 using Cinemachine;
 using UnityEngine.UI;
 using System;
-using UnityEngine.InputSystem.XR;
 
 public class PlayerController : MonoBehaviour
 {
@@ -97,8 +96,10 @@ public class PlayerController : MonoBehaviour
 
         playerInputActions.PlayerActions.Special.started += OnSpecialStarted;
         playerInputActions.PlayerActions.Special.canceled += OnSpecialCanceled;
+
+        playerInputActions.PlayerActions.Enter.performed += OnEnterPerformd;
         #endregion
-        
+
         hp += hp * ((float)DataManager.Instance.SaveData.healthStat / GameData.maxStatPoint);
         maxHp = hp;
         uIManager.SetHp(hp, maxHp);
@@ -252,6 +253,12 @@ public class PlayerController : MonoBehaviour
         StartCoroutine(WaitSpecialCooldown(ShapeInfo.cooldown));
     }
 
+    void OnEnterPerformd(InputAction.CallbackContext context)
+    {
+        // ClearPoint에서 누르면 승리
+        GameManager.instance.CurrentStage.CheckPlayerInClearPoint();
+    }
+
     #endregion
 
     // 조작 활성화/비활성화
@@ -275,6 +282,8 @@ public class PlayerController : MonoBehaviour
     {
         ShapeInfo.gameObject.SetActive(false);
         playerInputActions.Disable();
+
+        GameManager.instance.CurrentStage.Gameover();
     }
 
     public void TakeDamage(float damage)
@@ -294,4 +303,14 @@ public class PlayerController : MonoBehaviour
 
         uIManager.UpdateHPBar(hp);
     }
+
+    public void Heal(float heal)
+    {
+        hp += heal;
+        if (hp > maxHp)
+            hp = maxHp;
+
+        uIManager.UpdateHPBar(hp);
+    }
+
 }

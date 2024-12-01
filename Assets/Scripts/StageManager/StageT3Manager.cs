@@ -15,7 +15,7 @@ public class StageT3Manager : StageBase
 
         isBoss = true;
 
-        bossTriangle.transform.GetChild(0).GetComponent<BossTriangle>().DeadEvent += GameManager.instance.StageClear;
+        bossTriangle.transform.GetChild(0).GetComponent<BossTriangle>().DeadEvent += StageClear;
 
         StartCoroutine(StartCutscene());
     }
@@ -40,6 +40,7 @@ public class StageT3Manager : StageBase
         PlayerController.Instance.vcam.gameObject.SetActive(true);
 
         PlayerController.Instance.SetInputSystem(true);
+
 
     }
 }

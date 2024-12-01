@@ -14,6 +14,9 @@ public abstract class EnemyBase : MonoBehaviour
     public float detectionRange = 9f;
     public float attackRange = 5f;
     bool isAttacking = false;
+
+    bool isDead = false;
+
     public bool IsAttacking {
         get { return isAttacking; }
         set
@@ -52,7 +55,7 @@ public abstract class EnemyBase : MonoBehaviour
         if (healingAmount < 10)
             healingAmount = 10;
 
-        GameManager.instance.AddEnmey();
+        GameManager.instance.enemieCount++;
     }
 
     // Update is called once per frame
@@ -61,7 +64,13 @@ public abstract class EnemyBase : MonoBehaviour
         player = PlayerController.Instance.GetShapeTransform();
 
         distance = Vector2.Distance(transform.position, player.transform.position);
-        if (distance <= detectionRange)
+
+        if (isDead)
+        {
+            Vector2 direction = (player.transform.position - transform.position).normalized;
+            rb.MovePosition(rb.position + direction * moveSpeed * Time.deltaTime);
+        }
+        else if (distance <= detectionRange)
         {
             ApproachPlayer();
 
@@ -115,7 +124,7 @@ public abstract class EnemyBase : MonoBehaviour
         canAttack = true;
     }
 
-    public virtual bool TakeDamage(float damage)
+    public virtual void TakeDamage(float damage)
     {
         Debug.Log("공격 " + damage + " 데미지");
 
@@ -127,9 +136,7 @@ public abstract class EnemyBase : MonoBehaviour
         if (health <= 0)
         {
             Die();
-            return true;
         }
-        return false;
     }
 
     public void AddForce(Vector2 force)
@@ -150,6 +157,24 @@ public abstract class EnemyBase : MonoBehaviour
         {
             Debug.LogWarning("GameManager instance not found!");
         }
+
+        StartCoroutine(DeadCoroutine());
+    }
+
+    protected IEnumerator DeadCoroutine()
+    {
+        
+        gameObject.layer = LayerMask.NameToLayer("IgnoreAll");
+        rb.gravityScale = 0;
+        rb.velocity = Vector2.zero;
+        GetComponent<Collider2D>().enabled = false;
+        GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.5f);
+        moveSpeed *= 2f;
+        isDead = true;
+
+        yield return new WaitWhile(() => distance > 1f);
+
+        PlayerController.Instance.Heal(healingAmount);
 
         Destroy(gameObject);
     }

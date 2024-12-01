@@ -40,7 +40,6 @@ public abstract class Shape : MonoBehaviour
         if (collision.gameObject.CompareTag("Enemy"))
         {
             EnemyBase enemy = collision.gameObject.GetComponent<EnemyBase>();
-            bool isKill = false;
 
             Vector2 dir = (enemy.transform.position - transform.position).normalized;
             //Debug.DrawRay(transform.position, dir, Color.red, 1f);
@@ -54,7 +53,7 @@ public abstract class Shape : MonoBehaviour
 
             if (controller.isAttacking)
             {
-                isKill = enemy.TakeDamage(attack);
+                enemy.TakeDamage(attack);
             }
 
             if (enemy.IsAttacking)
@@ -84,13 +83,6 @@ public abstract class Shape : MonoBehaviour
                 controller.TakeDamage(enemy.attackPower);
             }
             */
-
-            if (isKill)
-            {
-                controller.hp += enemy.healingAmount;
-                if (controller.hp > controller.maxHp)
-                    controller.hp = controller.maxHp;
-            }
         }
 
         if (collision.gameObject.CompareTag("Ground") || collision.gameObject.CompareTag("Enemy"))
