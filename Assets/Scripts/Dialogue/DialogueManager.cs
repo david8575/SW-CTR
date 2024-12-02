@@ -8,6 +8,8 @@ using UnityEngine.UI;
 
 public class DialogueManager : MonoBehaviour
 {
+    public static bool IsInDialogue = false;
+
     PlayerInputActions inputActions;
 
     [Header("Dialogue UI")]
@@ -19,6 +21,9 @@ public class DialogueManager : MonoBehaviour
     [Header("Dialogue File")]
     public string dialogueFileName;
     public Dictionary<string ,Dictionary<string, string>> dialouge;
+
+    [Header("Special Dialogue")]
+    public TextMeshProUGUI specialDialogueText;
 
     Queue<Dictionary<string, string>> chat = new Queue<Dictionary<string, string>>();
 
@@ -42,19 +47,19 @@ public class DialogueManager : MonoBehaviour
         
     }
 
-    [ContextMenu("test")]
-    public void testScript() => StartDialouge("test");
-
-    public void StartDialouge(string key)
+    public void StartDialouge(string key, float interval = 0.05f, bool UseSpecialText =false)
     {
+        IsInDialogue = true;
+
         if (PlayerController.Instance != null)
             PlayerController.Instance.SetInputSystem(false);
+
 
         // key에 해당하는 대화를 chat 큐에 저장
         int idx = 1;
         chat.Clear();
         chat.Enqueue(dialouge[key]);
-        
+
         while (true)
         {
             // special이 end가 나올 때까지 대화를 chat 큐에 저장
@@ -67,15 +72,23 @@ public class DialogueManager : MonoBehaviour
         }
 
         inputActions.DialougeActions.Enable();
-        StartCoroutine(DialogueCoroutine());
-    }
-
-    IEnumerator DialogueCoroutine()
-    {
-        WaitWhile waitClick = new WaitWhile(() => !isClicked);
-        WaitForSeconds waitTime = new WaitForSeconds(0.05f);
 
         dialougePanel.SetBool("show", true);
+        if (UseSpecialText)
+        {
+            StartCoroutine(DialogueCoroutine(specialDialogueText, interval));
+        }
+        else
+        {
+            StartCoroutine(DialogueCoroutine(dialogueText, interval));
+        }
+    }
+
+    IEnumerator DialogueCoroutine(TextMeshProUGUI curDialougueText, float wait)
+    {
+        WaitWhile waitClick = new WaitWhile(() => !isClicked);
+        WaitForSeconds waitTime = new WaitForSeconds(wait);
+
         yield return waitTime;
 
         while (chat.Count > 0)
@@ -100,7 +113,7 @@ public class DialogueManager : MonoBehaviour
 
             for (int i = 0; i < words.Length; i++)
             {
-                dialogueText.text = output;
+                curDialougueText.text = output;
                 output += words[i];
                 yield return waitTime;
 
@@ -110,7 +123,7 @@ public class DialogueManager : MonoBehaviour
                     break;
                 }
             }
-            dialogueText.text = words;
+            curDialougueText.text = words;
 
             yield return waitClick;
             isClicked = false;
@@ -119,13 +132,15 @@ public class DialogueManager : MonoBehaviour
         EndDialouge();
     }
 
-    public void EndDialouge()
+    void EndDialouge()
     {
         if (PlayerController.Instance != null)
             PlayerController.Instance.SetInputSystem(true);
         inputActions.DialougeActions.Disable();
 
         dialougePanel.SetBool("show", false);
+
+        IsInDialogue = false;
     }
 
     private void NextDialouge(InputAction.CallbackContext context)
