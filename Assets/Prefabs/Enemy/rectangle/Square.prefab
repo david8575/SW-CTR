@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4456315052586254927}
   - component: {fileID: 2434265723837182918}
   - component: {fileID: 7171181735996897487}
-  - component: {fileID: 6777983709441411530}
+  - component: {fileID: -1013882565894464265}
   m_Layer: 0
   m_Name: Square
   m_TagString: Enemy
@@ -184,7 +184,7 @@ PolygonCollider2D:
       - {x: 0.49300003, y: -0.42400002}
       - {x: 0.51900005, y: -0.39800003}
   m_UseDelaunayMesh: 0
---- !u!114 &6777983709441411530
+--- !u!114 &-1013882565894464265
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -193,7 +193,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5504927658485018397}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0330f8849fe0464898d1a948db2bdaa, type: 3}
+  m_Script: {fileID: 11500000, guid: 9985b019bce4df84cafacf29d9892fe2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   health: 100
@@ -208,5 +208,5 @@ MonoBehaviour:
   distance: 0
   hpBar: {fileID: 0}
   attackImage: {fileID: 0}
+  jumpHeight: 5
   attackForce: 7
-  jumpHeight: 15
