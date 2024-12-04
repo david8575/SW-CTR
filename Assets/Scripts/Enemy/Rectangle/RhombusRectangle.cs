@@ -9,7 +9,7 @@ public class RhombusRectangle : EnemyBase
 
     protected override IEnumerator Attack()
     {
-        Vector2 jumpTarget = new Vector2(player.transform.position.x, player.transform.position.y + 2f); // 머리 위로 2 유닛
+        Vector2 jumpTarget = new Vector2(player.transform.position.x, player.transform.position.y + 2f); 
         Vector2 jumpDir = (jumpTarget - (Vector2)transform.position).normalized;
 
         rb.velocity = new Vector2(jumpDir.x * jumpHeight, jumpHeight); 
