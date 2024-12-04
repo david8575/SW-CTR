@@ -9,9 +9,9 @@ public class StageT3Manager : StageBase
     public CinemachineVirtualCamera bossCam;
     public GameObject bossTriangle;
 
-    protected override void Start()
+    protected override void Awake()
     {
-        base.Start();
+        base.Awake();
 
         isBoss = true;
 

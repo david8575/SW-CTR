@@ -4,10 +4,26 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager instance; 
+    public static GameManager Instance; 
 
     public int starsCollected { get; private set; } = 0;
-    public int enemieCount { get; set; } = 0;
+
+    [SerializeField]
+    private int enemieCount = 0;
+    public int EnemieCount
+    {
+        get { return enemieCount; }
+        set
+        {
+            Debug.Log("Enemy Count: " + value);
+            enemieCount = value;
+            if (enemieCount < 0)
+                enemieCount = 0;
+
+            if (CurrentStage != null)
+                CurrentStage.SetEnemyCount();
+        }
+    }
     public bool IsAllKill { get; private set; } = false;
 
     [SerializeField]
@@ -19,16 +35,16 @@ public class GameManager : MonoBehaviour
         {
             stage = value;
             starsCollected = 0;
-            enemieCount = 0;
+            EnemieCount = 0;
             IsAllKill = false;
         }
     }
 
     private void Awake()
     {
-        if (instance == null)
+        if (Instance == null)
         {
-            instance = this;
+            Instance = this;
             DontDestroyOnLoad(gameObject); 
         }
         else
@@ -41,15 +57,15 @@ public class GameManager : MonoBehaviour
     {
         starsCollected++;
         Debug.Log("Star Collected! Total Stars: " + starsCollected);
-        CurrentStage.SetStarCount(starsCollected);
     }
 
     public void CheckAllEnemiesDefeated()
     {
         //GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
-        enemieCount--;
-        
-        if (enemieCount == 0 && IsAllKill == false)
+        EnemieCount--;
+        CurrentStage.SetEnemyCount();
+
+        if (EnemieCount == 0 && IsAllKill == false)
         {
             Debug.Log("All enemies defeated!");
             IsAllKill = true;

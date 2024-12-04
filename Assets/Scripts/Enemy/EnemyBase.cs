@@ -5,6 +5,7 @@ using UnityEngine;
 public abstract class EnemyBase : MonoBehaviour
 {
     [Header("Enemy Stats")]
+    public EnemyStatus status;
     public float health = 100f;
     public float attackPower = 10f;
     public float jumpPower = 5f;
@@ -17,6 +18,7 @@ public abstract class EnemyBase : MonoBehaviour
 
     bool isDead = false;
 
+    public bool EnemyEnabled = true;
     public bool IsAttacking {
         get { return isAttacking; }
         set
@@ -46,6 +48,8 @@ public abstract class EnemyBase : MonoBehaviour
 
     protected virtual void Start()
     {
+        SetStat();
+
         rb = GetComponent<Rigidbody2D>();
         hpBar?.SetHp(health, health);
 
@@ -55,12 +59,28 @@ public abstract class EnemyBase : MonoBehaviour
         if (healingAmount < 10)
             healingAmount = 10;
 
-        GameManager.instance.enemieCount++;
+        GameManager.Instance.EnemieCount++;
+    }
+
+    void SetStat()
+    {
+        health = status.Health;
+        attackPower = status.AttackPower;
+        jumpPower = status.JumpPower;
+        moveSpeed = status.MoveSpeed;
+        defense = status.Defense;
+        attackCoolDown = status.AttackCoolDown;
+        detectionRange = status.DetectionRange;
+        attackRange = status.AttackRange;
+        healingAmount = status.HealingAmount;
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
+        if (!EnemyEnabled)
+            return;
+
         player = PlayerController.Instance.GetShapeTransform();
 
         distance = Vector2.Distance(transform.position, player.transform.position);
@@ -149,9 +169,9 @@ public abstract class EnemyBase : MonoBehaviour
 
     protected virtual void Die()
     {
-        if (GameManager.instance != null) // GameManager가 존재하는지 확인
+        if (GameManager.Instance != null) // GameManager가 존재하는지 확인
         {
-            GameManager.instance.CheckAllEnemiesDefeated();
+            GameManager.Instance.CheckAllEnemiesDefeated();
         }
         else
         {

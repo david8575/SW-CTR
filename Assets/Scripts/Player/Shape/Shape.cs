@@ -4,13 +4,15 @@ using UnityEngine;
 
 public abstract class Shape : MonoBehaviour
 {
+    public PlayerStatus status;
+
     // 도형의 능력치
-    public float speed;
-    public float jumpForce;
-    public float attack;
-    public float defense;
-    public float cooldown;
-    public float specialPower;
+    public float speed { get { return status.Speed; } }
+    public float jumpForce { get { return status.JumpPower; } }
+    public float attack { get { return status.Attack; } }
+    public float defense { get { return status.Defense; } }
+    public float cooldown { get { return status.Cooldown; } }
+    public float specialPower { get { return status.SpecialPower; } }
 
     public bool IsInvincible = false;
 

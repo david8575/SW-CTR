@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class StageUI : MonoBehaviour
 {
     public StageTimer stageTimer;
-    public TextMeshProUGUI starText;
+    public TextMeshProUGUI EnemyText;
 
     public GameObject[] clearObjects;
     public GameObject[] stars;
@@ -35,7 +35,7 @@ public class StageUI : MonoBehaviour
 
     }
 
-    public IEnumerator StageCorutine()
+    public IEnumerator StageCorutine(bool[] starInfo)
     {
         var wait = new WaitForSeconds(1f);
         int i;
@@ -46,25 +46,13 @@ public class StageUI : MonoBehaviour
             yield return wait;
         }
 
-        var saveData = DataManager.Instance.SaveData;
-        var stageInfo = saveData.Stages[GameManager.instance.CurrentStage.stageNumber];
-
-        if (stageInfo.isAllKill)
+        for (int j = 0; j < 3; j++)
         {
-            stars[0].SetActive(true);
-            yield return wait;
-        }
-
-        if (stageInfo.isPuzzleClear)
-        {
-            stars[1].SetActive(true);
-            yield return wait;
-        }
-
-        if (stageInfo.isTimeClear)
-        {
-            stars[2].SetActive(true);
-            yield return wait;
+            if (starInfo[j])
+            { 
+                stars[j].SetActive(true);
+                yield return wait;
+            }
         }
 
         clearObjects[i].SetActive(true);

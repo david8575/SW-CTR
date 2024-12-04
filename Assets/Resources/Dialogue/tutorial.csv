@@ -1,8 +1,11 @@
 ﻿key,chat,speaker,special
-test,이것은 테스트 문장입니다1,player,
-test1,이것은 테스트 문장입니다2,player,
-test2,이것은 테스트 문장입니다3,actriangle,
-test3,이것은 테스트 문장입니다4,player,
-test4,이것은 테스트 문장입니다5,actriangle,
-test5,이것은 테스트 문장입니다6,player,
-test6,이것은 테스트 문장입니다7,,end
+intro,"각이 많고, 각의 크기와 변의 길이가 균일할수록",,
+intro1,강해지는 도형의 세계,,
+intro2,각도 없고 ,,
+intro3,변도 정할 수 없는 원은,,
+intro4,최하층의 계급으로서,,
+intro5,혹사당하고 있다.,,end
+first_chat,이봐 원! 여기는 삼각형 구역이다!,actriangle,
+first_chat1,아 죄송합니다. 구역을 넘어간지 몰랐습니다…,player,
+first_chat2,뭐? 그런것도 몰라?,actriangle,tuto_first
+first_chat3,모르면 맞아야지!,actriangle,end

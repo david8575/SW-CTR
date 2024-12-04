@@ -99,7 +99,7 @@ public class PlayerController : MonoBehaviour
 
         playerInputActions.PlayerActions.Enter.performed += OnEnterPerformd;
         #endregion
-
+        hp = shapes[0].status.MaxHp;
         hp += hp * ((float)DataManager.Instance.SaveData.healthStat / GameData.maxStatPoint);
         maxHp = hp;
         uIManager.SetHp(hp, maxHp);
@@ -256,7 +256,7 @@ public class PlayerController : MonoBehaviour
     void OnEnterPerformd(InputAction.CallbackContext context)
     {
         // ClearPoint에서 누르면 승리
-        GameManager.instance.CurrentStage.CheckPlayerInClearPoint();
+        GameManager.Instance.CurrentStage.CheckPlayerInClearPoint();
     }
 
     #endregion
@@ -283,7 +283,7 @@ public class PlayerController : MonoBehaviour
         ShapeInfo.gameObject.SetActive(false);
         playerInputActions.Disable();
 
-        GameManager.instance.CurrentStage.Gameover();
+        GameManager.Instance.CurrentStage.Gameover();
     }
 
     public void TakeDamage(float damage)

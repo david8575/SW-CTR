@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -76,6 +77,7 @@ public class DialogueManager : MonoBehaviour
         dialougePanel.SetBool("show", true);
         if (UseSpecialText)
         {
+            specialDialogueText.gameObject.SetActive(true);
             StartCoroutine(DialogueCoroutine(specialDialogueText, interval));
         }
         else
@@ -134,13 +136,17 @@ public class DialogueManager : MonoBehaviour
 
     void EndDialouge()
     {
-        if (PlayerController.Instance != null)
-            PlayerController.Instance.SetInputSystem(true);
+
         inputActions.DialougeActions.Disable();
 
         dialougePanel.SetBool("show", false);
+        if (specialDialogueText != null)
+            specialDialogueText.gameObject.SetActive(false);
 
         IsInDialogue = false;
+
+        if (PlayerController.Instance != null)
+            PlayerController.Instance.SetInputSystem(true);
     }
 
     private void NextDialouge(InputAction.CallbackContext context)
