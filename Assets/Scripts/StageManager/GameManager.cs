@@ -4,11 +4,29 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager instance; 
+    public static GameManager Instance; 
 
     public int starsCollected { get; private set; } = 0;
-    int enemieCount = 0;
 
+    [SerializeField]
+    private int enemieCount = 0;
+    public int EnemieCount
+    {
+        get { return enemieCount; }
+        set
+        {
+            Debug.Log("Enemy Count: " + value);
+            enemieCount = value;
+            if (enemieCount < 0)
+                enemieCount = 0;
+
+            if (CurrentStage != null)
+                CurrentStage.SetEnemyCount();
+        }
+    }
+    public bool IsAllKill { get; private set; } = false;
+
+    [SerializeField]
     StageBase stage;
     public StageBase CurrentStage
     {
@@ -17,15 +35,16 @@ public class GameManager : MonoBehaviour
         {
             stage = value;
             starsCollected = 0;
-            enemieCount = 0;
+            EnemieCount = 0;
+            IsAllKill = false;
         }
     }
 
     private void Awake()
     {
-        if (instance == null)
+        if (Instance == null)
         {
-            instance = this;
+            Instance = this;
             DontDestroyOnLoad(gameObject); 
         }
         else
@@ -33,31 +52,24 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    public void AddEnmey()
-    {
-        enemieCount++;
-    }
 
     public void CollectStar()
     {
         starsCollected++;
         Debug.Log("Star Collected! Total Stars: " + starsCollected);
-        CurrentStage.SetStarCount(starsCollected);
-    }
-
-    public void StageClear()
-    {
-        CurrentStage.StageClear();
     }
 
     public void CheckAllEnemiesDefeated()
     {
         //GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
-        enemieCount--;
-        if (enemieCount == 0)
+        EnemieCount--;
+        CurrentStage.SetEnemyCount();
+
+        if (EnemieCount == 0 && IsAllKill == false)
         {
-            Debug.Log("All enemies defeated! Activating Clear Point.");
-            CurrentStage.EnableClearPoint();
+            Debug.Log("All enemies defeated!");
+            IsAllKill = true;
+            CollectStar();
         }
     }
 }
