@@ -1,21 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
+
 public class ClearPoint : MonoBehaviour
 {
-    private bool isCleared = false;
-    // Start is called before the first frame update
+    public bool IsPlayerInside { get; private set; } = false;
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Player") && !isCleared)
+        if (other.CompareTag("Player"))
         {
-            isCleared = true; 
-            Debug.Log("Stage Cleared");
+            IsPlayerInside = true;
+        }
+    }
 
-            GameManager.instance.CollectStar();
-            GameManager.instance.StageClear();
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            IsPlayerInside = false;
         }
     }
 }

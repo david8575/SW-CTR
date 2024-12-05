@@ -58,6 +58,7 @@ public class DataManager
     {
         string json = JsonUtility.ToJson(saveData);
         File.WriteAllText(savePath, json);
+        
     }
 
     public void RemoveGameData()

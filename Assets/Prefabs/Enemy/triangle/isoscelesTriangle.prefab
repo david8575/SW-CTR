@@ -100,6 +100,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0832b2ec3b9251244a7425574d79fd5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  status: {fileID: 11400000, guid: 124682c379db49646a696c2e130e28c1, type: 2}
   health: 10
   attackPower: 1
   jumpPower: 5
@@ -108,7 +109,7 @@ MonoBehaviour:
   attackCoolDown: 1.5
   detectionRange: 12
   attackRange: 8
-  isAttacking: 0
+  EnemyEnabled: 1
   healingAmount: 0
   distance: 0
   hpBar: {fileID: 9081391170514147465}

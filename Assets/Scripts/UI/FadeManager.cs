@@ -10,7 +10,12 @@ public class FadeManager : MonoBehaviour
     public Image fade;
     float fadeSpeed = 0.01f;
 
-    WaitForSeconds wait = new WaitForSeconds(0.01f);
+    public bool IsFade
+    {
+        get { return fade.gameObject.activeSelf; }
+    }
+
+        WaitForSeconds wait = new WaitForSeconds(0.01f);
 
     private void Awake()
     {
@@ -23,6 +28,13 @@ public class FadeManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+
+    public void SetFade(bool isOn)
+    {
+        fade.gameObject.SetActive(isOn);
+        float a = isOn ? 1 : 0;
+        fade.color = new Color(0, 0, 0, a);
     }
 
     public Coroutine FadeIn(float speed = 0.01f)

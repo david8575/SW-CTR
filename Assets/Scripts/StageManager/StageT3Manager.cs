@@ -9,13 +9,13 @@ public class StageT3Manager : StageBase
     public CinemachineVirtualCamera bossCam;
     public GameObject bossTriangle;
 
-    protected override void Start()
+    protected override void Awake()
     {
-        base.Start();
+        base.Awake();
 
         isBoss = true;
 
-        bossTriangle.transform.GetChild(0).GetComponent<BossTriangle>().DeadEvent += GameManager.instance.StageClear;
+        bossTriangle.transform.GetChild(0).GetComponent<BossTriangle>().DeadEvent += StageClear;
 
         StartCoroutine(StartCutscene());
     }
@@ -40,6 +40,7 @@ public class StageT3Manager : StageBase
         PlayerController.Instance.vcam.gameObject.SetActive(true);
 
         PlayerController.Instance.SetInputSystem(true);
+
 
     }
 }

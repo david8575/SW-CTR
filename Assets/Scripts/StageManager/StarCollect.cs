@@ -9,8 +9,8 @@ public class StarCollect : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             Debug.Log("Star collected");
-            GameManager.instance.CollectStar();
-            GameManager.instance.CurrentStage.puzzleClear = true;
+            GameManager.Instance.CollectStar();
+            GameManager.Instance.CurrentStage.puzzleClear = true;
             Destroy(gameObject);
         }
     }

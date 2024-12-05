@@ -7,14 +7,17 @@ using UnityEngine.UI;
 public class StageUI : MonoBehaviour
 {
     public StageTimer stageTimer;
-    public TextMeshProUGUI starText;
+    public TextMeshProUGUI EnemyText;
 
     public GameObject[] clearObjects;
     public GameObject[] stars;
     public TextMeshProUGUI[] timeTexts;
     public TextMeshProUGUI puzzleText;
 
-    public Button finishButton;
+    public GameObject[] GameoverObjects;
+    public TextMeshProUGUI GameoverTimeText;
+
+    public Button[] finishButtons;
 
     private void Start()
     {
@@ -24,10 +27,15 @@ public class StageUI : MonoBehaviour
                 stars[i].SetActive(false);
             clearObjects[i].SetActive(false);
         }
-        
+
+        for (int i = 0; i < GameoverObjects.Length; i++)
+        {
+            GameoverObjects[i].SetActive(false);
+        }
+
     }
 
-    public IEnumerator StageCorutine()
+    public IEnumerator StageCorutine(bool[] starInfo)
     {
         var wait = new WaitForSeconds(1f);
         int i;
@@ -38,12 +46,26 @@ public class StageUI : MonoBehaviour
             yield return wait;
         }
 
-        for (int j = 0; j < GameManager.instance.starsCollected; j++)
+        for (int j = 0; j < 3; j++)
         {
-            stars[j].SetActive(true);
-            yield return wait;
+            if (starInfo[j])
+            { 
+                stars[j].SetActive(true);
+                yield return wait;
+            }
         }
 
         clearObjects[i].SetActive(true);
+    }
+
+    public IEnumerator GameoverCorutine()
+    {
+        var wait = new WaitForSeconds(1f);
+
+        for (int i = 0; i < GameoverObjects.Length; i++)
+        {
+            GameoverObjects[i].SetActive(true);
+            yield return wait;
+        }
     }
 }

@@ -73,7 +73,7 @@ public class BossTriangle : EnemyBase
         if (rnd == 0)
         {
             // wait
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(0.2f);
             Debug.Log("Wait");
         }
         else if (rnd == 1)
@@ -194,11 +194,14 @@ public class BossTriangle : EnemyBase
 
     }
 
-    public override bool TakeDamage(float damage)
+    public override void TakeDamage(float damage)
     {
-        bool r = base.TakeDamage(damage);
+        if (health < damage)
+        {
+            DeadEvent?.Invoke();
+        }
 
-        if (r) return true;
+        base.TakeDamage(damage);
 
         if (step < 4 && health <= maxHp * 0.8f)
         {
@@ -218,13 +221,5 @@ public class BossTriangle : EnemyBase
             Instantiate(rightTriangle, transform.position, Quaternion.identity);
 
         }
-
-        return false;
-    }
-
-    override protected void Die()
-    {
-        DeadEvent?.Invoke();
-        base.Die();
     }
 }

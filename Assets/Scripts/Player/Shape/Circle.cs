@@ -21,13 +21,18 @@ public class Circle : Shape
         // 차징 중에는 힘이 계속해서 증가함
         if (isCharging)
         {
-            power *= 2;
-            PlayerController.Instance.uIManager.cooldownCircle.color = new Color(power / specialPower, 0, 0, 1);
+            if (power < specialPower)
+            {         
+                power *= 2;
+                float amount = power / specialPower;
+                spriteRenderer.color = new Color(1f - amount, 1f - amount, 1f - amount, 1);
+            }
 
             // 특수능력 스탯이 최대치
             if (power > specialPower)
             {
                 power = specialPower;
+                spriteRenderer.color = Color.red;
             }
         }
     }
@@ -37,7 +42,7 @@ public class Circle : Shape
         if (controller.canSpecial == false || isCharging == false)
             return;
         isCharging = false;
-        PlayerController.Instance.uIManager.cooldownCircle.color = Color.white;
+        spriteRenderer.color = Color.white;
 
         //rb.velocity = Vector2.zero;
 
