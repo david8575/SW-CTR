@@ -80,6 +80,15 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Enter"",
+                    ""type"": ""Button"",
+                    ""id"": ""aeea2133-6e33-4ba7-a75f-6821321976b0"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -129,6 +138,17 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""a04ef1c3-d18f-42d9-9320-82b90406318a"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Jump"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""a8cf70c1-23d0-41af-a885-f19a9a7a545c"",
                     ""path"": ""<Mouse>/leftButton"",
                     ""interactions"": ""Hold"",
@@ -168,6 +188,17 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": "";PC"",
                     ""action"": ""ChangeSquare"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6df310a4-9a34-4fae-83cc-04206dd393de"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Enter"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -240,6 +271,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_PlayerActions_ChangeCircle = m_PlayerActions.FindAction("ChangeCircle", throwIfNotFound: true);
         m_PlayerActions_ChangeTriangle = m_PlayerActions.FindAction("ChangeTriangle", throwIfNotFound: true);
         m_PlayerActions_ChangeSquare = m_PlayerActions.FindAction("ChangeSquare", throwIfNotFound: true);
+        m_PlayerActions_Enter = m_PlayerActions.FindAction("Enter", throwIfNotFound: true);
         // DialougeActions
         m_DialougeActions = asset.FindActionMap("DialougeActions", throwIfNotFound: true);
         m_DialougeActions_NextDialouge = m_DialougeActions.FindAction("NextDialouge", throwIfNotFound: true);
@@ -316,6 +348,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_PlayerActions_ChangeCircle;
     private readonly InputAction m_PlayerActions_ChangeTriangle;
     private readonly InputAction m_PlayerActions_ChangeSquare;
+    private readonly InputAction m_PlayerActions_Enter;
     public struct PlayerActionsActions
     {
         private @PlayerInputActions m_Wrapper;
@@ -326,6 +359,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         public InputAction @ChangeCircle => m_Wrapper.m_PlayerActions_ChangeCircle;
         public InputAction @ChangeTriangle => m_Wrapper.m_PlayerActions_ChangeTriangle;
         public InputAction @ChangeSquare => m_Wrapper.m_PlayerActions_ChangeSquare;
+        public InputAction @Enter => m_Wrapper.m_PlayerActions_Enter;
         public InputActionMap Get() { return m_Wrapper.m_PlayerActions; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -353,6 +387,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @ChangeSquare.started += instance.OnChangeSquare;
             @ChangeSquare.performed += instance.OnChangeSquare;
             @ChangeSquare.canceled += instance.OnChangeSquare;
+            @Enter.started += instance.OnEnter;
+            @Enter.performed += instance.OnEnter;
+            @Enter.canceled += instance.OnEnter;
         }
 
         private void UnregisterCallbacks(IPlayerActionsActions instance)
@@ -375,6 +412,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @ChangeSquare.started -= instance.OnChangeSquare;
             @ChangeSquare.performed -= instance.OnChangeSquare;
             @ChangeSquare.canceled -= instance.OnChangeSquare;
+            @Enter.started -= instance.OnEnter;
+            @Enter.performed -= instance.OnEnter;
+            @Enter.canceled -= instance.OnEnter;
         }
 
         public void RemoveCallbacks(IPlayerActionsActions instance)
@@ -455,6 +495,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         void OnChangeCircle(InputAction.CallbackContext context);
         void OnChangeTriangle(InputAction.CallbackContext context);
         void OnChangeSquare(InputAction.CallbackContext context);
+        void OnEnter(InputAction.CallbackContext context);
     }
     public interface IDialougeActionsActions
     {

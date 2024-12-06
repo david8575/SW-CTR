@@ -23,8 +23,10 @@ public class StageTimer : MonoBehaviour
         if (timerOn)
         {
             time += Time.deltaTime;
-            // 00(초):00(밀리초) 형식으로 표시
-            timeText.text = string.Format("{0:00}:{1:00}", (int)time, (int)(time * 100) % 100);
+            // 00(분) : 00(초) 형식으로 표시
+            timeText.text = string.Format("{0:00}:{1:00}", (int)(time/60), (int)(time % 60));
+
+            //timeText.text = string.Format("{0:00}:{1:00}", (int)time, (int)(time * 100) % 100);
         }
     }
 }

@@ -5,6 +5,7 @@ using UnityEngine;
 public abstract class EnemyBase : MonoBehaviour
 {
     [Header("Enemy Stats")]
+    public EnemyStatus status;
     public float health = 100f;
     public float attackPower = 10f;
     public float jumpPower = 5f;
@@ -14,6 +15,10 @@ public abstract class EnemyBase : MonoBehaviour
     public float detectionRange = 9f;
     public float attackRange = 5f;
     bool isAttacking = false;
+
+    bool isDead = false;
+
+    public bool EnemyEnabled = true;
     public bool IsAttacking {
         get { return isAttacking; }
         set
@@ -43,6 +48,8 @@ public abstract class EnemyBase : MonoBehaviour
 
     protected virtual void Start()
     {
+        SetStat();
+
         rb = GetComponent<Rigidbody2D>();
         hpBar?.SetHp(health, health);
 
@@ -52,16 +59,38 @@ public abstract class EnemyBase : MonoBehaviour
         if (healingAmount < 10)
             healingAmount = 10;
 
-        GameManager.instance.AddEnmey();
+        GameManager.Instance.EnemieCount++;
+    }
+
+    void SetStat()
+    {
+        health = status.Health;
+        attackPower = status.AttackPower;
+        jumpPower = status.JumpPower;
+        moveSpeed = status.MoveSpeed;
+        defense = status.Defense;
+        attackCoolDown = status.AttackCoolDown;
+        detectionRange = status.DetectionRange;
+        attackRange = status.AttackRange;
+        healingAmount = status.HealingAmount;
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
+        if (!EnemyEnabled)
+            return;
+
         player = PlayerController.Instance.GetShapeTransform();
 
         distance = Vector2.Distance(transform.position, player.transform.position);
-        if (distance <= detectionRange)
+
+        if (isDead)
+        {
+            Vector2 direction = (player.transform.position - transform.position).normalized;
+            rb.MovePosition(rb.position + direction * moveSpeed * Time.deltaTime);
+        }
+        else if (distance <= detectionRange)
         {
             ApproachPlayer();
 
@@ -115,7 +144,7 @@ public abstract class EnemyBase : MonoBehaviour
         canAttack = true;
     }
 
-    public virtual bool TakeDamage(float damage)
+    public virtual void TakeDamage(float damage)
     {
         Debug.Log("공격 " + damage + " 데미지");
 
@@ -127,9 +156,7 @@ public abstract class EnemyBase : MonoBehaviour
         if (health <= 0)
         {
             Die();
-            return true;
         }
-        return false;
     }
 
     public void AddForce(Vector2 force)
@@ -142,14 +169,32 @@ public abstract class EnemyBase : MonoBehaviour
 
     protected virtual void Die()
     {
-        if (GameManager.instance != null) // GameManager가 존재하는지 확인
+        if (GameManager.Instance != null) // GameManager가 존재하는지 확인
         {
-            GameManager.instance.CheckAllEnemiesDefeated();
+            GameManager.Instance.CheckAllEnemiesDefeated();
         }
         else
         {
             Debug.LogWarning("GameManager instance not found!");
         }
+
+        StartCoroutine(DeadCoroutine());
+    }
+
+    protected IEnumerator DeadCoroutine()
+    {
+        
+        gameObject.layer = LayerMask.NameToLayer("IgnoreAll");
+        rb.gravityScale = 0;
+        rb.velocity = Vector2.zero;
+        GetComponent<Collider2D>().enabled = false;
+        GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0.5f);
+        moveSpeed *= 2f;
+        isDead = true;
+
+        yield return new WaitWhile(() => distance > 1f);
+
+        PlayerController.Instance.Heal(healingAmount);
 
         Destroy(gameObject);
     }

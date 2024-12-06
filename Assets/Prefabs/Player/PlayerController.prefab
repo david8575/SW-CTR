@@ -416,12 +416,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d656c8b5e1dabf4da22ded7fb402f62, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 7
-  jumpForce: 5
-  attack: 15
-  defense: 2
-  cooldown: 0.5
-  specialPower: 10
+  status: {fileID: 11400000, guid: 7dfe7cb72b0875d499bbe757694fc1d6, type: 2}
   IsInvincible: 0
   rb: {fileID: 0}
 --- !u!1 &2463534224681667219
@@ -851,12 +846,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1327d5b52daa2142956e0aac6f43d58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 10
-  jumpForce: 10
-  attack: 0
-  defense: 0
-  cooldown: 0.5
-  specialPower: 20
+  status: {fileID: 11400000, guid: 0eed06e39d26df940b562d019f0ace28, type: 2}
   IsInvincible: 0
   rb: {fileID: 0}
 --- !u!1 &3359880043729010140
@@ -1270,12 +1260,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e49da784b33af444baf278ea5659d9fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 5
-  jumpForce: 10
-  attack: 10
-  defense: 5
-  cooldown: 0.5
-  specialPower: 20
+  status: {fileID: 11400000, guid: cd22835a162600f43b4a8655546e5926, type: 2}
   IsInvincible: 0
   rb: {fileID: 0}
 --- !u!1 &8268247406045826871

@@ -8,16 +8,24 @@ public class GameData
     [System.Serializable]
     public struct StageInfo
     {
-        public bool isClear;
         public float bestTime;
-        public bool puzzleClear;
+
+        public bool isPuzzleClear;
+        public bool isAllKill;
+        public bool isTimeClear;
+
     };
 
-    public StageInfo TutorialStage = new();
-    public StageInfo[] TriangleStage = new StageInfo[3];
-    public StageInfo[] SquareStage = new StageInfo[3];
-    public StageInfo[] PentagonStage = new StageInfo[3];
-    public StageInfo[] CircleStage = new StageInfo[4];
+    //public StageInfo TutorialStage = new();
+    //public StageInfo[] TriangleStage = new StageInfo[3];
+    //public StageInfo[] SquareStage = new StageInfo[3];
+    //public StageInfo[] CircleStage = new StageInfo[4];
+
+    /// <summary>
+    /// 0: Tutorial, 1 ~ 3: Triangle, 4 ~ 6: Square, 7: Cutscene 8 ~ 10: Circle
+    /// </summary>
+    public StageInfo[] Stages = new StageInfo[11];
+
 
     public bool UnlockSquare = false;
 
