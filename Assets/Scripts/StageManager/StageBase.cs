@@ -65,15 +65,23 @@ public class StageBase : MonoBehaviour
         stageUI.timeTexts[0].text = string.Format("{0:00}:{1:00}", (int)(StageTimer.time / 60), (int)(StageTimer.time % 60));
         stageUI.timeTexts[1].text = string.Format("{0:00}:{1:00}", (int)(clearTime / 60), (int)(clearTime % 60));
 
+        bool[] startinfo;
         // 보스 전이면 보스 클리어 아니면 퍼즐 성공 여부 출력
         if (isBoss)
         {
             GameManager.Instance.CollectStar();
-            stageUI.puzzleText.text = "Boss Clear"; 
+            stageUI.puzzleText.text = "Boss Clear";
+            startinfo = new bool[] { true, true, true };
         }
         else
+        { 
             stageUI.puzzleText.text = "Puzzle " + (puzzleClear ? "Clear" : "Fail");
-
+            startinfo = new bool[3] {
+                GameManager.Instance.EnemieCount == 0,
+                puzzleClear,
+                StageTimer.time < clearTime,
+                };
+        }
         // 신기록 저장하기
         #region Save Data
         var saveData = DataManager.Instance.SaveData;
@@ -81,7 +89,7 @@ public class StageBase : MonoBehaviour
             saveData.Stages[stageNumber].bestTime = Mathf.Min(saveData.Stages[stageNumber].bestTime, StageTimer.time);
         else
             saveData.Stages[stageNumber].bestTime = StageTimer.time;
-        if (saveData.Stages[stageNumber].isPuzzleClear == false && puzzleClear)
+        if ((saveData.Stages[stageNumber].isPuzzleClear == false || isBoss) && puzzleClear)
         {
             saveData.Stages[stageNumber].isPuzzleClear = true;
             saveData.leftStatPoint++;
@@ -93,7 +101,7 @@ public class StageBase : MonoBehaviour
             saveData.leftStatPoint++;
         }
 
-        if (saveData.Stages[stageNumber].isAllKill == false && GameManager.Instance.IsAllKill)
+        if ((saveData.Stages[stageNumber].isAllKill == false | isBoss) && GameManager.Instance.IsAllKill)
         {
             saveData.Stages[stageNumber].isAllKill = true;
             saveData.leftStatPoint++;
@@ -104,14 +112,7 @@ public class StageBase : MonoBehaviour
 
         #endregion
 
-
-
-        StartCoroutine(stageUI.StageCorutine(new bool[3]
-        {
-            GameManager.Instance.EnemieCount == 0,
-            puzzleClear,
-            StageTimer.time < clearTime,
-        }));
+        StartCoroutine(stageUI.StageCorutine(startinfo));
     }
 
     public void Gameover()

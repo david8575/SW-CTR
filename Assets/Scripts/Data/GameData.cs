@@ -30,6 +30,7 @@ public class GameData
     public bool IsTutorialClear = false;
 
     public bool UnlockSquare = false;
+    public bool UnlockTrueCircle = false;
 
     public int leftStatPoint = 0;
 

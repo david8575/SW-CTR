@@ -111,6 +111,13 @@ public class PlayerController : MonoBehaviour
         hp = shapes[0].status.MaxHp;
         hp += hp * ((float)DataManager.Instance.SaveData.healthStat / GameData.maxStatPoint);
         maxHp = hp;
+
+        if (DataManager.Instance.SaveData.UnlockSquare == true)
+        {
+            CanChangeShape[2] = true;
+
+        }
+
         uiManager.Init(this);
         SetStat();
 
@@ -121,6 +128,8 @@ public class PlayerController : MonoBehaviour
         SetShapeType(ShapeType.Circle);
 
         uiManager.GetComponent<Canvas>().worldCamera = Camera.main;
+
+
     }
 
     // 능력치에 업그레이드 배율 적용
@@ -268,8 +277,12 @@ public class PlayerController : MonoBehaviour
 
     void OnSpecialCanceled(InputAction.CallbackContext context)
     {
-        if (ShapeInfo.IsInvincible  == true)
+        if (ShapeInfo.IsInvincible  == true || canSpecial == false)
             return;
+        if (ShapeInfo is Circle && ((Circle)ShapeInfo).isCharging == false)
+        {
+            return;
+        }
 
         ShapeInfo.OnSpecialCanceled();
         // 쿨타임은 여기서 돌리기

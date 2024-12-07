@@ -1015,6 +1015,7 @@ MonoBehaviour:
       isClear: 0
     IsTutorialClear: 0
     UnlockSquare: 0
+    UnLockTrueCircle: 0
     leftStatPoint: 0
     healthStat: 0
     attackStat: 0

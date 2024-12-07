@@ -21,6 +21,7 @@ public abstract class Shape : MonoBehaviour
     protected PlayerController controller;
     protected SpriteRenderer spriteRenderer;
     protected Color color;
+    protected Coroutine attackCoroutine;
 
     // 초기화
     public void Init(PlayerController con)
@@ -65,6 +66,8 @@ public abstract class Shape : MonoBehaviour
                     controller.TakeDamage(enemy.attackPower);
             }
 
+            StopAttack();
+
             /*
             if (controller.isAttacking && enemy.IsAttacking)
             {
@@ -105,6 +108,17 @@ public abstract class Shape : MonoBehaviour
     protected virtual void ActiveJump()
     {
         controller.canJump = true;
+    }
+
+    protected virtual void StopAttack()
+    {
+        if (attackCoroutine != null)
+        {
+            StopCoroutine(attackCoroutine);
+            attackCoroutine = null;
+        }
+        controller.isAttacking = false;
+        spriteRenderer.color = color;
     }
 
     public IEnumerator Invincible(float time)

@@ -1,13 +1,30 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class Circle : Shape
 {
-    bool isCharging = false;
+    public bool isCharging = false;
+
+    [SerializeField]
+    bool IsTrueCircle = false;
+
+    public PlayerStatus TrueCircleStatus;
+
     float power;
-    
+
+    public Transform FireEffect;
+    public CircleCollider2D attackCollider;
+
+    private void Start()
+    {
+        IsTrueCircle = DataManager.Instance.SaveData.UnlockTrueCircle;
+        if (IsTrueCircle)
+            status = TrueCircleStatus;
+    }
+
     public override void OnSpecialStarted()
     {
 
@@ -56,5 +73,52 @@ public class Circle : Shape
             rb.velocity = Vector2.zero;
         rb.AddForce(dir * power, ForceMode2D.Impulse);
 
+        if (IsTrueCircle)
+        {
+            attackCoroutine = StartCoroutine(TrueCircleAttack());
+        }
+    }
+
+    private void Update()
+    {
+        if (controller.isAttacking)
+        {
+            Vector3 dir = rb.velocity.normalized;
+            // 오른쪽 0도, 왼쪽 이동 중일땐 180도
+            FireEffect.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg);
+        }
+    }
+
+    protected override void StopAttack()
+    {
+        FireEffect.gameObject.SetActive(false);
+        base.StopAttack();
+    }
+
+    IEnumerator TrueCircleAttack()
+    {
+        FireEffect.gameObject.SetActive(true);
+        controller.isAttacking = true;
+        spriteRenderer.color = Color.red;
+        attackCollider.enabled = true;
+
+        yield return new WaitWhile(() => rb.velocity.magnitude > 4f);
+        spriteRenderer.color = color;
+        controller.isAttacking = false;
+        FireEffect.gameObject.SetActive(false);
+        attackCollider.enabled = false;
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            EnemyBase enemy = collision.gameObject.GetComponent<EnemyBase>();
+
+            if (controller.isAttacking)
+            {
+                enemy.TakeDamage(attack);
+            }
+        }
     }
 }
