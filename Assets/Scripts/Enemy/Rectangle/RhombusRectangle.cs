@@ -2,56 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RhombusRectangle : EnemyBase_old
+public class RhombusRectangle : EnemyBase
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        health = 50f;
-        attackPower = 20f;
-        defense = 20f;
-        moveSpeed = 1f;
-        jumpPower = 1f;
-        attackCoolDown = 5f;
-    }
+    public float jumpHeight = 5f; 
+    public float attackForce = 7f; 
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-        if (health <= 0)
-        {
-            Die();
-        }
-        else
-        {
-            DetectPlayer();
-
-            if (isPlayerInRange)
-            {
-                if (canAttack)
-                {
-                    StartCoroutine(Attack());
-                }
-            }
-            else
-            {
-                Patrol();
-            }
-        }
-    }
     protected override IEnumerator Attack()
     {
-        canAttack = false;
+        Vector2 jumpTarget = new Vector2(player.transform.position.x, player.transform.position.y + 2f); 
+        Vector2 jumpDir = (jumpTarget - (Vector2)transform.position).normalized;
 
-        transform.position = new Vector3(player.transform.position.x, player.transform.position.y+10f, transform.position.z);
-        
+        rb.velocity = new Vector2(jumpDir.x * jumpHeight, jumpHeight); 
+        yield return new WaitForSeconds(0.5f); 
+
+        Vector2 attackDir = (player.transform.position - transform.position).normalized;
+        yield return new WaitForSeconds(0.3f);
+
+        IsAttacking = true;
+        rb.AddForce(attackDir * attackForce, ForceMode2D.Impulse);
         yield return new WaitForSeconds(0.5f);
-        Vector2 direction = (player.transform.position - transform.position).normalized;
 
-        GetComponent<Rigidbody2D>().AddForce(direction * attackPower, ForceMode2D.Impulse);
-
-        yield return new WaitForSeconds(attackCoolDown);
-        canAttack = true;
+        IsAttacking = false;
     }
 }

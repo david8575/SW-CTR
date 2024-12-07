@@ -1,143 +1,158 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class SquareRectangle : EnemyBase_old
+public class SquareRectangle : EnemyBase
 {
-    public GameObject miniSquarePrefab;
-    public GameObject missilePrefab;
-    [SerializeField]
-    public float mapWidth;
-    private bool isRestrictingPlayer = false;
+    [Header("Square Rectangle Settings")]
+    public GameObject miniSquarePrefab; 
+    public Transform miniSquareSpawnPoint; 
+    public GameObject prisonPrefab; 
+    public Transform[] teleportPoints; 
 
-    // Start is called before the first frame update
-    void Start()
+    private float maxHealth;
+    private bool hasTransformed = false;
+    private bool hasTeleported = false;
+    private int step = 1; 
+
+    protected override void Start()
     {
-        health = 50f;
-        attackPower = 20f;
-        defense = 20f;
-        moveSpeed = 1f;
-        jumpPower = 1f;
-        attackCoolDown = 5f;
-
-        mapWidth = 20f;
+        base.Start();
+        maxHealth = health;
     }
 
-    // Update is called once per frame
-    void Update()
+    protected override IEnumerator Attack()
     {
-        if (health <= 0)
+        int rnd = Random.Range(0, step); 
+
+        if (rnd == 0)
         {
-            Die();
+            yield return BasicAttack();
         }
-        else if (health <= 0.3 * 100 && !isRestrictingPlayer)
+        else if (rnd == 1 && health <= maxHealth * 0.8f)
         {
-            StartCoroutine(LowHealthRestrictPlayer());
+            yield return TransformAttack();
         }
-        else if (health <= 0.3 * 100)
+        else if (rnd == 2 && health <= maxHealth * 0.5f)
         {
-            LongDiveAttack(0.75f);
+            yield return TeleportAttack();
         }
-        else if (health <= 0.5 * 100)
+        else if (rnd == 3 && health <= maxHealth * 0.3f)
         {
-            StartCoroutine(TeleportAndShootMissile());
-        }
-        else if (health <= 0.8 * 100)
-        {
-            LongDiveAttack(0.5f); 
-        }
-        else
-        {
-            BasicAttack();
+            yield return TrapPlayer();
         }
     }
 
-    private void BasicAttack()
+    private IEnumerator BasicAttack()
     {
-        if (canAttack)
-        {
-            StartCoroutine(BasicAttackRoutine());
-        }
-    }
+        Debug.Log("Basic Attack: Jump and Smash");
 
-    private IEnumerator BasicAttackRoutine()
-    {
-        canAttack = false;
-
-        GameObject miniSquare = Instantiate(miniSquarePrefab, transform.position, Quaternion.identity);
-        Vector2 direction = (player.transform.position - transform.position).normalized;
-        miniSquare.GetComponent<Rigidbody2D>().velocity = direction * moveSpeed;
-
-        yield return new WaitForSeconds(attackCoolDown);
-        canAttack = true;
-    }
-
-    private void LongDiveAttack(float scaleFactor)
-    {
-        if (canAttack)
-        {
-            StartCoroutine(LongDiveAttackRoutine(scaleFactor));
-        }
-    }
-
-    private IEnumerator LongDiveAttackRoutine(float scaleFactor)
-    {
-        canAttack = false;
-
-        Vector3 originalScale = transform.localScale;
-        transform.localScale = new Vector3(mapWidth * scaleFactor, originalScale.y, originalScale.z);
-
+        
+        Vector3 targetPosition = PlayerController.Instance.transform.position;
+        rb.velocity = Vector2.zero;
+        rb.AddForce(new Vector2(0, jumpPower), ForceMode2D.Impulse);
         yield return new WaitForSeconds(0.5f);
+        rb.AddForce(new Vector2(0, -jumpPower * 2f), ForceMode2D.Impulse);
+        yield return new WaitForSeconds(1.5f);
 
-        Vector2 direction = Vector2.down;
-        GetComponent<Rigidbody2D>().AddForce(direction * attackPower, ForceMode2D.Impulse);
-
-        yield return new WaitForSeconds(attackCoolDown);
-        transform.localScale = originalScale;
-        canAttack = true;
+        Debug.Log("Summon Mini Squares");
+        Instantiate(miniSquarePrefab, miniSquareSpawnPoint.position, Quaternion.identity);
     }
 
-    private IEnumerator TeleportAndShootMissile()
+    private IEnumerator TransformAttack()
     {
-        canAttack = false;
-
-        Vector3 obstaclePosition = FindRandomObstaclePosition();
-        transform.position = obstaclePosition;
-
-        yield return new WaitForSeconds(1f);
-        ShootMissileAtPlayer();
-
-        yield return new WaitForSeconds(attackCoolDown);
-        canAttack = true;
-    }
-
-    private void ShootMissileAtPlayer()
-    {
-        GameObject missile = Instantiate(missilePrefab, transform.position, Quaternion.identity);
-        Vector2 direction = (player.transform.position - transform.position).normalized;
-        missile.GetComponent<Rigidbody2D>().velocity = direction * 10f;
-    }
-
-    private Vector3 FindRandomObstaclePosition()
-    {
-        return new Vector3(Random.Range(-mapWidth / 2, mapWidth / 2), transform.position.y, transform.position.z);
-    }
-
-    private IEnumerator LowHealthRestrictPlayer()
-    {
-        isRestrictingPlayer = true;
-
-        GameObject restrictionBox = new GameObject("RestrictionBox");
-        restrictionBox.transform.position = player.transform.position;
-        restrictionBox.transform.localScale = new Vector3(5f, 5f, 1f);
-
-        while (restrictionBox.transform.localScale.x > 1f)
+        if (!hasTransformed)
         {
-            restrictionBox.transform.localScale -= new Vector3(0.1f, 0.1f, 0);
-            yield return new WaitForSeconds(0.1f);
+            Debug.Log("Transforming: Enlarging and Smashing");
+            hasTransformed = true;
+
+            Vector3 originalScale = transform.localScale;
+            transform.localScale = new Vector3(originalScale.x * 2f, originalScale.y, originalScale.z);
+
+            yield return new WaitForSeconds(0.5f);
+
+            rb.velocity = Vector2.zero;
+            rb.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
+
+            yield return new WaitUntil(() => rb.velocity.y <= 0); 
+
+            IsAttacking = true;
+            rb.AddForce(Vector2.down * jumpPower * 3f, ForceMode2D.Impulse);
+
+            yield return new WaitUntil(() =>
+            {
+                Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, 0.5f);
+                foreach (var hit in hits)
+                {
+                    if (hit.CompareTag("Ground"))
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            });
+
+            transform.localScale = originalScale;
+            IsAttacking = false;
+
+            Debug.Log("Smash attack completed and size reset.");
+            yield return new WaitForSeconds(0.5f);
         }
 
-        Destroy(restrictionBox);
-        isRestrictingPlayer = false;
+        hasTransformed = false;
+    }
+
+    private IEnumerator TeleportAttack()
+    {
+        if (!hasTeleported)
+        {
+            Debug.Log("Teleporting and Summoning Mini Squares");
+            hasTeleported = true;
+
+            for (int i = 0; i < 3; i++)
+            {
+                Instantiate(miniSquarePrefab, miniSquareSpawnPoint.position, Quaternion.identity);
+                yield return new WaitForSeconds(0.3f);
+            }
+
+            Transform targetPoint = teleportPoints[Random.Range(0, teleportPoints.Length)];
+            transform.position = targetPoint.position;
+            yield return new WaitForSeconds(0.5f);
+        }
+        hasTeleported = false;
+    }
+
+    private IEnumerator TrapPlayer()
+    {
+        Debug.Log("Trapping Player");
+
+        Vector3 playerPosition = GameObject.FindWithTag("Player").transform.position;
+
+        GameObject prison = Instantiate(prisonPrefab, playerPosition, Quaternion.identity);
+
+        prison.transform.position = new Vector3(playerPosition.x, playerPosition.y, playerPosition.z);
+
+        Debug.Log($"Player Position: {PlayerController.Instance.transform.position}");
+
+        yield return new WaitForSeconds(3f);
+
+        Destroy(prison);
+    }
+
+    public override void TakeDamage(float damage)
+    {
+        base.TakeDamage(damage);
+
+        if (step < 2 && health <= maxHealth * 0.8f)
+        {
+            step = 2;
+        }
+        else if (step < 3 && health <= maxHealth * 0.5f)
+        {
+            step = 3;
+        }
+        else if (step < 4 && health <= maxHealth * 0.3f)
+        {
+            step = 4;
+        }
     }
 }

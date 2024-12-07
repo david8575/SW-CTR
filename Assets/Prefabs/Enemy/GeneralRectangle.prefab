@@ -73,7 +73,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: eb824c4a9a8d64348b44677ece35edb0, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -82,7 +82,7 @@ SpriteRenderer:
   m_Size: {x: 1.7933333, y: 1.93}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!114 &7928930533607788530
@@ -104,3 +104,9 @@ MonoBehaviour:
   defense: 5
   attackCoolDown: 1.5
   detectionRange: 5
+  attackRange: 5
+  healingAmount: 0
+  distance: 0
+  hpBar: {fileID: 0}
+  attackImage: {fileID: 0}
+  attackForce: 7

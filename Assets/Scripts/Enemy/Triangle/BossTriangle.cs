@@ -115,9 +115,9 @@ public class BossTriangle : EnemyBase
             time = 0;
             while (time < 1.0f)
             {
-                // ·¹ÀÌÀú ¹æÇâ : ÇÃ·¹ÀÌ¾î ¹æÇâ
+                // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ : ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ï¿½ï¿½
                 
-                // ·¹ÀÌÀú ³Ê¹« ±æ¾î¼­ Å©±â Á¶ÀýÀº ¾ÈÇÔ
+                // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¹ï¿½ ï¿½ï¿½î¼­ Å©ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
                 //targetLaser.transform.localScale = new Vector3(dir.magnitude, 1, 1);
                 targetLaser.transform.rotation = Quaternion.Euler(0, 0, Vector2.SignedAngle(Vector2.right, dir));
 
@@ -150,7 +150,7 @@ public class BossTriangle : EnemyBase
             // laser
             Debug.Log("Laser Attack");
 
-            // È¸Àü ºñÈ°¼ºÈ­
+            // È¸ï¿½ï¿½ ï¿½ï¿½È°ï¿½ï¿½È­
             rb.angularVelocity = 0;
 
             rb.AddTorque(2f);

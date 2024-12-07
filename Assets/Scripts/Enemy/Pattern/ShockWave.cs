@@ -17,7 +17,7 @@ public class ShockWave : MonoBehaviour
 
     IEnumerator Animation()
     {
-        // Á¡Á¡ Ä¿Áö´Â ¾Ö´Ï¸ÞÀÌ¼Ç
+        // ï¿½ï¿½ï¿½ï¿½ Ä¿ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½
         float scale = 0.1f;
         while (scale < maxScale)
         {
@@ -28,7 +28,7 @@ public class ShockWave : MonoBehaviour
 
         yield return new WaitForSeconds(0.5f);
 
-        // Á¡Á¡ ÀÛ¾ÆÁö´Â ¾Ö´Ï¸ÞÀÌ¼Ç
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½Û¾ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½
         while (scale > 0.1f)
         {
             scale /= 2;
