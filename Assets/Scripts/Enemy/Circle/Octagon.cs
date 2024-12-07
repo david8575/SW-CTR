@@ -2,63 +2,42 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Octagon : EnemyBase_old
+public class Octagon : EnemyBase
 {
     
-    private bool DefendBoost = false;
-    // Start is called before the first frame update
-    void Start()
+    [Header("Octagon Specific")]
+    public Sprite normalSprite; // 기본 스프라이트
+    public Sprite poweredUpSprite; // 체력 50% 이하 시 스프라이트
+    private SpriteRenderer spriteRenderer;
+
+    protected override void Start()
     {
-        health = 100f;
-        attackPower = 15f;
-        defense = 10f;
-        moveSpeed = 3f;
-        jumpPower = 1f;
-        attackCoolDown = 5f;
+        base.Start();
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        spriteRenderer.sprite = normalSprite; // 초기 스프라이트 설정
     }
 
-    // Update is called once per frame
-    void Update()
+    protected override IEnumerator Attack()
     {
-        if (health <= 0)
-        {
-            Die();
-        }
-        else if (health <= 0.5 * 100 && !DefendBoost)
-        {
-            DefenseBoost();
-        }
+        // 돌진 공격
+        Vector2 direction = (player.position - transform.position).normalized;
+        rb.AddForce(direction * moveSpeed * 10f, ForceMode2D.Impulse);
 
-        BasicAttack();
-    
-    }
-
-    private void BasicAttack()
-    {
-        if (canAttack)
-        {
-            StartCoroutine(BasicAttackRoutine());
-        }
-    }
-
-    private IEnumerator BasicAttackRoutine()
-    {
-        canAttack = false;
-
-        transform.position = new Vector3(player.transform.position.x, player.transform.position.y+10f, transform.position.z);
-        
-        yield return new WaitForSeconds(0.5f);
-        Vector2 downDirection = Vector2.down;
-        GetComponent<Rigidbody2D>().AddForce(downDirection * attackPower, ForceMode2D.Impulse);
-
+        // 쿨타임 대기
         yield return new WaitForSeconds(attackCoolDown);
-        canAttack = true;
     }
 
-    private void DefenseBoost()
+    public override void TakeDamage(float damage)
     {
-        DefendBoost = true;
-        float originalDefense = defense;
-        defense *= 2;
+        base.TakeDamage(damage);
+
+        // 체력이 50% 이하일 때 방어력 증가 및 스프라이트 변경
+        if (health <= status.Health * 0.5f && spriteRenderer.sprite != poweredUpSprite)
+        {
+            defense *= 2; // 방어력 2배 증가
+            spriteRenderer.sprite = poweredUpSprite; // 스프라이트 변경
+            Debug.Log("OctagonEnemy powered up");
+        }
     }
 }
+

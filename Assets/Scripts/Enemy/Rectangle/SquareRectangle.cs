@@ -1,212 +1,158 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class SquareRectangle : EnemyBase
 {
-     public bool startFight = false;
+    [Header("Square Rectangle Settings")]
+    public GameObject miniSquarePrefab; 
+    public Transform miniSquareSpawnPoint; 
+    public GameObject prisonPrefab; 
+    public Transform[] teleportPoints; 
 
-    [Header("Square Boss Settings")]
-    [SerializeField]
-    int step = 2; 
-    float smashHeight = 15f; 
-    float attackForce = 20f;
-    float maxHp;
+    private float maxHealth;
+    private bool hasTransformed = false;
+    private bool hasTeleported = false;
+    private int step = 1; 
 
-    [SerializeField]
-    Transform miniSquareSpawnPoint; 
-
-    [Header("Prefabs")]
-    public GameObject miniSquarePrefab;
-    public GameObject enclosingWallPrefab;
-    private Vector3 startPos;
-    private float mapWidth;
     protected override void Start()
     {
         base.Start();
-        maxHp = health;
-        startPos = transform.position;
-        mapWidth = 100f;
-    }
-
-    protected override void ApproachPlayer()
-    {
-        //base.ApproachPlayer();
+        maxHealth = health;
     }
 
     protected override IEnumerator Attack()
     {
-        if(!startFight)
-        {
-            yield return new WaitForSeconds(1f);
-            startFight = true;
-        }
-
-        yield return new WaitForSeconds(0.5f);
-
-        int rnd = UnityEngine.Random.Range(0, step);
+        int rnd = Random.Range(0, step); 
 
         if (rnd == 0)
         {
-            Debug.Log("대기 중");
-            yield return new WaitForSeconds(1f);
+            yield return BasicAttack();
         }
-
-        else if (rnd == 1)
+        else if (rnd == 1 && health <= maxHealth * 0.8f)
         {
-            Debug.Log("BossSquare: Basic Downward Smash");
-            rb.gravityScale = 0f;
-
-             Vector3 targetPosition = player.position;
-            targetPosition.x += UnityEngine.Random.Range(-3f, 3f); 
-            targetPosition.y += smashHeight; 
-            transform.position = targetPosition;
-
-            yield return new WaitForSeconds(0.5f);
-
-            rb.gravityScale = 1f;
-            IsAttacking = true;
-            rb.AddForce(Vector2.down * attackForce, ForceMode2D.Impulse);
-            yield return new WaitForSeconds(1.5f);
-
-            IsAttacking = false;
+            yield return TransformAttack();
         }
-
-        else if (rnd == 2)
+        else if (rnd == 2 && health <= maxHealth * 0.5f)
         {
-            Debug.Log("꼬맹이들 소환");
-            Instantiate(miniSquarePrefab, miniSquareSpawnPoint.position, Quaternion.identity);
-            Instantiate(miniSquarePrefab, miniSquareSpawnPoint.position, Quaternion.identity);
-            yield return new WaitForSeconds(0.5f);
+            yield return TeleportAttack();
         }
-
-        else if (rnd == 3)
+        else if (rnd == 3 && health <= maxHealth * 0.3f)
         {
-            Debug.Log("50% 크고 내려찍기");
-            yield return StartCoroutine(PerformDownwardSmash(mapWidth / 2f));
+            yield return TrapPlayer();
         }
-        else if (rnd == 4)
-        {
-            Debug.Log("순간이동");
-            yield return StartCoroutine(TeleportToFloatingPlatform());
-        }
-        else if (rnd == 5)
-        {
-            Debug.Log("75% 크고 내려찍기");
-            yield return StartCoroutine(PerformDownwardSmash(mapWidth * 0.75f));
-            yield return StartCoroutine(EnclosePlayer());
-        }
-
-        rb.gravityScale = 0f;
-        rb.velocity = Vector2.zero;
-
-        float time = 0f;
-        while (Vector2.Distance(transform.position, startPos) > 0.3f)
-        {
-            transform.position = Vector2.Lerp(transform.position, startPos, 0.1f);
-            yield return new WaitForSeconds(0.05f);
-
-            time += 0.05f;
-            if (time > 2.5f)
-            {
-                break;
-            }
-        }
-
-        transform.position = startPos;
     }
 
-    IEnumerator PerformDownwardSmash(float width)
+    private IEnumerator BasicAttack()
     {
-        rb.gravityScale = 0f;
+        Debug.Log("Basic Attack: Jump and Smash");
 
-        Vector3 targetPosition = player.position;
-        targetPosition.x += UnityEngine.Random.Range(-3f, 3f); 
-        targetPosition.y += smashHeight;
-        transform.position = targetPosition;
-
-        Vector3 originalScale = transform.localScale;
-        transform.localScale = new Vector3(width, originalScale.y, originalScale.z);
-
+        
+        Vector3 targetPosition = PlayerController.Instance.transform.position;
+        rb.velocity = Vector2.zero;
+        rb.AddForce(new Vector2(0, jumpPower), ForceMode2D.Impulse);
         yield return new WaitForSeconds(0.5f);
-
-        rb.gravityScale = 1f;
-        IsAttacking = true;
-        rb.AddForce(Vector2.down * attackForce, ForceMode2D.Impulse);
+        rb.AddForce(new Vector2(0, -jumpPower * 2f), ForceMode2D.Impulse);
         yield return new WaitForSeconds(1.5f);
 
-        transform.localScale = originalScale;
-        IsAttacking = false;
+        Debug.Log("Summon Mini Squares");
+        Instantiate(miniSquarePrefab, miniSquareSpawnPoint.position, Quaternion.identity);
     }
 
-    IEnumerator TeleportToFloatingPlatform()
+    private IEnumerator TransformAttack()
     {
-        GameObject[] platforms = GameObject.FindGameObjectsWithTag(tag);
-
-        if (platforms.Length == 0)
+        if (!hasTransformed)
         {
-            Debug.LogWarning($"태그 '{tag}'를 가진 지형물이 없습니다!");
-            yield break;
+            Debug.Log("Transforming: Enlarging and Smashing");
+            hasTransformed = true;
+
+            Vector3 originalScale = transform.localScale;
+            transform.localScale = new Vector3(originalScale.x * 2f, originalScale.y, originalScale.z);
+
+            yield return new WaitForSeconds(0.5f);
+
+            rb.velocity = Vector2.zero;
+            rb.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
+
+            yield return new WaitUntil(() => rb.velocity.y <= 0); 
+
+            IsAttacking = true;
+            rb.AddForce(Vector2.down * jumpPower * 3f, ForceMode2D.Impulse);
+
+            yield return new WaitUntil(() =>
+            {
+                Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, 0.5f);
+                foreach (var hit in hits)
+                {
+                    if (hit.CompareTag("Ground"))
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            });
+
+            transform.localScale = originalScale;
+            IsAttacking = false;
+
+            Debug.Log("Smash attack completed and size reset.");
+            yield return new WaitForSeconds(0.5f);
         }
 
-        GameObject chosenPlatform = platforms[UnityEngine.Random.Range(0, platforms.Length)];
-        transform.position = chosenPlatform.transform.position;
-
-        yield return new WaitForSeconds(1f);
+        hasTransformed = false;
     }
 
-    IEnumerator EnclosePlayer()
+    private IEnumerator TeleportAttack()
     {
-        Vector3 playerPosition = player.position;
+        if (!hasTeleported)
+        {
+            Debug.Log("Teleporting and Summoning Mini Squares");
+            hasTeleported = true;
 
-        GameObject leftWall = Instantiate(enclosingWallPrefab, playerPosition + Vector3.left * 2f, Quaternion.identity);
-        GameObject rightWall = Instantiate(enclosingWallPrefab, playerPosition + Vector3.right * 2f, Quaternion.identity);
-        GameObject topWall = Instantiate(enclosingWallPrefab, playerPosition + Vector3.up * 2f, Quaternion.identity);
-        GameObject bottomWall = Instantiate(enclosingWallPrefab, playerPosition + Vector3.down * 2f, Quaternion.identity);
+            for (int i = 0; i < 3; i++)
+            {
+                Instantiate(miniSquarePrefab, miniSquareSpawnPoint.position, Quaternion.identity);
+                yield return new WaitForSeconds(0.3f);
+            }
+
+            Transform targetPoint = teleportPoints[Random.Range(0, teleportPoints.Length)];
+            transform.position = targetPoint.position;
+            yield return new WaitForSeconds(0.5f);
+        }
+        hasTeleported = false;
+    }
+
+    private IEnumerator TrapPlayer()
+    {
+        Debug.Log("Trapping Player");
+
+        Vector3 playerPosition = GameObject.FindWithTag("Player").transform.position;
+
+        GameObject prison = Instantiate(prisonPrefab, playerPosition, Quaternion.identity);
+
+        prison.transform.position = new Vector3(playerPosition.x, playerPosition.y, playerPosition.z);
+
+        Debug.Log($"Player Position: {PlayerController.Instance.transform.position}");
 
         yield return new WaitForSeconds(3f);
 
-        Destroy(leftWall);
-        Destroy(rightWall);
-        Destroy(topWall);
-        Destroy(bottomWall);
+        Destroy(prison);
     }
 
-    public override bool TakeDamage(float damage)
+    public override void TakeDamage(float damage)
     {
-        bool isDead = base.TakeDamage(damage);
+        base.TakeDamage(damage);
 
-        if (isDead)
+        if (step < 2 && health <= maxHealth * 0.8f)
         {
-            return true;
+            step = 2;
         }
-
-        if (health <= maxHp * 0.8f && step < 3)
+        else if (step < 3 && health <= maxHealth * 0.5f)
         {
-            Debug.Log("보스 피 80");
             step = 3;
         }
-
-         else if (health <= maxHp * 0.5f && step < 4)
+        else if (step < 4 && health <= maxHealth * 0.3f)
         {
-            Debug.Log("보스 피 50");
-            attackCoolDown -= 0.5f; 
             step = 4;
         }
-        else if (health <= maxHp * 0.3f && step < 5)
-        {
-            Debug.Log("보스 피 30");
-            Instantiate(miniSquarePrefab, miniSquareSpawnPoint.position, Quaternion.identity);
-            step = 5;
-        }
-
-        return false;
-    }
-
-    protected override void Die()
-    {
-        Debug.Log("주금");
-        base.Die();
     }
 }

@@ -4,35 +4,49 @@ using UnityEngine;
 
 public class OblongRectangle : EnemyBase
 {
-    public float attackForce = 7f;
-    public float jumpHeight = 15f;
+    public float jumpForce = 10f;
+    public float slamForce = 20f;
     private Vector3 originalScale;
+
     protected override void Start()
     {
         base.Start();
         originalScale = transform.localScale;
     }
+
     protected override IEnumerator Attack()
     {
-        Vector2 jumpDirection = new Vector2(player.transform.position.x, player.transform.position.y + jumpHeight) - (Vector2)transform.position;
-        jumpDirection = jumpDirection.normalized; 
+        if (player == null)
+        {
+            player = PlayerController.Instance?.GetShapeTransform();
+            if (player == null)
+            {
+                Debug.LogWarning("Player reference is null in DynamicRectangle Attack.");
+                yield break;
+            }
+        }
 
-        yield return new WaitForSeconds(0.3f);
+        
+        if (originalScale == Vector3.zero)
+        {
+            Debug.LogWarning("Original scale is zero. Resetting to default values.");
+            originalScale = new Vector3(1, 1, 1);
+        }
 
-        IsAttacking = true;
-        rb.AddForce(jumpDirection * attackForce, ForceMode2D.Impulse);
+        Vector2 jumpDirection = new Vector2(0, 1);
+        rb.AddForce(jumpDirection * jumpForce, ForceMode2D.Impulse);
+
+        transform.localScale = new Vector3(originalScale.x * 2, originalScale.y, originalScale.z);
 
         yield return new WaitForSeconds(0.5f);
 
-        transform.localScale = new Vector3(originalScale.x*2, originalScale.y, originalScale.z);
-
-        Vector2 smashDirection = Vector2.down; 
-        rb.AddForce(smashDirection * attackForce * 2, ForceMode2D.Impulse); 
+        IsAttacking = true;
+        Vector2 slamDirection = new Vector2(0, -1);
+        rb.AddForce(slamDirection * slamForce, ForceMode2D.Impulse);
 
         yield return new WaitForSeconds(0.5f);
 
         transform.localScale = originalScale;
-
         IsAttacking = false;
     }
 }
