@@ -16,7 +16,7 @@ public abstract class EnemyBase : MonoBehaviour
     public float attackRange = 5f;
     bool isAttacking = false;
 
-    bool isDead = false;
+    public bool isDead = false;
 
     public bool EnemyEnabled = true;
     public bool IsAttacking {
@@ -136,7 +136,7 @@ public abstract class EnemyBase : MonoBehaviour
 
     protected abstract IEnumerator Attack();
 
-    IEnumerator AttackDecorator()
+    public IEnumerator AttackDecorator()
     {
         canAttack = false;
         yield return StartCoroutine(Attack());
@@ -146,7 +146,7 @@ public abstract class EnemyBase : MonoBehaviour
 
     public virtual void TakeDamage(float damage)
     {
-        Debug.Log("°ø°Ý " + damage + " µ¥¹ÌÁö");
+        Debug.Log("ï¿½ï¿½ï¿½ï¿½ " + damage + " ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
 
         if (damage > defense)
             health -= (damage - defense);
@@ -169,7 +169,7 @@ public abstract class EnemyBase : MonoBehaviour
 
     protected virtual void Die()
     {
-        if (GameManager.Instance != null) // GameManager°¡ Á¸ÀçÇÏ´ÂÁö È®ÀÎ
+        if (GameManager.Instance != null) // GameManagerï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ï¿½ï¿½ È®ï¿½ï¿½
         {
             GameManager.Instance.CheckAllEnemiesDefeated();
         }
