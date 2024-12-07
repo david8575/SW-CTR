@@ -39,6 +39,7 @@ public abstract class Shape : MonoBehaviour
     // 접촉시
     void OnCollisionEnter2D(Collision2D collision)
     {
+        
         if (collision.gameObject.CompareTag("Enemy"))
         {
             EnemyBase enemy = collision.gameObject.GetComponent<EnemyBase>();
@@ -89,6 +90,7 @@ public abstract class Shape : MonoBehaviour
 
         if (collision.gameObject.CompareTag("Ground") || collision.gameObject.CompareTag("Enemy"))
         {
+            
             var contact = collision.GetContact(0);
             if (contact.point.y < transform.position.y)
             {

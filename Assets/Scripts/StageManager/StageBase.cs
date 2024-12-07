@@ -77,7 +77,10 @@ public class StageBase : MonoBehaviour
         // 신기록 저장하기
         #region Save Data
         var saveData = DataManager.Instance.SaveData;
-        saveData.Stages[stageNumber].bestTime = Mathf.Min(saveData.Stages[stageNumber].bestTime, StageTimer.time);
+        if (saveData.Stages[stageNumber].isClear == true)
+            saveData.Stages[stageNumber].bestTime = Mathf.Min(saveData.Stages[stageNumber].bestTime, StageTimer.time);
+        else
+            saveData.Stages[stageNumber].bestTime = StageTimer.time;
         if (saveData.Stages[stageNumber].isPuzzleClear == false && puzzleClear)
         {
             saveData.Stages[stageNumber].isPuzzleClear = true;
@@ -96,6 +99,7 @@ public class StageBase : MonoBehaviour
             saveData.leftStatPoint++;
         }
 
+        saveData.Stages[stageNumber].isClear = true;
         DataManager.Instance.SaveGameData();
 
         #endregion
@@ -120,7 +124,7 @@ public class StageBase : MonoBehaviour
         StartCoroutine(stageUI.GameoverCorutine());
     }
 
-    IEnumerator OnFinishButton()
+    protected IEnumerator OnFinishButton()
     {
         var scene = SceneManager.LoadSceneAsync("StageSelect");
         scene.allowSceneActivation = false;

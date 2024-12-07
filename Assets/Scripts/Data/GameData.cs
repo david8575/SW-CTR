@@ -14,6 +14,7 @@ public class GameData
         public bool isAllKill;
         public bool isTimeClear;
 
+        public bool isClear;
     };
 
     //public StageInfo TutorialStage = new();
@@ -26,6 +27,7 @@ public class GameData
     /// </summary>
     public StageInfo[] Stages = new StageInfo[11];
 
+    public bool IsTutorialClear = false;
 
     public bool UnlockSquare = false;
 

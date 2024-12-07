@@ -12228,6 +12228,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 773596233573947665, guid: f7e0022c9a970d949900df099c34f468, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -9.324997
+      objectReference: {fileID: 0}
     - target: {fileID: 1524125350780229205, guid: f7e0022c9a970d949900df099c34f468, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -12248,6 +12252,10 @@ PrefabInstance:
       propertyPath: m_BodyType
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4431418569521788187, guid: f7e0022c9a970d949900df099c34f468, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 952808133}
     - target: {fileID: 4864453462324202390, guid: f7e0022c9a970d949900df099c34f468, type: 3}
       propertyPath: speed
       value: 10
@@ -15466,6 +15474,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1abd70c409dff9244bc9ca7545d96afc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  stageNumber: 1
   clearPoint: {fileID: 3965945164880769169}
   clearTime: 60
   puzzleClear: 0

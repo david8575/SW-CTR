@@ -51,6 +51,9 @@ public class Circle : Shape
         mousePos.z = 0;
 
         Vector3 dir = (mousePos - transform.position).normalized;
+        float dot = Vector3.Dot(dir, rb.velocity);
+        if (dot < 0)
+            rb.velocity = Vector2.zero;
         rb.AddForce(dir * power, ForceMode2D.Impulse);
 
     }

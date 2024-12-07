@@ -5802,6 +5802,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6582d42e3053a3e43ad22256d1d3377e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  stageNumber: 0
   clearPoint: {fileID: 521627389}
   clearTime: 60
   puzzleClear: 0

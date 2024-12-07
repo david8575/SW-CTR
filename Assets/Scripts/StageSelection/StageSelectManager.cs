@@ -16,12 +16,24 @@ public class StageSelectManager : MonoBehaviour
 
     [Header("Other")]
     public Image fade;
+    public GameObject buttonHighestParents;
 
     void Start()
     {
         FadeManager.Instance.FadeOut();
         data = DataManager.Instance.SaveData;
         UpdateStatAlarm();
+
+        int idx = 0;
+        for (int i = 0; i < buttonHighestParents.transform.childCount; i++)
+        {
+            var buttonParent = buttonHighestParents.transform.GetChild(i);
+            for (int j = 0; j < buttonParent.childCount; j++)
+            {
+                buttonParent.GetChild(j).GetComponent<StageSelectButton>().Init(this, idx++);
+
+            }
+        }
     }
 
     // 데이터 초기화용 디버그 기능
@@ -45,17 +57,14 @@ public class StageSelectManager : MonoBehaviour
         UpdateStatAlarm();
     }
 
-    public void OnStageButton(string sceneName)
+    public void OnStageButton(int sceneIdx)
     {
-        if (sceneName != "")
-        {
-            StartCoroutine(StageCutscene(sceneName));
-        }
+        StartCoroutine(StageCutscene(sceneIdx));
     }
 
-    IEnumerator StageCutscene(string sceneName)
+    IEnumerator StageCutscene(int sceneIdx)
     {
-        var load = SceneManager.LoadSceneAsync(sceneName);
+        var load = SceneManager.LoadSceneAsync(sceneIdx);
         load.allowSceneActivation = false;
 
         yield return FadeManager.Instance.FadeIn();
