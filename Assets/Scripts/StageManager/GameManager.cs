@@ -65,7 +65,7 @@ public class GameManager : MonoBehaviour
         EnemieCount--;
         CurrentStage.SetEnemyCount();
 
-        if (EnemieCount == 0 && IsAllKill == false)
+        if (EnemieCount <= 0 && IsAllKill == false)
         {
             Debug.Log("All enemies defeated!");
             IsAllKill = true;

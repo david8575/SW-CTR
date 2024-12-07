@@ -14,8 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHp: 100
   attack: 10
-  defense: 10
+  defense: 0
   speed: 10
   cooldown: 10
   maxSpeed: 100
   jumpPower: 10
+  specialPower: 10

@@ -9,6 +9,7 @@ public class NormalTriangle : EnemyBase
     protected override IEnumerator Attack()
     {
         Vector2 dir = (player.transform.position - transform.position).normalized;
+        rb.AddForce(Vector2.up, ForceMode2D.Impulse);
         yield return new WaitForSeconds(0.3f);
 
         IsAttacking = true;

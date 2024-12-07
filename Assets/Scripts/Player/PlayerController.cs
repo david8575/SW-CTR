@@ -38,8 +38,8 @@ public class PlayerController : MonoBehaviour
 
 
     PlayerInputActions playerInputActions;
-    Rigidbody2D rb;
-
+    public Rigidbody2D rb { get; private set; }
+    [Header("Player Stats")]
     public float hp = 100;
     public float maxHp = 100;
     public float attack = 10;
@@ -67,7 +67,10 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField]
     Shape[] shapes;
-    
+
+    public bool[] CanChangeShape = new bool[3] { true, true, false };
+    public bool PlayerInputEnable = true;
+
     public enum ShapeType
     {
         Circle = 0,
@@ -76,14 +79,15 @@ public class PlayerController : MonoBehaviour
     }
 
     public CinemachineVirtualCamera vcam;
-    public PlayerUIManager uIManager;
+    public PlayerUIManager uiManager;
+
+    Coroutine specialCooldownCoroutine;
 
     private void Start()
     {
         // 키 입력과 함수 연결
         #region key Input
         playerInputActions = new();
-        playerInputActions.Enable();
 
         playerInputActions.PlayerActions.Move.started += (x) => moveInput = x.ReadValue<float>();
         playerInputActions.PlayerActions.Move.canceled += (x) => moveInput = x.ReadValue<float>();
@@ -98,11 +102,23 @@ public class PlayerController : MonoBehaviour
         playerInputActions.PlayerActions.Special.canceled += OnSpecialCanceled;
 
         playerInputActions.PlayerActions.Enter.performed += OnEnterPerformd;
+
+        if (PlayerInputEnable)
+        {
+            playerInputActions.Enable();
+        }
         #endregion
         hp = shapes[0].status.MaxHp;
         hp += hp * ((float)DataManager.Instance.SaveData.healthStat / GameData.maxStatPoint);
         maxHp = hp;
-        uIManager.SetHp(hp, maxHp);
+
+        if (DataManager.Instance.SaveData.UnlockSquare == true)
+        {
+            CanChangeShape[2] = true;
+
+        }
+
+        uiManager.Init(this);
         SetStat();
 
         for (int i = 0; i < shapes.Length; i++)
@@ -111,7 +127,9 @@ public class PlayerController : MonoBehaviour
         }
         SetShapeType(ShapeType.Circle);
 
-        
+        uiManager.GetComponent<Canvas>().worldCamera = Camera.main;
+
+
     }
 
     // 능력치에 업그레이드 배율 적용
@@ -128,6 +146,11 @@ public class PlayerController : MonoBehaviour
     // 도형의 종류를 바꾸는 함수
     public void SetShapeType(ShapeType shapeType)
     {
+        if (CanChangeShape[(int)shapeType] == false)
+        {
+            return;
+        }
+
         int idx = (int)shapeType;
         // ShapeInfo가 null 이 아닐때 감지해야하므로 &&로 묶어줌
         if (ShapeInfo != null && ShapeInfo.name == shapes[idx].name && ShapeInfo.IsInvincible == false
@@ -139,7 +162,7 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        uIManager.UpdateShape(idx);
+        uiManager.UpdateShape(idx);
 
         // 도형 로드
         //string shapeStatPath = "Player/" + shapeName;
@@ -215,12 +238,21 @@ public class PlayerController : MonoBehaviour
         while (t < maxCooldown)
         {
             t += Time.deltaTime;
-            uIManager.UpdateCooldown(t, maxCooldown);
+            uiManager.UpdateCooldown(t, maxCooldown);
             yield return null;
         }
- 
+        uiManager.UpdateCooldown(1.0f, 1.0f);
+
         Debug.Log("쿨타임 종료");
         canSpecial = true;
+    }
+
+    public void ResetCooltime()
+    {
+        canSpecial = true;
+        uiManager.UpdateCooldown(1.0f, 1.0f);
+        if (specialCooldownCoroutine != null)
+            StopCoroutine(specialCooldownCoroutine);
     }
 
 
@@ -245,12 +277,16 @@ public class PlayerController : MonoBehaviour
 
     void OnSpecialCanceled(InputAction.CallbackContext context)
     {
-        if (ShapeInfo.IsInvincible  == true)
+        if (ShapeInfo.IsInvincible  == true || canSpecial == false)
             return;
+        if (ShapeInfo is Circle && ((Circle)ShapeInfo).isCharging == false)
+        {
+            return;
+        }
 
         ShapeInfo.OnSpecialCanceled();
         // 쿨타임은 여기서 돌리기
-        StartCoroutine(WaitSpecialCooldown(ShapeInfo.cooldown));
+        specialCooldownCoroutine = StartCoroutine(WaitSpecialCooldown(ShapeInfo.cooldown));
     }
 
     void OnEnterPerformd(InputAction.CallbackContext context)
@@ -301,7 +337,7 @@ public class PlayerController : MonoBehaviour
             ShapeDead();
         }
 
-        uIManager.UpdateHPBar(hp);
+        uiManager.UpdateHPBar(hp);
     }
 
     public void Heal(float heal)
@@ -310,7 +346,12 @@ public class PlayerController : MonoBehaviour
         if (hp > maxHp)
             hp = maxHp;
 
-        uIManager.UpdateHPBar(hp);
+        uiManager.UpdateHPBar(hp);
     }
 
+    private void OnDestroy()
+    {
+        playerInputActions.Disable();
+        playerInputActions.Dispose();
+    }
 }

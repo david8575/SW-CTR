@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 305c9a3d504e9b64aa76c206c66514af, type: 3}
   m_Name: miniTriangle
   m_EditorClassIdentifier: 
-  health: 100
+  health: 10
   attackPower: 10
   jumpPower: 5
   moveSpeed: 2
-  defense: 5
+  defense: 0
   attackCoolDown: 1.5
-  detectionRange: 9
+  detectionRange: 100
   attackRange: 5
-  healingAmount: 0
+  healingAmount: 10
