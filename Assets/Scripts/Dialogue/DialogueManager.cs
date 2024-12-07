@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -37,6 +36,8 @@ public class DialogueManager : MonoBehaviour
         {"actriangle", "삼각형" },
     };
 
+    public bool playerAutoEnable = true;
+
     private void Start()
     {
         inputActions = new PlayerInputActions();
@@ -48,45 +49,22 @@ public class DialogueManager : MonoBehaviour
         
     }
 
-    public void StartDialouge(string key, float interval = 0.05f, bool UseSpecialText =false)
+    public void StartDialogue(string key, float interval = 0.05f, Action callBack = null)
     {
-        IsInDialogue = true;
-
-        if (PlayerController.Instance != null)
-            PlayerController.Instance.SetInputSystem(false);
-
-
-        // key에 해당하는 대화를 chat 큐에 저장
-        int idx = 1;
-        chat.Clear();
-        chat.Enqueue(dialouge[key]);
-
-        while (true)
-        {
-            // special이 end가 나올 때까지 대화를 chat 큐에 저장
-            var dia = dialouge[key + idx.ToString()];
-            chat.Enqueue(dia);
-            idx++;
-
-            if (dia["special"] == "end")
-                break;
-        }
-
-        inputActions.DialougeActions.Enable();
+        SetDialogue(key);
 
         dialougePanel.SetBool("show", true);
-        if (UseSpecialText)
-        {
-            specialDialogueText.gameObject.SetActive(true);
-            StartCoroutine(DialogueCoroutine(specialDialogueText, interval));
-        }
-        else
-        {
-            StartCoroutine(DialogueCoroutine(dialogueText, interval));
-        }
+        StartCoroutine(DialogueCoroutine(dialogueText, interval, callBack));
     }
 
-    IEnumerator DialogueCoroutine(TextMeshProUGUI curDialougueText, float wait)
+    public void StartSpecialDialogue(string key, float interval = 0.05f, Action callBack = null)
+    {
+        SetDialogue(key);
+        specialDialogueText.gameObject.SetActive(true);
+        StartCoroutine(DialogueCoroutine(specialDialogueText, interval, callBack));
+    }
+
+    IEnumerator DialogueCoroutine(TextMeshProUGUI curDialougueText, float wait, Action callBack)
     {
         WaitWhile waitClick = new WaitWhile(() => !isClicked);
         WaitForSeconds waitTime = new WaitForSeconds(wait);
@@ -132,6 +110,7 @@ public class DialogueManager : MonoBehaviour
         }
 
         EndDialouge();
+        callBack?.Invoke();
     }
 
     void EndDialouge()
@@ -145,12 +124,42 @@ public class DialogueManager : MonoBehaviour
 
         IsInDialogue = false;
 
-        if (PlayerController.Instance != null)
+        if (PlayerController.Instance != null && playerAutoEnable)
             PlayerController.Instance.SetInputSystem(true);
     }
 
     private void NextDialouge(InputAction.CallbackContext context)
     {
         isClicked = true;
+    }
+
+    void SetDialogue(string key)
+    {
+        IsInDialogue = true;
+
+        if (PlayerController.Instance != null)
+            PlayerController.Instance.SetInputSystem(false);
+
+
+        // key에 해당하는 대화를 chat 큐에 저장
+        int idx = 1;
+        var dia = dialouge[key];
+        chat.Clear();
+        chat.Enqueue(dia);
+
+        while (true)
+        {
+            if (dia["special"] == "end")
+                break;
+
+            // special이 end가 나올 때까지 대화를 chat 큐에 저장
+            dia = dialouge[key + idx.ToString()];
+            chat.Enqueue(dia);
+            idx++;
+
+
+        }
+
+        inputActions.DialougeActions.Enable();
     }
 }

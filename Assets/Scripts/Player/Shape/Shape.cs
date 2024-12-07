@@ -21,6 +21,7 @@ public abstract class Shape : MonoBehaviour
     protected PlayerController controller;
     protected SpriteRenderer spriteRenderer;
     protected Color color;
+    protected Coroutine attackCoroutine;
 
     // 초기화
     public void Init(PlayerController con)
@@ -39,6 +40,7 @@ public abstract class Shape : MonoBehaviour
     // 접촉시
     void OnCollisionEnter2D(Collision2D collision)
     {
+        
         if (collision.gameObject.CompareTag("Enemy"))
         {
             EnemyBase enemy = collision.gameObject.GetComponent<EnemyBase>();
@@ -63,6 +65,8 @@ public abstract class Shape : MonoBehaviour
                 if (defense < enemy.attackPower)
                     controller.TakeDamage(enemy.attackPower);
             }
+
+            StopAttack();
 
             /*
             if (controller.isAttacking && enemy.IsAttacking)
@@ -89,6 +93,7 @@ public abstract class Shape : MonoBehaviour
 
         if (collision.gameObject.CompareTag("Ground") || collision.gameObject.CompareTag("Enemy"))
         {
+            
             var contact = collision.GetContact(0);
             if (contact.point.y < transform.position.y)
             {
@@ -103,6 +108,17 @@ public abstract class Shape : MonoBehaviour
     protected virtual void ActiveJump()
     {
         controller.canJump = true;
+    }
+
+    protected virtual void StopAttack()
+    {
+        if (attackCoroutine != null)
+        {
+            StopCoroutine(attackCoroutine);
+            attackCoroutine = null;
+        }
+        controller.isAttacking = false;
+        spriteRenderer.color = color;
     }
 
     public IEnumerator Invincible(float time)

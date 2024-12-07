@@ -2,143 +2,95 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BossPentagon : EnemyBase_old
+public class BossPentagon : EnemyBase
 {
-    public GameObject miniPentagonPrefab;     
-    public GameObject missilePrefab;           
-    public GameObject strongTrianglePrefab;    
-    public GameObject strongSquarePrefab;      
-    public float dashSpeed = 20f;
-    public float strongDashSpeed = 40f;
+    [Header("Boss Specific")]
+    public GameObject miniPentagonPrefab;
+    public GameObject trianglePrefab;
+    public GameObject squarePrefab;
+    public GameObject missilePrefab;
+    public Transform[] cornerPositions;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        health = 100f;
-        attackPower = 15f;
-        defense = 10f;
-        moveSpeed = 5f;
-        jumpPower = 1f;
-        attackCoolDown = 5f;
-    }
+    [Header("Missile Settings")]
+    public Transform missileSpawnPoint;
 
-    // Update is called once per frame
-    void Update()
+    protected override IEnumerator Attack()
     {
-        if (health <= 0)
+        int randomAttack = Random.Range(1, 6); // 1~5 랜덤 선택
+        Debug.Log($"BossPentagon performing attack {randomAttack}");
+
+        switch (randomAttack)
         {
-            Die();
-        }
-        else if (health <= 0.3 * 100)
-        {
-            SummonStrongShapes(); 
-        }
-        else if (health <= 0.5 * 100)
-        {
-            StarPatternMissileAttack(); 
-        }
-        else if (health <= 0.8 * 100)
-        {
-            StrongDashAttack();
-        }
-        else
-        {
-            BasicAttack();
+            case 1: // 돌진 공격
+                yield return RushAttack();
+                break;
+            case 2: // 미니 오각형 소환
+                yield return SummonMiniPentagons();
+                break;
+            case 3: // 강한 돌진 공격
+                yield return StrongRushAttack();
+                break;
+            case 4: // 꼭짓점에서 미사일 발사
+                // yield return MissileFromCorners();
+                // break;
+            case 5: // 삼각형과 사각형 소환
+                yield return SummonShapes();
+                break;
         }
     }
 
-    private void BasicAttack()
+    private IEnumerator RushAttack()
     {
-        if (canAttack)
+        Vector2 direction = (player.position - transform.position).normalized;
+        rb.AddForce(direction * moveSpeed * 10f, ForceMode2D.Impulse);
+        yield return new WaitForSeconds(0.5f);
+        rb.velocity = Vector2.zero;
+    }
+
+    private IEnumerator SummonMiniPentagons()
+    {
+        for (int i = 0; i < 3; i++)
         {
-            StartCoroutine(BasicAttackRoutine());
+            Instantiate(miniPentagonPrefab, transform.position + (Vector3)(Random.insideUnitCircle * 2f), Quaternion.identity);
+            yield return new WaitForSeconds(0.3f);
         }
     }
 
-    private IEnumerator BasicAttackRoutine()
+    private IEnumerator StrongRushAttack()
     {
-        canAttack = false;
+        Vector2 direction = (player.position - transform.position).normalized;
+        rb.AddForce(direction * moveSpeed * 20f, ForceMode2D.Impulse);
 
-        GameObject miniPentagon = Instantiate(miniPentagonPrefab, transform.position, Quaternion.identity);
-        Vector2 direction = (player.transform.position - transform.position).normalized;
-        miniPentagon.GetComponent<Rigidbody2D>().velocity = direction * moveSpeed;
-
-        yield return new WaitForSeconds(attackCoolDown);
-        canAttack = true;
-    }
-
-    private void StrongDashAttack()
-    {
-        if (canAttack)
+        for (int i = 0; i < 5; i++) // 벽에 튕기는 효과
         {
-            StartCoroutine(StrongDashAttackRoutine());
+            yield return new WaitForSeconds(0.5f);
+            Vector2 bounceDirection = Vector2.Reflect(rb.velocity.normalized, Random.insideUnitCircle.normalized);
+            rb.AddForce(bounceDirection * moveSpeed * 10f, ForceMode2D.Impulse);
         }
+
+        rb.velocity = Vector2.zero;
     }
 
-    private IEnumerator StrongDashAttackRoutine()
+    private IEnumerator MissileFromCorners()
     {
-        canAttack = false;
-
-        yield return new WaitForSeconds(2f);
-
-        Vector2 direction = (player.transform.position - transform.position).normalized;
-        Rigidbody2D rb = GetComponent<Rigidbody2D>();
-        rb.AddForce(direction * strongDashSpeed, ForceMode2D.Impulse);
-
-        yield return new WaitForSeconds(attackCoolDown);
-        canAttack = true;
+        for (int i = 0; i < 5; i++) // 5개의 미사일 발사
+    {
+        // 미사일 생성
+        GameObject missile = Instantiate(missilePrefab, missileSpawnPoint.position, Quaternion.identity);
+        
+        // 미사일이 플레이어를 향하도록 방향 설정
+        Vector2 direction = (player.position - missileSpawnPoint.position).normalized;
+        Rigidbody2D missileRb = missile.GetComponent<Rigidbody2D>();
+        missileRb.velocity = direction * 10f; // 미사일 속도 설정
+        
+        yield return new WaitForSeconds(0.2f); // 발사 간격
+    }
     }
 
-    private void StarPatternMissileAttack()
+    private IEnumerator SummonShapes()
     {
-        if (canAttack)
-        {
-            StartCoroutine(StarPatternMissileRoutine());
-        }
-    }
-
-    private IEnumerator StarPatternMissileRoutine()
-    {
-        canAttack = false;
-
-        GameObject missile = Instantiate(missilePrefab, transform.position, Quaternion.identity);
-        Vector2 direction = (player.transform.position - transform.position).normalized;
-        missile.GetComponent<Rigidbody2D>().velocity = direction * dashSpeed;
-
-        yield return new WaitForSeconds(1f);
-        FireAdditionalMissiles(missile.transform.position);
-
-        yield return new WaitForSeconds(attackCoolDown);
-        canAttack = true;
-    }
-
-    private void FireAdditionalMissiles(Vector2 position)
-    {
-        GameObject missile1 = Instantiate(missilePrefab, position, Quaternion.identity);
-        GameObject missile2 = Instantiate(missilePrefab, position, Quaternion.identity);
-
-        Vector2 inwardDirection1 = new Vector2(-1, 1).normalized;
-        Vector2 inwardDirection2 = new Vector2(1, 1).normalized;
-        missile1.GetComponent<Rigidbody2D>().velocity = inwardDirection1 * dashSpeed;
-        missile2.GetComponent<Rigidbody2D>().velocity = inwardDirection2 * dashSpeed;
-    }
-
-    private void SummonStrongShapes()
-    {
-        if (canAttack)
-        {
-            StartCoroutine(SummonStrongShapesRoutine());
-        }
-    }
-
-    private IEnumerator SummonStrongShapesRoutine()
-    {
-        canAttack = false;
-
-        Instantiate(strongTrianglePrefab, transform.position + Vector3.left * 2, Quaternion.identity);
-        Instantiate(strongSquarePrefab, transform.position + Vector3.right * 2, Quaternion.identity);
-
-        yield return new WaitForSeconds(attackCoolDown);
-        canAttack = true;
+        Instantiate(trianglePrefab, transform.position + Vector3.left * 2, Quaternion.identity);
+        yield return new WaitForSeconds(0.5f);
+        Instantiate(squarePrefab, transform.position + Vector3.right * 2, Quaternion.identity);
     }
 }

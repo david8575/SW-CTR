@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5627968052910564687}
   - component: {fileID: 3230331318841582065}
   - component: {fileID: -3007588811887363209}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: shockWave
   m_TagString: Bullet
   m_Icon: {fileID: 0}
@@ -134,3 +134,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxScale: 1
+  IsForPlayer: 0

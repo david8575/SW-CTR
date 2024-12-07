@@ -19,7 +19,7 @@ public class DataManager
     }
 
     const string dataFileName = "GameData.json";
-    string savePath;
+    readonly string savePath;
 
     private GameData saveData;
     public GameData SaveData

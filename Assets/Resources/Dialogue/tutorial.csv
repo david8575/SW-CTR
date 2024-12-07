@@ -6,6 +6,17 @@ intro3,변도 정할 수 없는 원은,,
 intro4,최하층의 계급으로서,,
 intro5,혹사당하고 있다.,,end
 first_chat,이봐 원! 여기는 삼각형 구역이다!,actriangle,
-first_chat1,아 죄송합니다. 구역을 넘어간지 몰랐습니다…,player,
-first_chat2,뭐? 그런것도 몰라?,actriangle,tuto_first
+first_chat1,죄송합니다. 구역을 넘어간지 몰랐습니다…,player,
+first_chat2,뭐? 그런것도 몰라?,actriangle,
 first_chat3,모르면 맞아야지!,actriangle,end
+after_jump,이녀석! 감히 내 공격을 피해?,actriangle,
+after_jump1,(도망가자),player,end
+scene2_,돌아가는 길은 삼각형이 막고 있어,player,
+scene2_1,다른 길을 찾아보자,player,
+scene2_2,(모든 플랫폼은 밑에서 위로 올라갈 수 있습니다,,end
+see_deadbody,(삼각형이 죽어있다),player,
+see_deadbody1,(뭔가 얻을게 있는지 살펴보자),player,end
+get_triangle,뭐야! 삼각형이 내 몸에 흡수됐어!,player,end
+after_triangle,나도 삼각형처럼 공격을 할 수 있잖아!,player,
+after_triangle1,사실 나는 특별한게 아닐까?,player,
+after_triangle2,다른 삼각형들을 잡아버리는거야!,player,end

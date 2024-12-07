@@ -21,6 +21,7 @@ public class BossTriangle : EnemyBase
     int step = 3;
     float attackForce = 12f;
     float maxHp;
+    SpriteRenderer spriteRenderer;
 
     [SerializeField]
     Vector3 startPos;
@@ -48,6 +49,8 @@ public class BossTriangle : EnemyBase
         startPos = transform.position;
 
         laserParent.gameObject.SetActive(false);
+
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
 
@@ -112,9 +115,9 @@ public class BossTriangle : EnemyBase
             time = 0;
             while (time < 1.0f)
             {
-                // ·¹ÀÌÀú ¹æÇâ : ÇÃ·¹ÀÌ¾î ¹æÇâ
+                // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ : ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ï¿½ï¿½
                 
-                // ·¹ÀÌÀú ³Ê¹« ±æ¾î¼­ Å©±â Á¶ÀýÀº ¾ÈÇÔ
+                // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¹ï¿½ ï¿½ï¿½î¼­ Å©ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
                 //targetLaser.transform.localScale = new Vector3(dir.magnitude, 1, 1);
                 targetLaser.transform.rotation = Quaternion.Euler(0, 0, Vector2.SignedAngle(Vector2.right, dir));
 
@@ -135,18 +138,19 @@ public class BossTriangle : EnemyBase
             shockWave.Appear(transform.position);
             dir = (player.transform.position - transform.position).normalized;
             IsAttacking = true;
-            rb.AddForce(dir * attackForce * 4f, ForceMode2D.Impulse);
+            rb.AddForce(dir * attackForce * 6f, ForceMode2D.Impulse);
 
             yield return new WaitForSeconds(3f);
             IsAttacking = false;
             rb.sharedMaterial = null;
+
         }
         else if (rnd == 4)
         {
             // laser
             Debug.Log("Laser Attack");
 
-            // È¸Àü ºñÈ°¼ºÈ­
+            // È¸ï¿½ï¿½ ï¿½ï¿½È°ï¿½ï¿½È­
             rb.angularVelocity = 0;
 
             rb.AddTorque(2f);
@@ -155,6 +159,7 @@ public class BossTriangle : EnemyBase
             for (int i = 0; i < lasers.Length; i++)
             {
                 lasers[i].SetAlpha(0.3f);
+                lasers[i].isLaserAttack = false;
             }
 
             yield return new WaitForSeconds(1f);
@@ -172,7 +177,9 @@ public class BossTriangle : EnemyBase
 
         rb.gravityScale = 0f;
         rb.velocity = Vector2.zero;
+        rb.angularVelocity = 0;
 
+        spriteRenderer.color = new Color(1, 1, 1, 0.5f);
         gameObject.layer = LayerMask.NameToLayer("IgnoreAll");
         time = 0;
         while (Vector2.Distance(transform.position, startPos) > 0.3f)
@@ -188,6 +195,7 @@ public class BossTriangle : EnemyBase
         }
         transform.position = startPos;
         gameObject.layer = LayerMask.NameToLayer("Default");
+        spriteRenderer.color = Color.white;
 
         //yield return new WaitForSeconds(1.0f);
 
@@ -196,10 +204,6 @@ public class BossTriangle : EnemyBase
 
     public override void TakeDamage(float damage)
     {
-        if (health < damage)
-        {
-            DeadEvent?.Invoke();
-        }
 
         base.TakeDamage(damage);
 
@@ -215,11 +219,18 @@ public class BossTriangle : EnemyBase
         {
             summonRightTriangle = true;
 
-            attackCoolDown -= 0.5f;
+            attackCoolDown /= 2f;
 
             Instantiate(rightTriangle, transform.position, Quaternion.identity);
             Instantiate(rightTriangle, transform.position, Quaternion.identity);
 
         }
+    }
+
+    private void OnDestroy()
+    {
+        if (PlayerController.Instance == null)
+            return;
+        DeadEvent?.Invoke();
     }
 }

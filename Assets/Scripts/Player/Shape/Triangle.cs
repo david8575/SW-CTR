@@ -16,11 +16,13 @@ public class Triangle : Shape
         // 좌우 속력은 잃어버림
         rb.velocity = new Vector2(0, rb.velocity.y);
 
+        rb.AddForce(Vector2.up * 0.3f, ForceMode2D.Impulse);
+
         // 발사하기
         rb.AddForce(target.normalized * specialPower, ForceMode2D.Impulse);
 
 
-        StartCoroutine(AttackTime(0.5f));
+        attackCoroutine = StartCoroutine(AttackTime(0.5f));
     }
 
     IEnumerator AttackTime(float time)

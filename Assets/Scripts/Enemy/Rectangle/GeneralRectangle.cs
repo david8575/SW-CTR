@@ -2,55 +2,32 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GeneralRectangle : EnemyBase_old
+public class GeneralRectangle : EnemyBase
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        health = 50f;
-        attackPower = 20f;
-        defense = 20f;
-        moveSpeed = 1f;
-        jumpPower = 1f;
-        attackCoolDown = 5f;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if (health <= 0)
-        {
-            Die();
-        }
-        else
-        {
-            DetectPlayer();
-
-            if (isPlayerInRange)
-            {
-                if (canAttack)
-                {
-                    StartCoroutine(Attack());
-                }
-            }
-            else
-            {
-                Patrol();
-            }
-        }
-    }
+    public float jumpForce = 10f;
+    public float slamForce = 20f;
 
     protected override IEnumerator Attack()
     {
-        canAttack = false;
+        if (player == null)
+        {
+            player = PlayerController.Instance?.GetShapeTransform();
+            if (player == null)
+            {
+                Debug.LogWarning("Player reference is null in NormalSquare Attack.");
+                yield break;
+            }
+        }
 
-        transform.position = new Vector3(player.transform.position.x, player.transform.position.y+10f, transform.position.z);
-        
+        Vector2 jumpDirection = new Vector2(0, 1);
+        rb.AddForce(jumpDirection * jumpForce, ForceMode2D.Impulse);
         yield return new WaitForSeconds(0.5f);
-        Vector2 downDirection = Vector2.down;
-        GetComponent<Rigidbody2D>().AddForce(downDirection * attackPower, ForceMode2D.Impulse);
 
-        yield return new WaitForSeconds(attackCoolDown);
-        canAttack = true;
-    }  
+        IsAttacking = true;
+        Vector2 slamDirection = new Vector2(0, -1);
+        rb.AddForce(slamDirection * slamForce, ForceMode2D.Impulse);
+
+        yield return new WaitForSeconds(0.5f);
+        IsAttacking = false;
+    }
 }

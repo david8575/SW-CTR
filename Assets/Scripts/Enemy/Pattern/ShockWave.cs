@@ -6,6 +6,8 @@ public class ShockWave : MonoBehaviour
 {
     public float maxScale = 1.5f;
 
+    public bool IsForPlayer = false;
+
     public void Appear(Vector3 pos)
     {
         transform.position = pos;
@@ -15,7 +17,7 @@ public class ShockWave : MonoBehaviour
 
     IEnumerator Animation()
     {
-        // Á¡Á¡ Ä¿Áö´Â ¾Ö´Ï¸ÞÀÌ¼Ç
+        // ï¿½ï¿½ï¿½ï¿½ Ä¿ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½
         float scale = 0.1f;
         while (scale < maxScale)
         {
@@ -26,7 +28,7 @@ public class ShockWave : MonoBehaviour
 
         yield return new WaitForSeconds(0.5f);
 
-        // Á¡Á¡ ÀÛ¾ÆÁö´Â ¾Ö´Ï¸ÞÀÌ¼Ç
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½Û¾ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½
         while (scale > 0.1f)
         {
             scale /= 2;
@@ -37,14 +39,28 @@ public class ShockWave : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Player"))
+        Debug.Log("ShockWave " + collision.name);
+        if (!IsForPlayer)
         {
-            if (PlayerController.Instance.IsInvincible == true)
-                return;
+            if (collision.gameObject.CompareTag("Player"))
+            {
+                if (PlayerController.Instance.IsInvincible == true)
+                    return;
 
-            PlayerController.Instance.TakeDamage(10);
+                PlayerController.Instance.TakeDamage(10);
+            }
         }
+        else
+        {
+            if (collision.gameObject.CompareTag("Enemy"))
+            {
+                Debug.Log("ShockWave OnTriggerEnter2D Enemy");
+                var enemy = collision.gameObject.GetComponent<EnemyBase>();
+                enemy.TakeDamage(PlayerController.Instance.attack);
+            }
+        }
+
     }
 }

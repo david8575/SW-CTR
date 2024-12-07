@@ -1,65 +1,52 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Numerics;
 using UnityEngine;
 
-public class OblongRectangle : EnemyBase_old
+public class OblongRectangle : EnemyBase
 {
-    
+    public float jumpForce = 10f;
+    public float slamForce = 20f;
+    private Vector3 originalScale;
 
-    // Start is called before the first frame update
-    void Start()
+    protected override void Start()
     {
-        health = 50f;
-        attackPower = 20f;
-        defense = 20f;
-        moveSpeed = 1f;
-        jumpPower = 1f;
-        attackCoolDown = 5f;
+        base.Start();
+        originalScale = transform.localScale;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-        if (health <= 0)
-        {
-            Die();
-        }
-        else
-        {
-            DetectPlayer();
-
-            if (isPlayerInRange)
-            {
-                if (canAttack)
-                {
-                    StartCoroutine(Attack());
-                }
-            }
-            else
-            {
-                Patrol();
-            }
-        }
-    }
     protected override IEnumerator Attack()
     {
-        canAttack = false;
+        if (player == null)
+        {
+            player = PlayerController.Instance?.GetShapeTransform();
+            if (player == null)
+            {
+                Debug.LogWarning("Player reference is null in DynamicRectangle Attack.");
+                yield break;
+            }
+        }
 
-        UnityEngine.Vector3 targetPosition = new UnityEngine.Vector3(player.transform.position.x, player.transform.position.y + 3f, transform.position.z);
-        transform.position = targetPosition;
+        
+        if (originalScale == Vector3.zero)
+        {
+            Debug.LogWarning("Original scale is zero. Resetting to default values.");
+            originalScale = new Vector3(1, 1, 1);
+        }
 
-        UnityEngine.Vector3 originalScale = transform.localScale;  
-        transform.localScale = new UnityEngine.Vector3(originalScale.x * 2, originalScale.y, originalScale.z);
+        Vector2 jumpDirection = new Vector2(0, 1);
+        rb.AddForce(jumpDirection * jumpForce, ForceMode2D.Impulse);
+
+        transform.localScale = new Vector3(originalScale.x * 2, originalScale.y, originalScale.z);
 
         yield return new WaitForSeconds(0.5f);
 
-        UnityEngine.Vector2 direction = (player.transform.position - transform.position).normalized;
-        GetComponent<Rigidbody2D>().AddForce(direction * attackPower, ForceMode2D.Impulse);
+        IsAttacking = true;
+        Vector2 slamDirection = new Vector2(0, -1);
+        rb.AddForce(slamDirection * slamForce, ForceMode2D.Impulse);
 
-        yield return new WaitForSeconds(attackCoolDown);
+        yield return new WaitForSeconds(0.5f);
+
         transform.localScale = originalScale;
-        canAttack = true;
+        IsAttacking = false;
     }
 }
