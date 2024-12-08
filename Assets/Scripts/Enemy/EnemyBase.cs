@@ -52,7 +52,8 @@ public abstract class EnemyBase : MonoBehaviour
 
         rb = GetComponent<Rigidbody2D>();
         hpBar?.SetHp(health, health);
-
+        if (attackImage != null)
+            attackImage.SetActive(false);
 
 
         healingAmount = health * 0.1f;
@@ -161,10 +162,7 @@ public abstract class EnemyBase : MonoBehaviour
 
     public void AddForce(Vector2 force)
     {
-        if (defense > 0)
-            rb.AddForce(force / defense, ForceMode2D.Impulse);
-        else
-            rb.AddForce(force, ForceMode2D.Impulse);
+        rb.AddForce(force, ForceMode2D.Impulse);
     }
 
     protected virtual void Die()

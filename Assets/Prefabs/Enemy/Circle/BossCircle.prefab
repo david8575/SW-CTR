@@ -596,7 +596,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8554990663907596549
 Transform:
   m_ObjectHideFlags: 0
@@ -861,16 +861,17 @@ MonoBehaviour:
   attackImage: {fileID: 8222476949557196194}
   enemyPrefabs:
   - {fileID: 7147933750946490294, guid: 61caaef006bacf046ba30c14c2ffd735, type: 3}
-  - {fileID: 2887117210247400219, guid: 679d2fcaa39a7de41a3af66df6ec5758, type: 3}
   - {fileID: 4523145390560691120, guid: e8537e8614daeb14da23ab283443252a, type: 3}
   - {fileID: 5182641469495976540, guid: 195ae0ef13f2cf9408a2a8159a33d58e, type: 3}
   - {fileID: 6784723221455272134, guid: e726550673dcabf4c9a97c8be57fa367, type: 3}
   - {fileID: 7512346008233717908, guid: 331cf0c4cc352bc4fb32fcd2e9183e65, type: 3}
   - {fileID: 6981773318275221049, guid: e341242c9c9a11f47950a30ec81de1d5, type: 3}
-  - {fileID: 1294879123345226103, guid: 788578e962ec4284289d69901a0b1a60, type: 3}
   - {fileID: 3073856439906788635, guid: ff786006a2f478449871d12597e64dbd, type: 3}
   - {fileID: 7350635367047959803, guid: 4ddc4c9c38878fa42a2653c7abeec03b, type: 3}
   - {fileID: 6136649041707381798, guid: 767a714dc8582d744a1b726daedbb428, type: 3}
+  bossPrefabs:
+  - {fileID: 2887117210247400219, guid: 679d2fcaa39a7de41a3af66df6ec5758, type: 3}
+  - {fileID: 1294879123345226103, guid: 788578e962ec4284289d69901a0b1a60, type: 3}
   laserPrefab:
   - {fileID: 1656486295342883525}
   - {fileID: 6932162970107909995}

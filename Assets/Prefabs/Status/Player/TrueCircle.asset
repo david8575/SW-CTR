@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: TrueCircle
   m_EditorClassIdentifier: 
   maxHp: 1000
-  attack: 100
+  attack: 50
   defense: 0
   speed: 10
   cooldown: 1

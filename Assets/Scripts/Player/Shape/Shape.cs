@@ -48,16 +48,15 @@ public abstract class Shape : MonoBehaviour
             Vector2 dir = (enemy.transform.position - transform.position).normalized;
             //Debug.DrawRay(transform.position, dir, Color.red, 1f);
 
-            if (defense > 0)
-                rb.AddForce(1f * (enemy.attackPower / defense) * -dir, ForceMode2D.Impulse);
-            else
-                rb.AddForce(1f * enemy.attackPower * -dir, ForceMode2D.Impulse);
+            float power = Mathf.Min(enemy.attackPower, attack);
 
-            enemy.AddForce(1f * (attack) * dir);
+            rb.AddForce(power * -dir, ForceMode2D.Impulse);
+            enemy.AddForce(power * dir);
 
             if (controller.isAttacking)
             {
                 enemy.TakeDamage(attack);
+                StopAttack();
             }
 
             if (enemy.IsAttacking)
@@ -65,8 +64,7 @@ public abstract class Shape : MonoBehaviour
                 if (defense < enemy.attackPower)
                     controller.TakeDamage(enemy.attackPower);
             }
-
-            StopAttack();
+            
 
             /*
             if (controller.isAttacking && enemy.IsAttacking)

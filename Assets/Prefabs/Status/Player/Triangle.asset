@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: Triangle
   m_EditorClassIdentifier: 
   maxHp: 100
-  attack: 10
-  defense: 0
-  speed: 10
-  cooldown: 1
+  attack: 20
+  defense: 10
+  speed: 7
+  cooldown: 2
   maxSpeed: 100
-  jumpPower: 10
+  jumpPower: 5
   specialPower: 10

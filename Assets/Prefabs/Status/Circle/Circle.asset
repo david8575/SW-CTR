@@ -16,7 +16,7 @@ MonoBehaviour:
   attackPower: 10
   jumpPower: 5
   moveSpeed: 50
-  defense: 50
+  defense: 5
   attackCoolDown: 1.5
   detectionRange: 1000
   attackRange: 1000

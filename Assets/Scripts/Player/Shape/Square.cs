@@ -38,6 +38,14 @@ public class Square : Shape
         }
     }
 
+    protected override void StopAttack()
+    {
+        base.StopAttack();
+
+        shock.gameObject.SetActive(true);
+        shock.Appear(transform.position);
+    }
+
     private void OnDisable()
     {
         shock.gameObject.SetActive(false);

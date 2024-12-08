@@ -6,6 +6,7 @@ public class BossCircle : EnemyBase
 {
     [Header("Circle Specific")]
     public GameObject[] enemyPrefabs; // 랜덤 소환할 적 프리팹
+    public GameObject[] bossPrefabs;
 
     [Header("Laser")]
     public Laser[] laserPrefab; // 레이저
@@ -30,6 +31,8 @@ public class BossCircle : EnemyBase
     float maxHealth;
     float firstAttackCoolDown;
     private SpriteRenderer spriteRenderer;
+    int flag = 0;
+    int layerNumber;
 
     protected override void Start()
     {
@@ -43,13 +46,18 @@ public class BossCircle : EnemyBase
 
         maxHealth = health;
         firstAttackCoolDown = attackCoolDown;
+
+        detectionRange = 1000f;
+        attackRange = 1000f;
+
+        layerNumber = LayerMask.NameToLayer("Enemy");
     }
 
     protected override void ApproachPlayer() { }
 
     protected override IEnumerator Attack()
     {
-        int randomAttack = Random.Range(0, 100); // 확률 선택
+        int randomAttack = Random.Range(25, 100); // 확률 선택
 
         if (randomAttack < 25)
         {
@@ -77,14 +85,16 @@ public class BossCircle : EnemyBase
         {
             yield return StartCoroutine(GrowAtCenter());
         }
+        yield return StartCoroutine(SummonRandomEnemy());
     }
 
     private IEnumerator SummonRandomEnemy()
     {
         Debug.Log("Summoning random enemy and Wait");
         GameObject randomEnemy = enemyPrefabs[Random.Range(0, enemyPrefabs.Length)];
-        Instantiate(randomEnemy, transform.position + (Vector3)Random.insideUnitCircle * 2f, Quaternion.identity);
-        yield return new WaitForSeconds(1f);
+        var s = Instantiate(randomEnemy, transform.position + (Vector3)Random.insideUnitCircle * 2f, Quaternion.identity);
+        s.layer = layerNumber;
+        yield return new WaitForSeconds(0.3f);
     }
 
     private IEnumerator GrowAtCenter()
@@ -105,7 +115,7 @@ public class BossCircle : EnemyBase
         {
             alp += Time.deltaTime;
             spriteRenderer.color = new Color(1, 1, 1, alp);
-            transform.localScale = Vector2.Lerp(transform.localScale, Vector2.one * 10f, 0.05f);
+            transform.localScale = Vector2.Lerp(transform.localScale, Vector2.one * 10f, 0.03f);
             yield return null;
         }
         attackWarning.gameObject.SetActive(false);
@@ -116,7 +126,7 @@ public class BossCircle : EnemyBase
         // 원래 크기로 돌아가기
         for (float t = 0; t < 1f; t += Time.deltaTime)
         {
-            transform.localScale = Vector3.Lerp(transform.localScale, originalScale, 0.05f);
+            transform.localScale = Vector3.Lerp(transform.localScale, originalScale, 0.01f);
             yield return null;
         }
         IsAttacking = false;
@@ -139,11 +149,11 @@ public class BossCircle : EnemyBase
         }
         lineRenderer.gameObject.SetActive(true);
 
-        int fireCount = Random.Range(3, 6);
+        int fireCount = Random.Range(5, 10);
         for (int i = 0; i < fireCount; i++)
         {
             var missile = Instantiate(missilePrefab, lineRenderer.movingTaget.transform.position, Quaternion.identity);
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(0.3f);
         }
 
         lineRenderer.gameObject.SetActive(false);
@@ -284,6 +294,25 @@ public class BossCircle : EnemyBase
 
         // 체력 비율만큼 쿨다운 감소
         attackCoolDown = firstAttackCoolDown * (health / maxHealth);
+        if (flag < 1 && health <= maxHealth * 0.7f)
+        {
+            flag = 1;
+
+            // summon boss Triangle
+            var tri = Instantiate(bossPrefabs[0], transform.position + (Vector3)Random.insideUnitCircle * 2f, Quaternion.identity).
+                transform.GetChild(0).GetComponent<BossTriangle>();
+
+            tri.step = 5;
+            tri.gameObject.layer = layerNumber;
+        }
+        else if (flag < 2 && health <= maxHealth * 0.4f)
+        {
+            flag = 2;
+            // summon boss Square
+            var rect = Instantiate(bossPrefabs[1], transform.position + (Vector3)Random.insideUnitCircle * 2f, Quaternion.identity).
+                transform.GetChild(0).GetComponent<BossSquare>();
+            rect.step = 4;
+        }
     }
 
     /// <summary>
