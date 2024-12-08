@@ -63,7 +63,7 @@ public class GameManager : MonoBehaviour
     {
         //GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
         EnemieCount--;
-        CurrentStage.SetEnemyCount();
+        CurrentStage?.SetEnemyCount();
 
         if (EnemieCount <= 0 && IsAllKill == false)
         {

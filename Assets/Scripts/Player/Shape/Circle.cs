@@ -18,6 +18,10 @@ public class Circle : Shape
     public Transform FireEffect;
     public CircleCollider2D attackCollider;
 
+    public PhysicsMaterial2D bounceMaterial;
+    public PhysicsMaterial2D defaultMaterial;
+
+
     private void Start()
     {
         IsTrueCircle = DataManager.Instance.SaveData.UnlockTrueCircle;
@@ -92,17 +96,20 @@ public class Circle : Shape
     protected override void StopAttack()
     {
         FireEffect.gameObject.SetActive(false);
+        rb.sharedMaterial = defaultMaterial;
         base.StopAttack();
     }
 
     IEnumerator TrueCircleAttack()
     {
+        rb.sharedMaterial = bounceMaterial;
         FireEffect.gameObject.SetActive(true);
         controller.isAttacking = true;
         spriteRenderer.color = Color.red;
         attackCollider.enabled = true;
 
         yield return new WaitWhile(() => rb.velocity.magnitude > 4f);
+        rb.sharedMaterial = defaultMaterial;
         spriteRenderer.color = color;
         controller.isAttacking = false;
         FireEffect.gameObject.SetActive(false);

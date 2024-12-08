@@ -799,7 +799,7 @@ Rigidbody2D:
   m_LinearDrag: 0.1
   m_AngularDrag: 0.05
   m_GravityScale: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 55580abf80702224ea687b20f3794e5a, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -865,6 +865,8 @@ MonoBehaviour:
   TrueCircleStatus: {fileID: 11400000, guid: 9d33e6f28ff9a134fa69f7d518727167, type: 2}
   FireEffect: {fileID: 7248278560730025270}
   attackCollider: {fileID: 6476741921926001903}
+  bounceMaterial: {fileID: 6200000, guid: 6236ab8b724d536449f6540f18c36d09, type: 2}
+  defaultMaterial: {fileID: 6200000, guid: 55580abf80702224ea687b20f3794e5a, type: 2}
 --- !u!58 &6476741921926001903
 CircleCollider2D:
   m_ObjectHideFlags: 0

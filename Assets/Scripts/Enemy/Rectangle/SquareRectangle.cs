@@ -18,6 +18,8 @@ public class SquareRectangle : EnemyBase
     {
         base.Start();
         maxHealth = health;
+
+        step = 4;
     }
 
     protected override IEnumerator Attack()
@@ -26,19 +28,19 @@ public class SquareRectangle : EnemyBase
 
         if (rnd == 0)
         {
-            yield return BasicAttack();
+            yield return StartCoroutine(BasicAttack());
         }
-        else if (rnd == 1 && health <= maxHealth * 0.8f)
+        else if (rnd == 1)
         {
-            yield return TransformAttack();
+            yield return StartCoroutine(TransformAttack());
         }
-        else if (rnd == 2 && health <= maxHealth * 0.5f)
+        else if (rnd == 2)
         {
-            yield return TeleportAttack();
+            yield return StartCoroutine(TeleportAttack());
         }
-        else if (rnd == 3 && health <= maxHealth * 0.3f)
+        else if (rnd == 3)
         {
-            yield return TrapPlayer();
+            yield return StartCoroutine(TrapPlayer());
         }
     }
 

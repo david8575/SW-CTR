@@ -178,6 +178,7 @@ public abstract class EnemyBase : MonoBehaviour
             Debug.LogWarning("GameManager instance not found!");
         }
 
+        StopAllCoroutines();
         StartCoroutine(DeadCoroutine());
     }
 
@@ -196,6 +197,11 @@ public abstract class EnemyBase : MonoBehaviour
 
         PlayerController.Instance.Heal(healingAmount);
 
+        Dead();
+    }
+
+    protected virtual void Dead()
+    {
         Destroy(gameObject);
     }
 }

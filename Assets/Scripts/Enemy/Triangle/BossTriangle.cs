@@ -227,10 +227,11 @@ public class BossTriangle : EnemyBase
         }
     }
 
-    private void OnDestroy()
+    protected override void Dead()
     {
         if (PlayerController.Instance == null)
             return;
         DeadEvent?.Invoke();
+        Destroy(transform.parent);
     }
 }

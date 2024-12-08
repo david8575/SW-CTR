@@ -93,8 +93,7 @@ public abstract class Shape : MonoBehaviour
 
         if (collision.gameObject.CompareTag("Ground") || collision.gameObject.CompareTag("Enemy"))
         {
-            
-            var contact = collision.GetContact(0);
+            var contact = collision.GetContact(collision.contactCount / 2);
             if (contact.point.y < transform.position.y)
             {
                 ActiveJump();

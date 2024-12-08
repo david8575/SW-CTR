@@ -6,13 +6,29 @@ public class BossCircle : EnemyBase
 {
     [Header("Circle Specific")]
     public GameObject[] enemyPrefabs; // 랜덤 소환할 적 프리팹
-    public GameObject missilePrefab; // 미사일 프리팹
-    public GameObject laserPrefab; // 레이저 프리팹
-    public Transform mapCenter; // 맵 중심 위치
-    private Sprite defaultSprite;
-    public Sprite secondFormSprite;
-    public Sprite thirdFormSprite;
 
+    [Header("Laser")]
+    public Laser[] laserPrefab; // 레이저
+    public Sprite laserFormSprite;
+
+    private Sprite defaultSprite;
+    [Header("Charge and Rush")]
+    public Transform ChargeParent;
+    Transform fireEffect;
+    Transform chargeEffect;
+    public GameObject targetLaser;
+    public PhysicsMaterial2D bounceMaterial;
+
+    [Header("Big attack")]
+    public Transform attackWarning;
+    public Transform mapCenter; // 맵 중심 위치
+
+    [Header("Missile Attack")]
+    public GameObject missilePrefab; // 미사일 프리팹
+    public BossCircleLine lineRenderer;
+
+    float maxHealth;
+    float firstAttackCoolDown;
     private SpriteRenderer spriteRenderer;
 
     protected override void Start()
@@ -20,60 +36,79 @@ public class BossCircle : EnemyBase
         base.Start();
         spriteRenderer = GetComponent<SpriteRenderer>();
         defaultSprite = spriteRenderer.sprite;
+        hpBar.transform.parent.GetComponent<Canvas>().worldCamera = Camera.main;
+
+        fireEffect = ChargeParent.Find("sidefire2");
+        chargeEffect = ChargeParent.Find("charge");
+
+        maxHealth = health;
+        firstAttackCoolDown = attackCoolDown;
     }
+
+    protected override void ApproachPlayer() { }
 
     protected override IEnumerator Attack()
     {
-        int randomAttack = Random.Range(1, 7); // 1~6 랜덤 선택
-        Debug.Log($"CircleEnemy performing attack {randomAttack}");
+        int randomAttack = Random.Range(0, 100); // 확률 선택
 
-        switch (randomAttack)
+        if (randomAttack < 25)
         {
-            case 1:
-                yield return SummonRandomEnemy();
-                break;
-            case 2:
-                yield return GrowAtCenter();
-                break;
-            case 3:
-                yield return TransformAndShoot();
-                break;
-            case 4:
-                yield return TransformAndLaser();
-                break;
-            case 5:
-                yield return ChargeAndRush();
-                break;
-            case 6:
-                yield return BounceRush();
-                break;
+            yield return StartCoroutine(SummonRandomEnemy());
+        }
+        else if (randomAttack < 45)
+        {
+            yield return StartCoroutine(ChargeAndRush());
+            
+        }
+        else if (randomAttack < 60)
+        {
+            yield return StartCoroutine(BounceRush());
+            
+        }
+        else if (randomAttack < 75)
+        {
+            yield return StartCoroutine(TransformAndLaser());
+        }
+        else if (randomAttack < 90)
+        {
+            yield return StartCoroutine(TransformAndShoot());
+        }
+        else
+        {
+            yield return StartCoroutine(GrowAtCenter());
         }
     }
 
     private IEnumerator SummonRandomEnemy()
     {
+        Debug.Log("Summoning random enemy and Wait");
         GameObject randomEnemy = enemyPrefabs[Random.Range(0, enemyPrefabs.Length)];
         Instantiate(randomEnemy, transform.position + (Vector3)Random.insideUnitCircle * 2f, Quaternion.identity);
-        yield return null;
+        yield return new WaitForSeconds(1f);
     }
 
     private IEnumerator GrowAtCenter()
     {
-        // 맵 중심으로 이동
-        while (Vector2.Distance(transform.position, mapCenter.position) > 0.5f)
-        {
-            Vector2 direction = (mapCenter.position - transform.position).normalized;
-            rb.MovePosition(rb.position + direction * moveSpeed * Time.deltaTime);
-            yield return null;
-        }
+        Debug.Log("Growing at center");
+        
+        yield return StartCoroutine(GoCenter());
+        attackWarning.position = mapCenter.position;
+        attackWarning.gameObject.SetActive(true);
+        yield return new WaitForSeconds(1.5f);
 
-        // 점진적으로 커지기
+        float alp = 0;
         Vector3 originalScale = transform.localScale;
-        for (float t = 0; t < 1f; t += Time.deltaTime)
+        IsAttacking = true;
+        attackImage.SetActive(false);
+        // 커지면서 등장
+        while (alp < 1)
         {
-            transform.localScale = Vector3.Lerp(originalScale, originalScale * 3f, t);
+            alp += Time.deltaTime;
+            spriteRenderer.color = new Color(1, 1, 1, alp);
+            transform.localScale = Vector2.Lerp(transform.localScale, Vector2.one * 10f, 0.05f);
             yield return null;
         }
+        attackWarning.gameObject.SetActive(false);
 
         // 일정 시간 대기
         yield return new WaitForSeconds(2f);
@@ -81,66 +116,191 @@ public class BossCircle : EnemyBase
         // 원래 크기로 돌아가기
         for (float t = 0; t < 1f; t += Time.deltaTime)
         {
-            transform.localScale = Vector3.Lerp(originalScale * 3f, originalScale, t);
+            transform.localScale = Vector3.Lerp(transform.localScale, originalScale, 0.05f);
             yield return null;
         }
+        IsAttacking = false;
+        transform.localScale = originalScale;
+        rb.constraints = RigidbodyConstraints2D.FreezeRotation;
     }
 
     private IEnumerator TransformAndShoot()
     {
-        spriteRenderer.sprite = secondFormSprite;
+        Debug.Log("TransformAndShoot");
+        yield return StartCoroutine(GoCenter());
+        yield return new WaitForSeconds(0.5f);
+        float alp = 0;
+        transform.rotation = Quaternion.Euler(0, 0, 0);
+        while (alp < 1)
+        {
+            alp += Time.deltaTime;
+            spriteRenderer.color = new Color(1, 1, 1, alp);
+            yield return null;
+        }
+        lineRenderer.gameObject.SetActive(true);
 
-        // 미사일 발사
-        // for (int i = 0; i < 5; i++)
-        // {
-        //    Instantiate(missilePrefab, transform.position, Quaternion.identity);
-            yield return new WaitForSeconds(0.2f);
-        //}
+        int fireCount = Random.Range(3, 6);
+        for (int i = 0; i < fireCount; i++)
+        {
+            var missile = Instantiate(missilePrefab, lineRenderer.movingTaget.transform.position, Quaternion.identity);
+            yield return new WaitForSeconds(1f);
+        }
 
-        yield return new WaitForSeconds(1f);
-        spriteRenderer.sprite = defaultSprite; // 원래 모습으로 복귀
+        lineRenderer.gameObject.SetActive(false);
+        rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+        yield return new WaitForSeconds(0.5f);
     }
 
     private IEnumerator TransformAndLaser()
     {
-        spriteRenderer.sprite = thirdFormSprite;
+        Debug.Log("TransformAndLaser");
+        
+        yield return StartCoroutine(GoCenter());
+        yield return new WaitForSeconds(0.5f);
 
-        // 레이저 발사 및 회전
-        // GameObject laser = Instantiate(laserPrefab, transform.position, Quaternion.identity);
-        // float rotationSpeed = 100f;
+        float alp = 0;
+        spriteRenderer.sprite = laserFormSprite;
+        transform.rotation = Quaternion.Euler(0, 0, 0);
+        while (alp < 1)
+        {
+            alp += Time.deltaTime;
+            spriteRenderer.color = new Color(1, 1, 1, alp);
+            yield return null;
+        }
 
-        // for (float t = 0; t < 3f; t += Time.deltaTime)
-        // {
-        //    laser.transform.Rotate(0, 0, rotationSpeed * Time.deltaTime);
-        yield return null;
-       // }
 
-        // Destroy(laser);
+        // 레이저 발사
+        for (int i = 0; i < laserPrefab.Length; i++)
+        {
+            laserPrefab[i].gameObject.SetActive(true);
+            laserPrefab[i].SetAlpha(0.3f);
+            laserPrefab[i].isLaserAttack = false;
+        }
+        yield return new WaitForSeconds(1f);
+        for (int i = 0; i < laserPrefab.Length; i++)
+        {
+            laserPrefab[i].SetAlpha(1.0f);
+            laserPrefab[i].isLaserAttack = true;
+        }
+
+        // 한바퀴 회전
+        float time = 0;
+        while (time < 3f)
+        {
+            transform.Rotate(Vector3.forward, 45 * Time.deltaTime);
+            time += Time.deltaTime;
+            yield return null;
+        }
+
+        // 레이저 끄고 복귀
+        for (int i = 0; i < laserPrefab.Length; i++)
+        {
+            laserPrefab[i].gameObject.SetActive(false);
+        }
         spriteRenderer.sprite = defaultSprite; // 원래 모습으로 복귀
+        rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+        yield return new WaitForSeconds(0.5f);
     }
 
     private IEnumerator ChargeAndRush()
     {
-        yield return new WaitForSeconds(1.5f); // 차징 시간
+        Debug.Log("ChargeAndRush");
+        float time = 0;
+        Vector3 two = new Vector3(2, 2, 2);
+        chargeEffect.localScale = two;
+        chargeEffect.gameObject.SetActive(true);
+        // 차징 시작
+        while (time < 1.5f)
+        {
+            time += Time.deltaTime;
+            chargeEffect.localScale = Vector3.Lerp(two, Vector3.zero, time / 1.5f);
+            yield return null;
+        }
+        chargeEffect.gameObject.SetActive(false);
         Vector2 direction = (player.position - transform.position).normalized;
-        rb.AddForce(direction * moveSpeed * 20f, ForceMode2D.Impulse);
-        yield return new WaitForSeconds(0.5f);
+        rb.AddForce(direction * moveSpeed, ForceMode2D.Impulse);
+
+        time = 0;
+        fireEffect.gameObject.SetActive(true);
+        IsAttacking = true;
+        while (time < 2f)
+        {
+            Vector3 myDir = rb.velocity.normalized;
+            // 오른쪽 0도, 왼쪽 이동 중일땐 180도
+            fireEffect.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(myDir.y, myDir.x) * Mathf.Rad2Deg);
+            time += Time.deltaTime;
+            yield return null;
+        }
+        fireEffect.gameObject.SetActive(false);
         rb.velocity = Vector2.zero;
+        IsAttacking = false;
     }
 
     private IEnumerator BounceRush()
     {
-        yield return new WaitForSeconds(0.8f); // 짧은 차징 시간
-        Vector2 direction = (player.position - transform.position).normalized;
-        rb.AddForce(direction * moveSpeed * 15f, ForceMode2D.Impulse);
+        Debug.Log("BounceRush");
 
-        for (int i = 0; i < 5; i++) // 벽에 튕기는 동작
+        // 조준하기
+        targetLaser.SetActive(true);
+        Vector3 pos = transform.position;
+        pos.z -= 2;
+        targetLaser.transform.position = pos;
+        Vector2 dir = (player.transform.position - transform.position).normalized;
+
+        float time = 0;
+        while (time < 1.0f)
         {
-            yield return new WaitForSeconds(0.5f);
-            Vector2 bounceDirection = Vector2.Reflect(rb.velocity.normalized, Random.insideUnitCircle.normalized);
-            rb.AddForce(bounceDirection * moveSpeed * 10f, ForceMode2D.Impulse);
+            //targetLaser.transform.localScale = new Vector3(dir.magnitude, 1, 1);
+            targetLaser.transform.rotation = Quaternion.Euler(0, 0, Vector2.SignedAngle(Vector2.right, dir));
+
+            pos = transform.position; pos.z -= 2;
+            targetLaser.transform.position = pos;
+
+            time += Time.deltaTime;
+            yield return null;
+            dir = (player.transform.position - transform.position).normalized;
         }
+        yield return new WaitForSeconds(1f);
+        targetLaser.SetActive(false);
+
+        rb.constraints = RigidbodyConstraints2D.None;
+        // 발사하기
+        rb.AddForce(dir * moveSpeed * 2f, ForceMode2D.Impulse);
+        IsAttacking = true;
+
+        var matSave = rb.sharedMaterial;
+        rb.sharedMaterial = bounceMaterial;
+        yield return new WaitForSeconds(3f);
+        rb.sharedMaterial = matSave;
+        IsAttacking = false;
 
         rb.velocity = Vector2.zero;
+        rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+    }
+
+    public override void TakeDamage(float damage)
+    {
+        base.TakeDamage(damage);
+
+        // 체력 비율만큼 쿨다운 감소
+        attackCoolDown = firstAttackCoolDown * (health / maxHealth);
+    }
+
+    /// <summary>
+    /// 사라진 뒤에 맵 가운데로 이동 (모든 이동 비활성된 상태)
+    /// </summary>
+    /// <returns></returns>
+    IEnumerator GoCenter()
+    {
+        float alp = 1;
+        while (alp > 0)
+        {
+            alp -= Time.deltaTime;
+            spriteRenderer.color = new Color(1, 1, 1, alp);
+            yield return null;
+        }
+        transform.position = mapCenter.position;
+        rb.constraints = RigidbodyConstraints2D.FreezeAll;
+        
     }
 }

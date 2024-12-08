@@ -17,7 +17,7 @@ public class TriangleMissile : BulletBase
     {
         if (move == 0)
         {
-            rb.AddForce(Vector2.up * 3f);
+            rb.AddForce(Vector2.up, ForceMode2D.Impulse);
 
             return;
         }
@@ -29,7 +29,7 @@ public class TriangleMissile : BulletBase
             Vector2 direction = (target.position - transform.position).normalized;
             float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
             transform.rotation = Quaternion.Euler(0f, 0f, angle - 90);
-            rb.AddForce(direction * 7f);
+            rb.AddForce(direction * 2f, ForceMode2D.Impulse);
         }
     }
 
@@ -39,15 +39,14 @@ public class TriangleMissile : BulletBase
         move = 1;
     }
 
-    protected override void OnCollisionEnter2D(Collision2D collision)
+    protected override void OnTriggerEnter2D(Collider2D collision)
     {
-        base.OnCollisionEnter2D(collision);
+        base.OnTriggerEnter2D(collision);
 
         if (collision.gameObject.CompareTag("Bullet") == false)
         {
             gameObject.SetActive(false);
             Destroy(gameObject);
         }
-
     }
 }

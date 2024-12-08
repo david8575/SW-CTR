@@ -12,7 +12,7 @@ public class BulletBase : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
     }
 
-    protected virtual void OnCollisionEnter2D(Collision2D collision)
+    protected virtual void OnTriggerEnter2D(Collider2D collision)
     {
         //Debug.Log(collision.gameObject.name);
 
