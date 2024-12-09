@@ -244,7 +244,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -1}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.2, y: 1.2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 9042135224371897047}
@@ -456,6 +456,7 @@ MonoBehaviour:
   attackCoolDown: 1.5
   detectionRange: 100
   attackRange: 60
+  isDead: 0
   EnemyEnabled: 1
   healingAmount: 0
   distance: 0
@@ -637,6 +638,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: HpBar
       objectReference: {fileID: 0}
+    - target: {fileID: 7530377891910538315, guid: 5b98e614b83c93c4a8c911bfc7f6d5e0, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7642795624121514777, guid: 5b98e614b83c93c4a8c911bfc7f6d5e0, type: 3}
       propertyPath: m_fontSize
       value: 40
@@ -760,6 +765,18 @@ PrefabInstance:
     - target: {fileID: 2722420902006617240, guid: 6e4e7d81a23c2584ea5203ea86e012ee, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5627968052910564687, guid: 6e4e7d81a23c2584ea5203ea86e012ee, type: 3}
+      propertyPath: m_Color.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5627968052910564687, guid: 6e4e7d81a23c2584ea5203ea86e012ee, type: 3}
+      propertyPath: m_Color.g
+      value: 0.9577489
+      objectReference: {fileID: 0}
+    - target: {fileID: 5627968052910564687, guid: 6e4e7d81a23c2584ea5203ea86e012ee, type: 3}
+      propertyPath: m_Color.r
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7416167286800409146, guid: 6e4e7d81a23c2584ea5203ea86e012ee, type: 3}
       propertyPath: m_LocalPosition.x
