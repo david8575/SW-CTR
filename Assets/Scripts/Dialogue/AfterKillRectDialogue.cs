@@ -16,6 +16,7 @@ public class AfterKillRectDialogue : MonoBehaviour
     public TMP_Text nameText;
     public TMP_Text dialogueText;
     public GameObject dialoguePanel;
+    public GameObject nameBox;
 
     public Dialogue dialogue;
     public Transform circle;
@@ -132,8 +133,10 @@ public class AfterKillRectDialogue : MonoBehaviour
 
     void EndDialogue()
     {
-        dialoguePanel.SetActive(false);
-        isDialogueActive = false;
+        dialogueText.text = ""; // 대화 텍스트 초기화
+        nameText.text = ""; // 이름 텍스트 초기화
+        dialoguePanel.SetActive(false); // 대화창 비활성화
+        nameBox.SetActive(false);
 
         SceneManager.LoadScene("Story2");
     }

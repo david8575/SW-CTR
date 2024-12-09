@@ -1227,6 +1227,7 @@ MonoBehaviour:
   nameText: {fileID: 586792055}
   dialogueText: {fileID: 1042216303}
   dialoguePanel: {fileID: 1046669578}
+  nameBox: {fileID: 1971021275}
   dialogue:
     characterName: 
     sentences:
