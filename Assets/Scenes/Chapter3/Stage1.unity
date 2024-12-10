@@ -262,7 +262,7 @@ GameObject:
   - component: {fileID: 18145505}
   m_Layer: 0
   m_Name: Tilemap_Ground2
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -58914,7 +58914,7 @@ Transform:
   m_GameObject: {fileID: 1526568400}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.7355003, y: -6.0942006, z: -10}
+  m_LocalPosition: {x: -1.2637959, y: -6.091827, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
