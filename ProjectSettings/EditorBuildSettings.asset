@@ -30,11 +30,11 @@ EditorBuildSettings:
     path: Assets/Scenes/Chapter3/Story3_Opt1.unity
     guid: 3502f79cb30a5ff46a7395b4d0bc16e6
   - enabled: 1
-    path: Assets/Scenes/Chapter3/Story3_Opt2.unity
-    guid: f2553b4053c482b4698f1274dabc7185
-  - enabled: 1
     path: Assets/Scenes/Chapter3/Story3.unity
     guid: a27d4e70709d9d04581703bb5c8cc760
+  - enabled: 1
+    path: Assets/Scenes/Chapter3/Story3_Opt2.unity
+    guid: f2553b4053c482b4698f1274dabc7185
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: a008a7f9ccada6e4aa74dcd55225c810, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: c3aa86a32a0b58a4ca1d92ee920bca08, type: 3}

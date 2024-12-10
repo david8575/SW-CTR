@@ -1015,7 +1015,7 @@ MonoBehaviour:
       isClear: 0
     IsTutorialClear: 0
     UnlockSquare: 0
-    UnLockTrueCircle: 0
+    UnlockTrueCircle: 0
     leftStatPoint: 0
     healthStat: 0
     attackStat: 0
@@ -4443,7 +4443,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0.47253847, b: 1, a: 0.392}
+  m_Color: {r: 0, g: 0.06748214, b: 0.514151, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
