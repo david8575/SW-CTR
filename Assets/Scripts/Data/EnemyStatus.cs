@@ -17,7 +17,7 @@ public class EnemyStatus : ScriptableObject
     [SerializeField] private float moveSpeed = 2f;
     public float MoveSpeed { get { return moveSpeed; } }
 
-    [SerializeField] private float defense = 5f;
+    [SerializeField] private float defense = 0;
     public float Defense { get { return defense; } }
 
     [SerializeField] private float attackCoolDown = 1.5f;

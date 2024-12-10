@@ -14,11 +14,10 @@ public class BossTriangle : EnemyBase
     bool summonRightTriangle = false;
 
     public bool startFight = false;
-
+    public int layer;
     public event Action DeadEvent = null;
 
-    [SerializeField]
-    int step = 3;
+    public int step = 3;
     float attackForce = 12f;
     float maxHp;
     SpriteRenderer spriteRenderer;
@@ -51,6 +50,10 @@ public class BossTriangle : EnemyBase
         laserParent.gameObject.SetActive(false);
 
         spriteRenderer = GetComponent<SpriteRenderer>();
+
+        detectionRange = 1000f;
+        attackRange = 1000f;
+        layer = gameObject.layer;
     }
 
 
@@ -83,8 +86,8 @@ public class BossTriangle : EnemyBase
         {
             // summon
             Debug.Log("Summon");
-            Instantiate(normalTriangle, normalSpawnPoint.position, Quaternion.identity);
-            Instantiate(normalTriangle, normalSpawnPoint.position, Quaternion.identity);
+            Instantiate(normalTriangle, normalSpawnPoint.position, Quaternion.identity).layer = layer;
+            Instantiate(normalTriangle, normalSpawnPoint.position, Quaternion.identity).layer = layer;
             yield return new WaitForSeconds(0.5f);
         }
         else if (rnd == 2)
@@ -194,7 +197,7 @@ public class BossTriangle : EnemyBase
             }
         }
         transform.position = startPos;
-        gameObject.layer = LayerMask.NameToLayer("Default");
+        gameObject.layer = layer;
         spriteRenderer.color = Color.white;
 
         //yield return new WaitForSeconds(1.0f);
@@ -227,10 +230,11 @@ public class BossTriangle : EnemyBase
         }
     }
 
-    private void OnDestroy()
+    protected override void Dead()
     {
         if (PlayerController.Instance == null)
             return;
         DeadEvent?.Invoke();
+        Destroy(transform.parent.gameObject);
     }
 }

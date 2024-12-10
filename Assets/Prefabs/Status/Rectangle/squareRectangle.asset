@@ -12,11 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 305c9a3d504e9b64aa76c206c66514af, type: 3}
   m_Name: squareRectangle
   m_EditorClassIdentifier: 
-  health: 100
+  health: 1000
   attackPower: 10
-  jumpPower: 5
+  jumpPower: 10
   moveSpeed: 2
-  defense: 5
+  defense: 0
   attackCoolDown: 1.5
   detectionRange: 9
   attackRange: 5
+  healingAmount: 0
