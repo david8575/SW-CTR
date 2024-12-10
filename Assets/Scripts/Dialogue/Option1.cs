@@ -172,18 +172,16 @@ public class Option1 : MonoBehaviour
         dialogueBox.SetActive(false);
         nameBox.SetActive(false);
 
-        // 검은 화면 페이드 인
         yield return StartCoroutine(FadeIn());
 
-        // "THE END" 텍스트 표시
         fadeText.text = "THE END";
-        fadeText.gameObject.SetActive(true); // 텍스트 활성화
-        yield return new WaitForSeconds(3f); // 텍스트 유지 시간
+        fadeText.gameObject.SetActive(true); 
+        yield return new WaitForSeconds(3f); 
     }
 
     IEnumerator FadeIn()
     {
-        fadePanel.SetActive(true); // fadePanel 활성화
+        fadePanel.SetActive(true); 
 
         float fadeDuration = 1f;
         float elapsedTime = 0f;
