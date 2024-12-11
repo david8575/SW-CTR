@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 using Cinemachine;
 using UnityEngine.UI;
 using System;
+using UnityEngine.InputSystem.XR;
 
 public class PlayerController : MonoBehaviour
 {
@@ -140,7 +141,9 @@ public class PlayerController : MonoBehaviour
         defense += defense * ((float)data.defenseStat / GameData.maxStatPoint);
         speed += speed * ((float)data.speedStat / GameData.maxStatPoint);
         cooldown -= cooldown * ((float)data.cooldownStat / GameData.maxStatPoint);
-           
+
+        if (cooldown < 0.1f)
+            cooldown = 0.1f;
     }
 
     // 도형의 종류를 바꾸는 함수
@@ -171,12 +174,12 @@ public class PlayerController : MonoBehaviour
         Shape newShapeInfo = shapes[idx];
 
         // 자주쓰는 능력치 저장
-        speed = newShapeInfo.speed;
-        attack = newShapeInfo.attack;
-        defense = newShapeInfo.defense;
-        maxSpeed = newShapeInfo.speed * 2;
-        jumpPower = newShapeInfo.jumpForce;
-        cooldown = newShapeInfo.cooldown;
+        speed = newShapeInfo.status.Speed;
+        attack = newShapeInfo.status.Attack;
+        defense = newShapeInfo.status.Defense;
+        maxSpeed = newShapeInfo.status.Speed * 2;
+        jumpPower = newShapeInfo.status.JumpPower;
+        cooldown = newShapeInfo.status.Cooldown;
         SetStat();
 
         // 도형 생성
@@ -286,7 +289,7 @@ public class PlayerController : MonoBehaviour
 
         ShapeInfo.OnSpecialCanceled();
         // 쿨타임은 여기서 돌리기
-        specialCooldownCoroutine = StartCoroutine(WaitSpecialCooldown(ShapeInfo.cooldown));
+        specialCooldownCoroutine = StartCoroutine(WaitSpecialCooldown(cooldown));
     }
 
     void OnEnterPerformd(InputAction.CallbackContext context)

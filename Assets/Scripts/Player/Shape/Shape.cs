@@ -7,11 +7,11 @@ public abstract class Shape : MonoBehaviour
     public PlayerStatus status;
 
     // 도형의 능력치
-    public float speed { get { return status.Speed; } }
-    public float jumpForce { get { return status.JumpPower; } }
-    public float attack { get { return status.Attack; } }
-    public float defense { get { return status.Defense; } }
-    public float cooldown { get { return status.Cooldown; } }
+    public float speed { get { return controller.speed; } }
+    public float jumpForce { get { return controller.jumpPower; } }
+    public float attack { get { return controller.attack; } }
+    public float defense { get { return controller.defense; } }
+    public float cooldown { get { return controller.cooldown; } }
     public float specialPower { get { return status.SpecialPower; } }
 
     public bool IsInvincible = false;
@@ -48,7 +48,7 @@ public abstract class Shape : MonoBehaviour
             Vector2 dir = (enemy.transform.position - transform.position).normalized;
             //Debug.DrawRay(transform.position, dir, Color.red, 1f);
 
-            float power = Mathf.Min(enemy.attackPower, attack);
+            float power = 5;
 
             rb.AddForce(power * -dir, ForceMode2D.Impulse);
             enemy.AddForce(power * dir);

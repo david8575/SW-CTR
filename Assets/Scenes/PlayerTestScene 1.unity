@@ -280,6 +280,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 8
       objectReference: {fileID: 0}
+    - target: {fileID: 1054705504266095030, guid: 7ba2cde7c54430742b777d90e76b0bd1, type: 3}
+      propertyPath: enemyPrefabs.Array.data[7]
+      value: 
+      objectReference: {fileID: 6136649041707381798, guid: 767a714dc8582d744a1b726daedbb428, type: 3}
     - target: {fileID: 1290912923771079895, guid: 7ba2cde7c54430742b777d90e76b0bd1, type: 3}
       propertyPath: m_Layer
       value: 8
