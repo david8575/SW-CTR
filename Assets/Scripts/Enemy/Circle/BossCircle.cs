@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BossCircle : EnemyBase
+public class BossCircle : EnemyBase, IHasDeadEvent
 {
     [Header("Circle Specific")]
     public GameObject[] enemyPrefabs; // 랜덤 소환할 적 프리팹
@@ -33,6 +33,8 @@ public class BossCircle : EnemyBase
     private SpriteRenderer spriteRenderer;
     int flag = 0;
     int layerNumber;
+
+    public event System.Action DeadEvent;
 
     protected override void Start()
     {
@@ -331,5 +333,13 @@ public class BossCircle : EnemyBase
         transform.position = mapCenter.position;
         rb.constraints = RigidbodyConstraints2D.FreezeAll;
         
+    }
+
+    protected override void Dead()
+    {
+        if (PlayerController.Instance == null)
+            return;
+        DeadEvent?.Invoke();
+        Destroy(transform.parent.gameObject);
     }
 }

@@ -9,7 +9,7 @@ public class GameManager : MonoBehaviour
     {
         get
         {
-            if (Instance == null)
+            if (instance == null)
             {
                 var obj = Resources.Load<GameManager>("GameManager");
                 instance = Instantiate(obj);
@@ -50,10 +50,16 @@ public class GameManager : MonoBehaviour
             starsCollected = 0;
             EnemieCount = 0;
             IsAllKill = false;
+
+            if (PlayBGMOnNewStage)
+            {
+                audioManager.PlayMusic(audioManager.stageBGM[stage.stageNumber]);
+            }
         }
     }
 
     public AudioManager audioManager;
+    public bool PlayBGMOnNewStage = true;
 
     private void Awake()
     {

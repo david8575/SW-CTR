@@ -9,7 +9,8 @@ public class AudioManager : MonoBehaviour
     int soundIndex = 0;
 
     Dictionary<string, AudioClip> soundLibrary = new Dictionary<string, AudioClip>();
-    Dictionary<string, AudioClip> musicLibrary = new Dictionary<string, AudioClip>();
+
+    public int[] stageBGM;
 
     [SerializeField]
     AudioClip[] soundClips;
@@ -25,10 +26,6 @@ public class AudioManager : MonoBehaviour
         {
             soundLibrary.Add(clip.name, clip);
         }
-        foreach (var clip in musicClips)
-        {
-            musicLibrary.Add(clip.name, clip);
-        }
     }
 
     public void SetSoundVolume(float volume)
@@ -39,13 +36,14 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    public static void PlaySound(string name)
+    public static void PlaySound(string name, float pitch = 1)
     {
         var audio = GameManager.Instance.audioManager;
 
         if (audio.soundLibrary.ContainsKey(name))
         {
             audio.soundSource[audio.soundIndex].clip = audio.soundLibrary[name];
+            audio.soundSource[audio.soundIndex].pitch = pitch;
             audio.soundSource[audio.soundIndex].Play();
             audio.soundIndex = (audio.soundIndex + 1) % audio.soundSource.Length;
         }
@@ -55,14 +53,20 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    public static void PlayMusic(string name, bool loop = true)
+    public void PlayMusic(int idx, bool loop = true)
     {
-        var audio = GameManager.Instance.audioManager;
-        if (audio.musicLibrary.ContainsKey(name))
+        Debug.Log("PlayMusic: " + idx);
+        if (idx == -1)
         {
-            audio.musicSource.clip = audio.musicLibrary[name];
-            audio.musicSource.loop = loop;
-            audio.musicSource.Play();
+            musicSource.Stop();
+            return;
+        }
+
+        if (idx < musicClips.Length)
+        {
+            musicSource.clip = musicClips[idx];
+            musicSource.loop = loop;
+            musicSource.Play();
         }
         else
         {

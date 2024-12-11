@@ -422,6 +422,7 @@ MonoBehaviour:
   status: {fileID: 11400000, guid: 7dfe7cb72b0875d499bbe757694fc1d6, type: 2}
   IsInvincible: 0
   rb: {fileID: 0}
+  JumpSound: jump_12
 --- !u!1 &2463534224681667219
 GameObject:
   m_ObjectHideFlags: 0
@@ -860,6 +861,7 @@ MonoBehaviour:
   status: {fileID: 11400000, guid: 0eed06e39d26df940b562d019f0ace28, type: 2}
   IsInvincible: 0
   rb: {fileID: 0}
+  JumpSound: jump_4
   isCharging: 0
   IsTrueCircle: 1
   TrueCircleStatus: {fileID: 11400000, guid: 9d33e6f28ff9a134fa69f7d518727167, type: 2}
@@ -1542,6 +1544,7 @@ MonoBehaviour:
   status: {fileID: 11400000, guid: cd22835a162600f43b4a8655546e5926, type: 2}
   IsInvincible: 0
   rb: {fileID: 0}
+  JumpSound: jump_3
   shock: {fileID: 6897943425874205692}
 --- !u!1 &8268247406045826871
 GameObject:

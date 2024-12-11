@@ -227,7 +227,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &7914880630078636915
 RectTransform:
   m_ObjectHideFlags: 0
@@ -704,6 +704,7 @@ MonoBehaviour:
   enemieCount: 0
   stage: {fileID: 0}
   audioManager: {fileID: 2022514337900435192}
+  PlayBGMOnNewStage: 1
 --- !u!1 &2452753123182891860
 GameObject:
   m_ObjectHideFlags: 0
@@ -993,7 +994,7 @@ RectTransform:
   m_Father: {fileID: 514374311084452395}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -1573,7 +1574,7 @@ RectTransform:
   m_Father: {fileID: 2677285091817432145}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -2293,9 +2294,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a7208c1a9de98c43a30f99761dea051, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  soundSource: {fileID: 3624962255039628930}
+  soundSource:
+  - {fileID: 3624962255039628930}
+  - {fileID: 6569306848699297555}
+  - {fileID: 297715377287976898}
+  - {fileID: 8152143214042608103}
+  - {fileID: 6751857505646252849}
   musicSource: {fileID: 2259294543706955250}
-  soundClips: []
+  stageBGM: ffffffff000000000000000003000000010000000100000004000000ffffffff020000000200000005000000
+  soundClips:
+  - {fileID: 8300000, guid: 149c44654cae64a46b9918bd48a346a0, type: 3}
+  - {fileID: 8300000, guid: 76f8c00779b924bd1afa3e7a8ca2fa3e, type: 3}
+  - {fileID: 8300000, guid: 82a8eef0a83444da6b372762f5175236, type: 3}
+  musicClips:
+  - {fileID: 8300000, guid: 0ad591428b0c18c4da51fe3bf98dbc63, type: 3}
+  - {fileID: 8300000, guid: 06906d718be5b6a4cb2df8732bf39832, type: 3}
+  - {fileID: 8300000, guid: 559c232a43caebe41870ce54786f604e, type: 3}
+  - {fileID: 8300000, guid: 51a4f1157b7ff1449b5e5cf064d584c7, type: 3}
+  - {fileID: 8300000, guid: 89f935015cc98724a862a586326fdf21, type: 3}
+  - {fileID: 8300000, guid: 35967e8a4dfb1664e9b066939272c0a4, type: 3}
 --- !u!1 &5782148221553624277
 GameObject:
   m_ObjectHideFlags: 0
@@ -2329,7 +2346,7 @@ RectTransform:
   m_Father: {fileID: 1673669514728607557}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -2649,7 +2666,7 @@ RectTransform:
   m_Father: {fileID: 5597971661945069361}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}

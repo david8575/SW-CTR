@@ -50,7 +50,8 @@ public class OptionMenu : MonoBehaviour
         IsPaused = false;
 
         fullScreenToggle.isOn = Screen.fullScreen;
-        
+        soundSlider.value = audioManager.soundSource[0].volume;
+        musicSlider.value = audioManager.musicSource.volume;
     }
 
     public void OnContinueButton()

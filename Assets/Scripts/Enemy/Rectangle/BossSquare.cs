@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class BossSquare : EnemyBase
+public class BossSquare : EnemyBase, IHasDeadEvent
 {
     [Header("Prefabs")]
     public GameObject miniSquarePrefab;
@@ -17,6 +17,8 @@ public class BossSquare : EnemyBase
     public int step = 1;
     private SpriteRenderer spriteRenderer;
     LineRenderer line;
+
+    public event System.Action DeadEvent = null;
 
     protected override void Start()
     {
@@ -208,5 +210,14 @@ public class BossSquare : EnemyBase
         {
             step = 4;
         }
+    }
+
+
+    protected override void Dead()
+    {
+        if (PlayerController.Instance == null)
+            return;
+        DeadEvent?.Invoke();
+        Destroy(transform.parent.gameObject);
     }
 }

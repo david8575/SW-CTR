@@ -265,6 +265,8 @@ public class PlayerController : MonoBehaviour
     {
         if (canJump)
         {
+            AudioManager.PlaySound(shapeInfo.JumpSound);
+
             rb.AddForce(new Vector2(0, jumpPower), ForceMode2D.Impulse);
             canJump = false;
         }

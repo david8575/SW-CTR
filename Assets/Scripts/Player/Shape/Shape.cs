@@ -23,6 +23,8 @@ public abstract class Shape : MonoBehaviour
     protected Color color;
     protected Coroutine attackCoroutine;
 
+    public string JumpSound;
+
     // 초기화
     public void Init(PlayerController con)
     {

@@ -2242,7 +2242,7 @@ Transform:
   m_GameObject: {fileID: 952808129}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.8460217, y: -6.096952, z: -10}
+  m_LocalPosition: {x: 0.7280264, y: -6.092132, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -37867,7 +37867,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1abd70c409dff9244bc9ca7545d96afc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stageNumber: 0
+  stageNumber: 1
   clearPoint: {fileID: 3965945164880769169}
   clearTime: 60
   puzzleClear: 0
@@ -38321,9 +38321,25 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1050628540439034066, guid: e275c2c6709b7114faa548ada140ca42, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1845337468718923325, guid: e275c2c6709b7114faa548ada140ca42, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2402104816812934122, guid: e275c2c6709b7114faa548ada140ca42, type: 3}
       propertyPath: m_Name
       value: GameManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 2464789915780981684, guid: e275c2c6709b7114faa548ada140ca42, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3002323843271246630, guid: e275c2c6709b7114faa548ada140ca42, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3012856470609345403, guid: e275c2c6709b7114faa548ada140ca42, type: 3}
       propertyPath: m_LocalPosition.x
@@ -38364,6 +38380,10 @@ PrefabInstance:
     - target: {fileID: 3012856470609345403, guid: e275c2c6709b7114faa548ada140ca42, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6061869413273452238, guid: e275c2c6709b7114faa548ada140ca42, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

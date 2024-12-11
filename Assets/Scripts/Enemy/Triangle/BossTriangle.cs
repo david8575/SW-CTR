@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class BossTriangle : EnemyBase
+public class BossTriangle : EnemyBase, IHasDeadEvent
 {
 
     // Wait, Attack, Summon triangle

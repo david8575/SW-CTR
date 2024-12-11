@@ -4,6 +4,11 @@ using UnityEngine;
 using Cinemachine;
 using UnityEngine.SceneManagement;
 
+public interface IHasDeadEvent
+{
+    event System.Action DeadEvent;
+}
+
 public class StageT3Manager : StageBase
 {
     public CinemachineVirtualCamera bossCam;
@@ -15,7 +20,7 @@ public class StageT3Manager : StageBase
 
         isBoss = true;
 
-        bossTriangle.transform.GetChild(0).GetComponent<BossTriangle>().DeadEvent += StageClear;
+        bossTriangle.transform.GetChild(0).GetComponent<IHasDeadEvent>().DeadEvent += StageClear;
 
         StartCoroutine(StartCutscene());
     }
