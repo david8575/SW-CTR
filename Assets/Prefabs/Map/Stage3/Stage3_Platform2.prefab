@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2417966083533758604}
   - component: {fileID: 2416892042508843418}
   - component: {fileID: 3842413691566199874}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Stage3_Platform2
   m_TagString: Ground
   m_Icon: {fileID: 0}
@@ -154,7 +154,7 @@ PlatformEffector2D:
     m_Bits: 4294967295
   m_RotationalOffset: 0
   m_UseOneWay: 1
-  m_UseOneWayGrouping: 0
+  m_UseOneWayGrouping: 1
   m_SurfaceArc: 180
   m_UseSideFriction: 0
   m_UseSideBounce: 0
