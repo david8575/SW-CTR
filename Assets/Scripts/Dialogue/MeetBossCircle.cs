@@ -9,37 +9,37 @@ public class MeetBossCircle : MonoBehaviour
     [System.Serializable]
     public class Dialogue
     {
-        public string characterName; 
-        [TextArea] public string[] sentences; 
+        public string characterName;
+        [TextArea] public string[] sentences;
         public Sprite characterSprite;
     }
 
-    public TMP_Text dialogueText; 
-    public TMP_Text nameText; 
-    public GameObject dialoguePanel; 
+    public TMP_Text dialogueText;
+    public TMP_Text nameText;
+    public GameObject dialoguePanel;
     public GameObject namePanel;
-    public GameObject fadePanel; 
-    public Image characterImage; 
-    public Dialogue bigCircleDialogue; 
+    public GameObject fadePanel;
+    public Image characterImage;
+    public Dialogue bigCircleDialogue;
     public Dialogue smallCircleDialogue;
-    public GameObject bigCircle; 
-    public GameObject smallCircle; 
-    public GameObject square; 
-    public GameObject triangle; 
+    public GameObject bigCircle;
+    public GameObject smallCircle;
+    public GameObject square;
+    public GameObject triangle;
 
-    private Queue<string> bigCircleSentences; 
-    private Queue<string> smallCircleSentences; 
-    private bool isBigCircleTurn = true; 
-    private bool isTyping = false; 
-    private bool isDialogueActive = false; 
+    private Queue<string> bigCircleSentences;
+    private Queue<string> smallCircleSentences;
+    private bool isBigCircleTurn = true;
+    private bool isTyping = false;
+    private bool isDialogueActive = false;
 
     void Start()
     {
         bigCircleSentences = new Queue<string>();
         smallCircleSentences = new Queue<string>();
-        dialoguePanel.SetActive(false); 
-        fadePanel.SetActive(false); 
-        square.SetActive(false); 
+        dialoguePanel.SetActive(false);
+        fadePanel.SetActive(false);
+        square.SetActive(false);
         triangle.SetActive(false);
 
         StartCoroutine(StartDialogueOnce());
@@ -60,20 +60,14 @@ public class MeetBossCircle : MonoBehaviour
         DisplayNextSentence();
         yield return StartCoroutine(DisplayDialogue());
 
-        bigCircle.SetActive(false);
-
-        square.SetActive(true);
-        triangle.SetActive(true);
-
-        yield return StartCoroutine(FadeIn());
-
+        yield return StartCoroutine(EndDialogue());
     }
 
     IEnumerator DisplayDialogue()
     {
         while (isDialogueActive)
         {
-            yield return null; 
+            yield return null;
         }
     }
 
@@ -116,7 +110,7 @@ public class MeetBossCircle : MonoBehaviour
                 if (smallCircleSentences.Count > 0)
                 {
                     DisplaySentence(smallCircleDialogue.characterName, smallCircleDialogue.characterSprite, smallCircleSentences.Dequeue());
-                    isBigCircleTurn = true; 
+                    isBigCircleTurn = true;
                 }
                 else if (bigCircleSentences.Count > 0)
                 {
@@ -143,7 +137,7 @@ public class MeetBossCircle : MonoBehaviour
 
     IEnumerator TypeSentence(string sentence)
     {
-        isTyping = true; 
+        isTyping = true;
         dialogueText.text = "";
 
         foreach (char letter in sentence.ToCharArray())
@@ -152,7 +146,7 @@ public class MeetBossCircle : MonoBehaviour
             yield return new WaitForSeconds(0.05f);
         }
 
-        isTyping = false; 
+        isTyping = false;
     }
 
     IEnumerator EndDialogue()
@@ -160,12 +154,46 @@ public class MeetBossCircle : MonoBehaviour
         dialoguePanel.SetActive(false);
         namePanel.SetActive(false);
 
-        bigCircle.SetActive(false);
+        yield return StartCoroutine(ShrinkAndDisappear(bigCircle));
 
-        square.SetActive(true);
-        triangle.SetActive(true);
+        yield return StartCoroutine(EnlargeAndShow(square));
+        yield return StartCoroutine(EnlargeAndShow(triangle));
 
         yield return StartCoroutine(FadeIn());
+    }
+
+    IEnumerator ShrinkAndDisappear(GameObject obj)
+    {
+        float shrinkDuration = 1f; 
+        float elapsedTime = 0f;
+        Vector3 originalScale = obj.transform.localScale;
+
+        while (elapsedTime < shrinkDuration)
+        {
+            elapsedTime += Time.deltaTime;
+            float scale = Mathf.Lerp(1f, 0f, elapsedTime / shrinkDuration);
+            obj.transform.localScale = originalScale * scale;
+            yield return null;
+        }
+
+        obj.SetActive(false);
+    }
+
+    IEnumerator EnlargeAndShow(GameObject obj)
+    {
+        obj.SetActive(true); 
+        float enlargeDuration = 1f; 
+        float elapsedTime = 0f;
+        Vector3 targetScale = obj.transform.localScale;
+        obj.transform.localScale = Vector3.zero; 
+
+        while (elapsedTime < enlargeDuration)
+        {
+            elapsedTime += Time.deltaTime;
+            float scale = Mathf.Lerp(0f, 1f, elapsedTime / enlargeDuration);
+            obj.transform.localScale = targetScale * scale;
+            yield return null;
+        }
     }
 
     IEnumerator FadeIn()
@@ -184,6 +212,6 @@ public class MeetBossCircle : MonoBehaviour
             yield return null;
         }
 
-        fadePanel.SetActive(false); 
+        fadePanel.SetActive(false);
     }
 }
