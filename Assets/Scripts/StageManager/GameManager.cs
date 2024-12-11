@@ -4,7 +4,20 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager Instance; 
+    private static GameManager instance;
+    public static GameManager Instance
+    {
+        get
+        {
+            if (Instance == null)
+            {
+                var obj = Resources.Load<GameManager>("GameManager");
+                instance = Instantiate(obj);
+                DontDestroyOnLoad(instance.gameObject);
+            }
+            return instance;
+        }
+    }
 
     public int starsCollected { get; private set; } = 0;
 
@@ -40,11 +53,13 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public AudioManager audioManager;
+
     private void Awake()
     {
-        if (Instance == null)
+        if (instance == null)
         {
-            Instance = this;
+            instance = this;
             DontDestroyOnLoad(gameObject); 
         }
         else

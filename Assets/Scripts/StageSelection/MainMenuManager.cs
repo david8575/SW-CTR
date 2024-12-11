@@ -5,6 +5,12 @@ using UnityEngine.SceneManagement;
 
 public class MainMenuManager : MonoBehaviour
 {
+
+    private void Start()
+    {
+        Screen.fullScreen = PlayerPrefs.GetInt("FullScreen", 1) == 1 ? true : false;
+    }
+
     public void OnStartButton()
     {
         if (DataManager.Instance.SaveData.IsTutorialClear == false)
