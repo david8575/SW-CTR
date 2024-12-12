@@ -32,4 +32,13 @@ public class EnemyStatus : ScriptableObject
     [SerializeField] private float healingAmount;
     public float HealingAmount { get { return healingAmount; } }
 
+    [SerializeField] private string attackSound = "jump_13";
+    public string AttackSound { get { return attackSound; } }
+
+    [SerializeField] private string hitSound = "hit_1";
+    public string HitSound { get { return hitSound; } }
+
+    [SerializeField] private string dieSound = "explosion_2";
+    public string DieSound { get { return dieSound; } }
+
 }

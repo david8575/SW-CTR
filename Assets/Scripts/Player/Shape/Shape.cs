@@ -24,6 +24,7 @@ public abstract class Shape : MonoBehaviour
     protected Coroutine attackCoroutine;
 
     public string JumpSound;
+    public string SpecialSound;
 
     // 초기화
     public void Init(PlayerController con)

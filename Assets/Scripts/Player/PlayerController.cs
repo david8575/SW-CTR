@@ -72,6 +72,9 @@ public class PlayerController : MonoBehaviour
     public bool[] CanChangeShape = new bool[3] { true, true, false };
     public bool PlayerInputEnable = true;
 
+    public string hitSound = "hit_4";
+    public string deadSound = "8-bit-video-game-lose-sound-version-1-145828";
+
     public enum ShapeType
     {
         Circle = 0,
@@ -324,6 +327,8 @@ public class PlayerController : MonoBehaviour
         ShapeInfo.gameObject.SetActive(false);
         playerInputActions.Disable();
 
+        AudioManager.PlaySound(deadSound);
+
         GameManager.Instance.CurrentStage.Gameover();
     }
 
@@ -331,6 +336,8 @@ public class PlayerController : MonoBehaviour
     {
         if (IsInvincible)
             return;
+
+        AudioManager.PlaySound(hitSound);
 
         Debug.Log("피격 " + damage + " 데미지");
 

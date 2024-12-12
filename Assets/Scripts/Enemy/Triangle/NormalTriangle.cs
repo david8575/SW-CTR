@@ -12,6 +12,8 @@ public class NormalTriangle : EnemyBase
         rb.AddForce(Vector2.up, ForceMode2D.Impulse);
         yield return new WaitForSeconds(0.3f);
 
+
+        AudioManager.PlaySound(status.AttackSound);
         IsAttacking = true;
         rb.AddForce(dir * attackForce, ForceMode2D.Impulse);
 

@@ -21,6 +21,8 @@ public class Circle : Shape
     public PhysicsMaterial2D bounceMaterial;
     public PhysicsMaterial2D defaultMaterial;
 
+    public string ChargingSound;
+    public string AttackSound;
 
     private void Start()
     {
@@ -31,7 +33,7 @@ public class Circle : Shape
 
     public override void OnSpecialStarted()
     {
-
+        AudioManager.PlaySound(SpecialSound);
         // 특수능력키 누르면 차징 시작
         isCharging = true;
         power = 0.1f;
@@ -65,6 +67,9 @@ public class Circle : Shape
         isCharging = false;
         spriteRenderer.color = Color.white;
 
+        
+        
+
         //rb.velocity = Vector2.zero;
 
         // 마우스를 때면 마우스 방향으로 모은 힘만큼 발사
@@ -79,7 +84,12 @@ public class Circle : Shape
 
         if (IsTrueCircle)
         {
+            AudioManager.PlaySound(AttackSound);
             attackCoroutine = StartCoroutine(TrueCircleAttack());
+        }
+        else
+        {
+            AudioManager.PlaySound(ChargingSound);
         }
     }
 

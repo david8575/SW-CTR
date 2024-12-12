@@ -357,7 +357,7 @@ Rigidbody2D:
     m_Bits: 0
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 4
 --- !u!60 &7583885352747470096
 PolygonCollider2D:
@@ -423,6 +423,7 @@ MonoBehaviour:
   IsInvincible: 0
   rb: {fileID: 0}
   JumpSound: jump_12
+  SpecialSound: powerup_9
 --- !u!1 &2463534224681667219
 GameObject:
   m_ObjectHideFlags: 0
@@ -618,6 +619,8 @@ MonoBehaviour:
   - {fileID: 1777693729153991015}
   CanChangeShape: 010100
   PlayerInputEnable: 1
+  hitSound: hit_4
+  deadSound: gamelose
   vcam: {fileID: 505415822292001964}
   uiManager: {fileID: 8569550201322642951}
 --- !u!1 &2832045239609829877
@@ -862,6 +865,7 @@ MonoBehaviour:
   IsInvincible: 0
   rb: {fileID: 0}
   JumpSound: jump_4
+  SpecialSound: powerup_35
   isCharging: 0
   IsTrueCircle: 1
   TrueCircleStatus: {fileID: 11400000, guid: 9d33e6f28ff9a134fa69f7d518727167, type: 2}
@@ -869,6 +873,8 @@ MonoBehaviour:
   attackCollider: {fileID: 6476741921926001903}
   bounceMaterial: {fileID: 6200000, guid: 6236ab8b724d536449f6540f18c36d09, type: 2}
   defaultMaterial: {fileID: 6200000, guid: 55580abf80702224ea687b20f3794e5a, type: 2}
+  ChargingSound: laser_shot_8
+  AttackSound: explosion_6
 --- !u!58 &6476741921926001903
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -1482,7 +1488,7 @@ Rigidbody2D:
     m_Bits: 0
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 4
 --- !u!61 &258803085489494573
 BoxCollider2D:
@@ -1545,6 +1551,8 @@ MonoBehaviour:
   IsInvincible: 0
   rb: {fileID: 0}
   JumpSound: jump_3
+  SpecialSound: jump_7
+  ShockWaveSound: explosion_21
   shock: {fileID: 6897943425874205692}
 --- !u!1 &8268247406045826871
 GameObject:

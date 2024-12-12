@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 public class Square : Shape
 {
 
+    public string ShockWaveSound;
     public ShockWave shock;
 
     public override void OnSpecialStarted()
@@ -13,6 +14,8 @@ public class Square : Shape
         RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 2f, LayerMask.GetMask("Wall"));
         if (hit.collider != null)
             return;
+
+        AudioManager.PlaySound(SpecialSound);
 
         // 특수 능력 누르자마자 밑으로 강한 힘 부여
         rb.velocity = Vector2.zero;
@@ -30,11 +33,12 @@ public class Square : Shape
         // 공격 중이면 공격 종료
         if (controller.isAttacking)
         {
-            shock.gameObject.SetActive(true);
-            shock.Appear(transform.position);
+            ApeearShock();
 
             controller.isAttacking = false;
             spriteRenderer.color = color;
+
+            
         }
     }
 
@@ -42,8 +46,14 @@ public class Square : Shape
     {
         base.StopAttack();
 
+        ApeearShock();
+    }
+
+    void ApeearShock()
+    {
         shock.gameObject.SetActive(true);
         shock.Appear(transform.position);
+        AudioManager.PlaySound(ShockWaveSound);
     }
 
     private void OnDisable()

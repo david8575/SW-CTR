@@ -8,7 +8,8 @@ public class MainMenuManager : MonoBehaviour
 
     private void Start()
     {
-        Screen.fullScreen = PlayerPrefs.GetInt("FullScreen", 1) == 1 ? true : false;
+        Screen.SetResolution(1920, 1080, true);
+        Screen.fullScreen = PlayerPrefs.GetInt("FullScreen", 0) == 1 ? true : false;
     }
 
     public void OnStartButton()

@@ -211,8 +211,6 @@ public class BossSquare : EnemyBase, IHasDeadEvent
             step = 4;
         }
     }
-
-
     protected override void Dead()
     {
         if (PlayerController.Instance == null)

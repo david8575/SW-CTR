@@ -19,6 +19,9 @@ public class StageUI : MonoBehaviour
 
     public Button[] finishButtons;
 
+    public string TextSound = "coin_7";
+    public string StarSound = "coin_11";
+
     private void Start()
     {
         for (int i = 0; i < clearObjects.Length; i++)
@@ -42,6 +45,7 @@ public class StageUI : MonoBehaviour
 
         for (i = 0; i < 4; i++)
         {
+            AudioManager.PlaySound(TextSound);
             clearObjects[i].SetActive(true);
             yield return wait;
         }
@@ -49,12 +53,14 @@ public class StageUI : MonoBehaviour
         for (int j = 0; j < 3; j++)
         {
             if (starInfo[j])
-            { 
+            {
+                AudioManager.PlaySound(StarSound);
                 stars[j].SetActive(true);
                 yield return wait;
             }
         }
 
+        AudioManager.PlaySound(TextSound);
         clearObjects[i].SetActive(true);
     }
 

@@ -10,9 +10,7 @@ public class StageBase : MonoBehaviour
     [Header("Stage Base")]
     public int stageNumber;
 
-    [SerializeField]
-    protected ClearPoint clearPoint;
-    public ClearPoint ClearPoint { get { return clearPoint; } }
+    public ClearPoint clearPoint;
 
     public float clearTime = 60f;
     public bool puzzleClear = false;
@@ -130,6 +128,7 @@ public class StageBase : MonoBehaviour
         var scene = SceneManager.LoadSceneAsync("StageSelect");
         scene.allowSceneActivation = false;
         yield return FadeManager.Instance.FadeIn();
+        GameManager.Instance.audioManager.PlayMusic(-1);
 
         scene.allowSceneActivation = true;
     }

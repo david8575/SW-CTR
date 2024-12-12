@@ -7,6 +7,7 @@ public class Triangle : Shape
 {
     public override void OnSpecialStarted()
     {
+        AudioManager.PlaySound(SpecialSound);
 
         // 특수 능력 누르자마자 마우스 방향으로 특수 능력 사용
         Vector2 target = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue()) - transform.position;

@@ -18,6 +18,8 @@ public class StageSelectManager : MonoBehaviour
     public Image fade;
     public GameObject buttonHighestParents;
 
+    public string StartSound = "gamestart-272829";
+
     void Start()
     {
         FadeManager.Instance.FadeOut();
@@ -60,6 +62,7 @@ public class StageSelectManager : MonoBehaviour
     public void OnStageButton(int sceneIdx)
     {
         StartCoroutine(StageCutscene(sceneIdx));
+        AudioManager.PlaySound(StartSound);
     }
 
     IEnumerator StageCutscene(int sceneIdx)

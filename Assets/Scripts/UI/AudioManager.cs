@@ -56,7 +56,7 @@ public class AudioManager : MonoBehaviour
     public void PlayMusic(int idx, bool loop = true)
     {
         Debug.Log("PlayMusic: " + idx);
-        if (idx == -1)
+        if (idx < 0 || idx >= musicClips.Length)
         {
             musicSource.Stop();
             return;

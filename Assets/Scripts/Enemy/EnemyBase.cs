@@ -147,10 +147,14 @@ public abstract class EnemyBase : MonoBehaviour
 
     public virtual void TakeDamage(float damage)
     {
-        Debug.Log("���� " + damage + " ������");
+        Debug.Log("enemy get " + damage);
+
 
         if (damage > defense)
+        {
             health -= (damage - defense);
+            AudioManager.PlaySound(status.HitSound);
+        }
 
         hpBar?.SetHp(health);
 
@@ -175,6 +179,8 @@ public abstract class EnemyBase : MonoBehaviour
         {
             Debug.LogWarning("GameManager instance not found!");
         }
+
+        AudioManager.PlaySound(status.DieSound);
 
         StopAllCoroutines();
         StartCoroutine(DeadCoroutine());
