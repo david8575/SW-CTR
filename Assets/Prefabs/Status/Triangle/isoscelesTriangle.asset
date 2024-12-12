@@ -21,3 +21,6 @@ MonoBehaviour:
   detectionRange: 100
   attackRange: 100
   healingAmount: 0
+  attackSound: Shoot17
+  hitSound: hit_1
+  dieSound: explosion_2

@@ -21,6 +21,7 @@ public class StageUI : MonoBehaviour
 
     public string TextSound = "coin_7";
     public string StarSound = "coin_11";
+    public string ClearSound = "Jingle_Win_00";
 
     private void Start()
     {
@@ -42,6 +43,8 @@ public class StageUI : MonoBehaviour
     {
         var wait = new WaitForSeconds(1f);
         int i;
+
+        AudioManager.PlaySound(ClearSound);
 
         for (i = 0; i < 4; i++)
         {

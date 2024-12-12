@@ -463,6 +463,7 @@ MonoBehaviour:
   hpBar: {fileID: 8074562270832232989}
   attackImage: {fileID: 1928973558177865465}
   startFight: 0
+  layer: 0
   step: 3
   startPos: {x: 0, y: 0, z: 0}
   bounceMaterial: {fileID: 6200000, guid: 60d4dfe2374460342b61f197e2ee0a52, type: 2}
@@ -476,6 +477,9 @@ MonoBehaviour:
   - {fileID: 8803794116469684758}
   - {fileID: 5579533369295767969}
   laserParent: {fileID: 1373724578798529229}
+  AlertSound: Alert13
+  ExplosionSound: 8bit_expl_short_22
+  LaserAlertSound: Alert07
 --- !u!60 &5143683303909871636
 PolygonCollider2D:
   m_ObjectHideFlags: 0

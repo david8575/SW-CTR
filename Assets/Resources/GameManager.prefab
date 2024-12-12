@@ -2582,6 +2582,14 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 23dacc4e032dc4e8dad8bcce34325da9, type: 3}
   - {fileID: 8300000, guid: a5f83c366a26aff4490f04ddd2263b58, type: 3}
   - {fileID: 8300000, guid: 46398be917b183b44b98305dfe490233, type: 3}
+  - {fileID: 8300000, guid: 824181355b0644ada8f340dc2f147176, type: 3}
+  - {fileID: 8300000, guid: 0622fd2ddc517bf4fa312b5be3987393, type: 3}
+  - {fileID: 8300000, guid: b33cffe046e94cd488a96a995df06d09, type: 3}
+  - {fileID: 8300000, guid: 3e2701f53e55c4e49a9d0eeb402f11ba, type: 3}
+  - {fileID: 8300000, guid: 46facd16bb17abc4da69ce402297c8fd, type: 3}
+  - {fileID: 8300000, guid: 1f51836e881a046d39829f52cc1fcdae, type: 3}
+  - {fileID: 8300000, guid: e52f70bf32d1bda4ab2d00a3829ff5bf, type: 3}
+  - {fileID: 8300000, guid: e87f4c339e74f48a7ac8e289c4b26872, type: 3}
   musicClips:
   - {fileID: 8300000, guid: 0ad591428b0c18c4da51fe3bf98dbc63, type: 3}
   - {fileID: 8300000, guid: 06906d718be5b6a4cb2df8732bf39832, type: 3}

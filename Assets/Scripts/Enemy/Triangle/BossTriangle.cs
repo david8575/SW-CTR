@@ -40,6 +40,12 @@ public class BossTriangle : EnemyBase, IHasDeadEvent
     public Laser[] lasers;
     public Transform laserParent;
 
+    public string AlertSound = "Alert13";
+    public string ExplosionSound = "8bit_expl_short_22";
+    public string LaserAlertSound = "Alert07";
+    public string SummonSound = "Pickup_01";
+    public string LaserAttackSound = "laser_shot_2";
+
     protected override void Start()
     {
         base.Start();
@@ -88,6 +94,7 @@ public class BossTriangle : EnemyBase, IHasDeadEvent
             Debug.Log("Summon");
             Instantiate(normalTriangle, normalSpawnPoint.position, Quaternion.identity).layer = layer;
             Instantiate(normalTriangle, normalSpawnPoint.position, Quaternion.identity).layer = layer;
+            AudioManager.PlaySound(SummonSound);
             yield return new WaitForSeconds(0.5f);
         }
         else if (rnd == 2)
@@ -95,6 +102,7 @@ public class BossTriangle : EnemyBase, IHasDeadEvent
             // attack
             Debug.Log("Attack");
             rb.gravityScale = 1;
+            AudioManager.PlaySound(status.AttackSound);
 
             Vector2 dir = (player.transform.position - transform.position).normalized;
             IsAttacking = true;
@@ -118,10 +126,6 @@ public class BossTriangle : EnemyBase, IHasDeadEvent
             time = 0;
             while (time < 1.0f)
             {
-                // ������ ���� : �÷��̾� ����
-                
-                // ������ �ʹ� �� ũ�� ������ ����
-                //targetLaser.transform.localScale = new Vector3(dir.magnitude, 1, 1);
                 targetLaser.transform.rotation = Quaternion.Euler(0, 0, Vector2.SignedAngle(Vector2.right, dir));
 
                 pos = transform.position; pos.z -= 2;
@@ -131,7 +135,9 @@ public class BossTriangle : EnemyBase, IHasDeadEvent
                 yield return null;
                 dir = (player.transform.position - transform.position);
             }
-            yield return new WaitForSeconds(0.2f);
+            AudioManager.PlaySound(AlertSound);
+            yield return new WaitForSeconds(0.5f);
+            AudioManager.PlaySound(ExplosionSound);
             targetLaser.SetActive(false);
 
             rb.gravityScale = 1;
@@ -158,6 +164,7 @@ public class BossTriangle : EnemyBase, IHasDeadEvent
 
             rb.AddTorque(2f);
 
+            AudioManager.PlaySound(LaserAlertSound);
             laserParent.gameObject.SetActive(true);
             for (int i = 0; i < lasers.Length; i++)
             {
@@ -166,6 +173,7 @@ public class BossTriangle : EnemyBase, IHasDeadEvent
             }
 
             yield return new WaitForSeconds(1f);
+            AudioManager.PlaySound(LaserAttackSound);
             for (int i = 0; i < lasers.Length; i++)
             {
                 lasers[i].SetAlpha(1.0f);

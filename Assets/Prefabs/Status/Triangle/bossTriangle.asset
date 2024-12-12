@@ -21,3 +21,6 @@ MonoBehaviour:
   detectionRange: 1000
   attackRange: 1000
   healingAmount: 0
+  attackSound: jump_13
+  hitSound: hit_1
+  dieSound: 8bit_expl_long_05
