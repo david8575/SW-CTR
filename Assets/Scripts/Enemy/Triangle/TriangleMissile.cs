@@ -43,7 +43,7 @@ public class TriangleMissile : BulletBase
     {
         base.OnTriggerEnter2D(collision);
 
-        if (collision.gameObject.CompareTag("Bullet") == false)
+        if (collision.gameObject.CompareTag("Bullet") == false && collision.gameObject.CompareTag("Camera") == false)
         {
             gameObject.SetActive(false);
             Destroy(gameObject);

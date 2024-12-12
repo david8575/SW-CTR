@@ -9,6 +9,7 @@ TagManager:
   - Bullet
   - Star
   - telepoint
+  - Camera
   layers:
   - Default
   - TransparentFX
