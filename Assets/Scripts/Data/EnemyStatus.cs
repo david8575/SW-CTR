@@ -41,4 +41,7 @@ public class EnemyStatus : ScriptableObject
     [SerializeField] private string dieSound = "explosion_2";
     public string DieSound { get { return dieSound; } }
 
+    [SerializeField] private float volume = 1f;
+    public float Volume { get { return volume; } }
+
 }

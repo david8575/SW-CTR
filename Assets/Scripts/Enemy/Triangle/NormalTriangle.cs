@@ -13,7 +13,7 @@ public class NormalTriangle : EnemyBase
         yield return new WaitForSeconds(0.3f);
 
 
-        AudioManager.PlaySound(status.AttackSound);
+        AudioManager.PlaySound(status.AttackSound, status.Volume);
         IsAttacking = true;
         rb.AddForce(dir * attackForce, ForceMode2D.Impulse);
 
