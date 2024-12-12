@@ -35,7 +35,7 @@ public class TriangleMissile : BulletBase
 
     IEnumerator Move()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.2f);
         move = 1;
     }
 
