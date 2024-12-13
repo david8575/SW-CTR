@@ -59,12 +59,12 @@ public class StageBase : MonoBehaviour
         if (StageTimer.time < clearTime)
             GameManager.Instance.CollectStar();
 
-        // ½Ã°£ ÀÔ·Â
+        // ï¿½Ã°ï¿½ ï¿½Ô·ï¿½
         stageUI.timeTexts[0].text = string.Format("{0:00}:{1:00}", (int)(StageTimer.time / 60), (int)(StageTimer.time % 60));
         stageUI.timeTexts[1].text = string.Format("{0:00}:{1:00}", (int)(clearTime / 60), (int)(clearTime % 60));
 
         bool[] startinfo;
-        // º¸½º ÀüÀÌ¸é º¸½º Å¬¸®¾î ¾Æ´Ï¸é ÆÛÁñ ¼º°ø ¿©ºÎ Ãâ·Â
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ì¸ï¿½ ï¿½ï¿½ï¿½ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½ ï¿½Æ´Ï¸ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
         if (isBoss)
         {
             GameManager.Instance.CollectStar();
@@ -80,9 +80,15 @@ public class StageBase : MonoBehaviour
                 StageTimer.time < clearTime,
                 };
         }
-        // ½Å±â·Ï ÀúÀåÇÏ±â
+        // ï¿½Å±ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï±ï¿½
         #region Save Data
         var saveData = DataManager.Instance.SaveData;
+
+        if (stageNumber == 3 && !saveData.UnlockSquare){
+            saveData.UnlockSquare = true;
+            Debug.Log("Square ability unlocked");
+        }
+
         if (saveData.Stages[stageNumber].isClear == true)
             saveData.Stages[stageNumber].bestTime = Mathf.Min(saveData.Stages[stageNumber].bestTime, StageTimer.time);
         else
