@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement; // 추가
 
 public class MeetBossCircle : MonoBehaviour
 {
@@ -26,6 +27,7 @@ public class MeetBossCircle : MonoBehaviour
     public GameObject smallCircle;
     public GameObject square;
     public GameObject triangle;
+    public int targetBuildIndex = 1; 
 
     private Queue<string> bigCircleSentences;
     private Queue<string> smallCircleSentences;
@@ -41,6 +43,7 @@ public class MeetBossCircle : MonoBehaviour
         fadePanel.SetActive(false);
         square.SetActive(false);
         triangle.SetActive(false);
+        FadeManager.Instance.FadeOut();
 
         StartCoroutine(StartDialogueOnce());
     }
@@ -160,6 +163,8 @@ public class MeetBossCircle : MonoBehaviour
         yield return StartCoroutine(EnlargeAndShow(triangle));
 
         yield return StartCoroutine(FadeIn());
+
+        SceneManager.LoadScene(targetBuildIndex); // 빌드 인덱스로 이동
     }
 
     IEnumerator ShrinkAndDisappear(GameObject obj)

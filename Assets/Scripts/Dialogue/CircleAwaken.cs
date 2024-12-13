@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement; // 씬 관리를 위해 추가
 
 public class CircleAwaken : MonoBehaviour
 {
@@ -113,6 +114,15 @@ public class CircleAwaken : MonoBehaviour
             additionalCanvas.SetActive(true); 
         }
 
-        isDialogueActive = false; 
+        isDialogueActive = false;
+
+        // 10초 뒤에 다음 씬으로 넘어감
+        StartCoroutine(LoadNextSceneAfterDelay(10f));
+    }
+
+    IEnumerator LoadNextSceneAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 3); // 현재 씬의 다음 씬으로 이동
     }
 }

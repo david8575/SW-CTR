@@ -35,6 +35,8 @@ public class AfterKillRectDialogue : MonoBehaviour
         sentences = new Queue<string>();
         dialoguePanel.SetActive(false);
 
+        FadeManager.Instance.FadeOut();
+
         StartDialogue();
     }
 
