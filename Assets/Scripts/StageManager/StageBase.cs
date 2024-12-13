@@ -93,7 +93,7 @@ public class StageBase : MonoBehaviour
             saveData.Stages[stageNumber].bestTime = Mathf.Min(saveData.Stages[stageNumber].bestTime, StageTimer.time);
         else
             saveData.Stages[stageNumber].bestTime = StageTimer.time;
-        if ((saveData.Stages[stageNumber].isPuzzleClear == false || isBoss) && puzzleClear)
+        if (saveData.Stages[stageNumber].isPuzzleClear == false && (puzzleClear || isBoss))
         {
             saveData.Stages[stageNumber].isPuzzleClear = true;
             saveData.leftStatPoint++;
@@ -105,7 +105,7 @@ public class StageBase : MonoBehaviour
             saveData.leftStatPoint++;
         }
 
-        if ((saveData.Stages[stageNumber].isAllKill == false | isBoss) && GameManager.Instance.IsAllKill)
+        if (saveData.Stages[stageNumber].isAllKill == false && (GameManager.Instance.IsAllKill || isBoss))
         {
             saveData.Stages[stageNumber].isAllKill = true;
             saveData.leftStatPoint++;

@@ -49,7 +49,7 @@ public class AudioManager : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("Sound not found in the library.");
+            Debug.LogWarning("Sound " + name + " not found in the library.");
         }
     }
 
