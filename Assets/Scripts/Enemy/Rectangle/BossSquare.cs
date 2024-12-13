@@ -20,6 +20,17 @@ public class BossSquare : EnemyBase, IHasDeadEvent
 
     public event System.Action DeadEvent = null;
 
+    public string AlertSound = "Alert13";
+    public string ExplosionSound = "explosion_21";
+    public string LaserAlertSound = "Alert07";
+    public string SummonSound = "Pickup_01";
+    public string JumpSound = "jump_13";
+    public string SizeChangeSound = "powerup_36";
+    public string TeleportSound = "powerup_43";
+    public string PrisonSummonSound = "hit_1";
+    public string DashSound = "explosion_12";
+    public string DestroySound = "Shoot17";
+
     protected override void Start()
     {
         base.Start();
@@ -69,18 +80,24 @@ public class BossSquare : EnemyBase, IHasDeadEvent
         Vector3 targetPosition = PlayerController.Instance.transform.position;
         rb.velocity = Vector2.zero;
         IsAttacking = true;
+
+        AudioManager.PlaySound(JumpSound);
         rb.AddForce(new Vector2(0, jumpPower), ForceMode2D.Impulse);
         yield return new WaitForSeconds(0.5f);
         rb.AddForce(new Vector2(0, -jumpPower * 2f), ForceMode2D.Impulse);
+        AudioManager.PlaySound(ExplosionSound);
         yield return new WaitWhile(() => Mathf.Abs(rb.velocity.y) > 0.5f);
         IsAttacking = false;
 
         yield return new WaitForSeconds(1f);
 
         Debug.Log("Summon Mini Squares");
+        AudioManager.PlaySound(SummonSound);
         Instantiate(miniSquarePrefab, miniSquareSpawnPoint.position, Quaternion.identity);
+        
         yield return new WaitForSeconds(0.2f);
-        Instantiate(miniSquarePrefab, miniSquareSpawnPoint.position, Quaternion.identity);
+        AudioManager.PlaySound(SummonSound);
+        Instantiate(miniSquarePrefab, miniSquareSpawnPoint.position, Quaternion.identity);   
     }
 
     private IEnumerator TransformAttack()
@@ -91,6 +108,7 @@ public class BossSquare : EnemyBase, IHasDeadEvent
         Vector3 bigScale = new Vector3(originalScale.x * 8f, originalScale.y, originalScale.z);
 
         rb.velocity = Vector2.zero;
+        AudioManager.PlaySound(JumpSound);
         rb.AddForce(Vector2.up * jumpPower * 2f, ForceMode2D.Impulse);
 
         yield return new WaitForSeconds(0.2f);
@@ -98,6 +116,7 @@ public class BossSquare : EnemyBase, IHasDeadEvent
         
         float time = 0;
         rb.gravityScale = 0;
+        AudioManager.PlaySound(SizeChangeSound);
         while (time < 0.5f)
         {
             transform.localScale = Vector3.Lerp(transform.localScale, bigScale, 0.03f);
@@ -108,11 +127,13 @@ public class BossSquare : EnemyBase, IHasDeadEvent
         IsAttacking = true;
         rb.gravityScale = 1;
         rb.AddForce(Vector2.down * jumpPower * 5f, ForceMode2D.Impulse);
+        AudioManager.PlaySound(ExplosionSound);
         yield return new WaitForSeconds(0.2f);
         yield return new WaitWhile(() => Mathf.Abs(rb.velocity.y) > 0.5f);
         yield return new WaitForSeconds(0.5f);
 
         time = 0;
+        AudioManager.PlaySound(SizeChangeSound);
         while (time < 0.5f)
         {
             transform.localScale = Vector3.Lerp(transform.localScale, originalScale, 0.02f);
@@ -129,12 +150,14 @@ public class BossSquare : EnemyBase, IHasDeadEvent
     private IEnumerator TeleportAttack()
     {
         Debug.Log("Teleporting and Summoning Mini Squares");
-
+        AudioManager.PlaySound(SummonSound);
         for (int i = 0; i < 4; i++)
         {
             Instantiate(miniSquarePrefab, miniSquareSpawnPoint.position, Quaternion.identity);
             yield return new WaitForSeconds(0.3f);
         }
+
+        AudioManager.PlaySound(SummonSound);
         Instantiate(rightTriangle, miniSquareSpawnPoint.position, Quaternion.identity);
         var tri = Instantiate(rightTriangle, miniSquareSpawnPoint.position, Quaternion.identity);
         tri.transform.rotation = Quaternion.Euler(0, 0, 180);
@@ -142,6 +165,7 @@ public class BossSquare : EnemyBase, IHasDeadEvent
         Sprite sprite = spriteRenderer.sprite;
         spriteRenderer.sprite = brickSprite;
 
+        AudioManager.PlaySound(TeleportSound);
         Transform targetPoint = teleportPoints[Random.Range(0, teleportPoints.Length)];
         transform.position = targetPoint.position;
         rb.constraints = RigidbodyConstraints2D.FreezeAll;
@@ -156,9 +180,11 @@ public class BossSquare : EnemyBase, IHasDeadEvent
     private IEnumerator TrapPlayer()
     {
         Debug.Log("Trapping Player");
-
+        AudioManager.PlaySound(AlertSound);
+        yield return new WaitForSeconds(0.5f);
         Vector3 playerPosition = PlayerController.Instance.GetShapeTransform().position;
 
+        AudioManager.PlaySound(PrisonSummonSound);
         Prison prison = Instantiate(prisonPrefab, playerPosition, Quaternion.identity);
         Transform[] pts = prison.points;
 
@@ -176,10 +202,12 @@ public class BossSquare : EnemyBase, IHasDeadEvent
             }
             float time = 0;
 
+            AudioManager.PlaySound(LaserAlertSound);
             line.SetPosition(0, transform.position);
             line.SetPosition(1, target);
             yield return new WaitForSeconds(0.7f);
 
+            AudioManager.PlaySound(DashSound);
             while (time < 0.2f)
             {
                 transform.position = Vector3.Lerp(transform.position, target, 0.04f);
@@ -191,6 +219,7 @@ public class BossSquare : EnemyBase, IHasDeadEvent
         IsAttacking = false;
         rb.gravityScale = 1;
 
+        AudioManager.PlaySound(DestroySound);
         Destroy(prison.gameObject);
     }
 

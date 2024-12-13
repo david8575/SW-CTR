@@ -1805,6 +1805,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0082ffa801369434b8618056a04a070d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  collectSound: coin_11
 --- !u!68 &324198380
 EdgeCollider2D:
   m_ObjectHideFlags: 0
@@ -5897,6 +5898,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2022514337900435192, guid: e275c2c6709b7114faa548ada140ca42, type: 3}
+      propertyPath: soundClips.Array.size
+      value: 26
+      objectReference: {fileID: 0}
+    - target: {fileID: 2022514337900435192, guid: e275c2c6709b7114faa548ada140ca42, type: 3}
+      propertyPath: soundClips.Array.data[25]
+      value: 
+      objectReference: {fileID: 8300000, guid: d4d38de8d2e3f4e6dad05bf45911b20d, type: 3}
     - target: {fileID: 2402104816812934122, guid: e275c2c6709b7114faa548ada140ca42, type: 3}
       propertyPath: m_Name
       value: GameManager
@@ -7240,7 +7249,7 @@ Transform:
   m_GameObject: {fileID: 1632973384}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.4892645, y: -6.1413984, z: -10}
+  m_LocalPosition: {x: 2.8244953, y: -6.1443925, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

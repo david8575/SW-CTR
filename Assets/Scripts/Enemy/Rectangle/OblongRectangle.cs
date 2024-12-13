@@ -8,6 +8,10 @@ public class OblongRectangle : EnemyBase
     public float slamForce = 20f;
     private Vector3 originalScale;
 
+    public string DashSound = "Shoot17";
+    public string JumpSound = "jump_6";
+    public string ScaleChangeSound = "powerup_36";
+
     protected override void Start()
     {
         base.Start();
@@ -34,14 +38,17 @@ public class OblongRectangle : EnemyBase
         }
 
         Vector2 jumpDirection = new Vector2(0, 1);
+        AudioManager.PlaySound(JumpSound);
         rb.AddForce(jumpDirection * jumpForce, ForceMode2D.Impulse);
 
+        AudioManager.PlaySound(ScaleChangeSound);
         transform.localScale = new Vector3(originalScale.x * 2, originalScale.y, originalScale.z);
 
         yield return new WaitForSeconds(0.5f);
 
         IsAttacking = true;
         Vector2 slamDirection = new Vector2(0, -1);
+        AudioManager.PlaySound(DashSound);
         rb.AddForce(slamDirection * slamForce, ForceMode2D.Impulse);
 
         yield return new WaitForSeconds(0.5f);
