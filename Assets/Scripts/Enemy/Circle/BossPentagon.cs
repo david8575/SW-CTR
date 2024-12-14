@@ -14,6 +14,13 @@ public class BossPentagon : EnemyBase
     [Header("Missile Settings")]
     public Transform missileSpawnPoint;
 
+    public string SummonSound = "Pickup_01";
+    public string SummonSound2 = "Pickup_00";
+    public string JumpSound = "jump_13";
+    public string DashSound = "Shoot17";
+    public string DashSound2 = "explosion_12";
+    public string MissileSound = "Hit7";
+
     protected override IEnumerator Attack()
     {
         int randomAttack = Random.Range(1, 6); // 1~5 랜덤 선택
@@ -42,6 +49,8 @@ public class BossPentagon : EnemyBase
     private IEnumerator RushAttack()
     {
         Vector2 direction = (player.position - transform.position).normalized;
+
+        AudioManager.PlaySound(DashSound);
         rb.AddForce(direction * moveSpeed * 10f, ForceMode2D.Impulse);
         yield return new WaitForSeconds(0.5f);
         rb.velocity = Vector2.zero;
@@ -49,6 +58,7 @@ public class BossPentagon : EnemyBase
 
     private IEnumerator SummonMiniPentagons()
     {
+        AudioManager.PlaySound(SummonSound);
         for (int i = 0; i < 3; i++)
         {
             Instantiate(miniPentagonPrefab, transform.position + (Vector3)(Random.insideUnitCircle * 2f), Quaternion.identity);
@@ -59,6 +69,7 @@ public class BossPentagon : EnemyBase
     private IEnumerator StrongRushAttack()
     {
         Vector2 direction = (player.position - transform.position).normalized;
+        AudioManager.PlaySound(DashSound2);
         rb.AddForce(direction * moveSpeed * 20f, ForceMode2D.Impulse);
 
         for (int i = 0; i < 5; i++) // 벽에 튕기는 효과
@@ -75,6 +86,7 @@ public class BossPentagon : EnemyBase
     {
         for (int i = 0; i < 5; i++) // 5개의 미사일 발사
     {
+        AudioManager.PlaySound(MissileSound);
         // 미사일 생성
         GameObject missile = Instantiate(missilePrefab, missileSpawnPoint.position, Quaternion.identity);
         
@@ -89,8 +101,10 @@ public class BossPentagon : EnemyBase
 
     private IEnumerator SummonShapes()
     {
+        AudioManager.PlaySound(SummonSound2);
         Instantiate(trianglePrefab, transform.position + Vector3.left * 2, Quaternion.identity);
         yield return new WaitForSeconds(0.5f);
+        AudioManager.PlaySound(SummonSound2);
         Instantiate(squarePrefab, transform.position + Vector3.right * 2, Quaternion.identity);
     }
 }

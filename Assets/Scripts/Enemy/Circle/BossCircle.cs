@@ -36,6 +36,18 @@ public class BossCircle : EnemyBase, IHasDeadEvent
 
     public event System.Action DeadEvent;
 
+    public string AlertSound = "Alert13";
+    public string ExplosionSound = "explosion_21";
+    public string LaserAlertSound = "Alert07";
+    public string LaserSound = "laser_shot_8";
+    public string LaserSound2 = "laser_shot_12";
+    public string SummonSound = "Pickup_00";
+    public string TeleportSound = "Shoot04";
+    public string DashSound = "explosion_12";
+    public string SizeUpSound = "powerup_36";
+    public string MissileSound = "Shoot20";
+    public string ChargeSound = "Machine22";
+
     protected override void Start()
     {
         base.Start();
@@ -94,6 +106,7 @@ public class BossCircle : EnemyBase, IHasDeadEvent
     {
         Debug.Log("Summoning random enemy and Wait");
         GameObject randomEnemy = enemyPrefabs[Random.Range(0, enemyPrefabs.Length)];
+        AudioManager.PlaySound(SummonSound);
         var s = Instantiate(randomEnemy, transform.position + (Vector3)Random.insideUnitCircle * 2f, Quaternion.identity);
         s.layer = layerNumber;
         yield return new WaitForSeconds(0.3f);
@@ -102,9 +115,10 @@ public class BossCircle : EnemyBase, IHasDeadEvent
     private IEnumerator GrowAtCenter()
     {
         Debug.Log("Growing at center");
-        
+        AudioManager.PlaySound(TeleportSound);
         yield return StartCoroutine(GoCenter());
         attackWarning.position = mapCenter.position;
+        AudioManager.PlaySound(AlertSound);
         attackWarning.gameObject.SetActive(true);
         yield return new WaitForSeconds(1.5f);
 
@@ -113,6 +127,7 @@ public class BossCircle : EnemyBase, IHasDeadEvent
         IsAttacking = true;
         attackImage.SetActive(false);
         // 커지면서 등장
+        AudioManager.PlaySound(SizeUpSound);
         while (alp < 1)
         {
             alp += Time.deltaTime;
@@ -139,6 +154,7 @@ public class BossCircle : EnemyBase, IHasDeadEvent
     private IEnumerator TransformAndShoot()
     {
         Debug.Log("TransformAndShoot");
+        AudioManager.PlaySound(TeleportSound);
         yield return StartCoroutine(GoCenter());
         yield return new WaitForSeconds(0.5f);
         float alp = 0;
@@ -155,6 +171,7 @@ public class BossCircle : EnemyBase, IHasDeadEvent
         for (int i = 0; i < fireCount; i++)
         {
             var missile = Instantiate(missilePrefab, lineRenderer.movingTaget.transform.position, Quaternion.identity);
+            AudioManager.PlaySound(MissileSound);
             yield return new WaitForSeconds(0.3f);
         }
 
@@ -166,7 +183,8 @@ public class BossCircle : EnemyBase, IHasDeadEvent
     private IEnumerator TransformAndLaser()
     {
         Debug.Log("TransformAndLaser");
-        
+
+        AudioManager.PlaySound(TeleportSound);
         yield return StartCoroutine(GoCenter());
         yield return new WaitForSeconds(0.5f);
 
@@ -182,6 +200,7 @@ public class BossCircle : EnemyBase, IHasDeadEvent
 
 
         // 레이저 발사
+        AudioManager.PlaySound(LaserSound);
         for (int i = 0; i < laserPrefab.Length; i++)
         {
             laserPrefab[i].gameObject.SetActive(true);
@@ -197,8 +216,9 @@ public class BossCircle : EnemyBase, IHasDeadEvent
 
         // 한바퀴 회전
         float time = 0;
+        AudioManager.PlaySound(LaserSound2);
         while (time < 3f)
-        {
+        {   
             transform.Rotate(Vector3.forward, 45 * Time.deltaTime);
             time += Time.deltaTime;
             yield return null;
@@ -222,6 +242,7 @@ public class BossCircle : EnemyBase, IHasDeadEvent
         chargeEffect.localScale = two;
         chargeEffect.gameObject.SetActive(true);
         // 차징 시작
+        AudioManager.PlaySound(ChargeSound);
         while (time < 1.5f)
         {
             time += Time.deltaTime;
@@ -230,6 +251,7 @@ public class BossCircle : EnemyBase, IHasDeadEvent
         }
         chargeEffect.gameObject.SetActive(false);
         Vector2 direction = (player.position - transform.position).normalized;
+        AudioManager.PlaySound(ExplosionSound);
         rb.AddForce(direction * moveSpeed, ForceMode2D.Impulse);
 
         time = 0;
@@ -259,6 +281,7 @@ public class BossCircle : EnemyBase, IHasDeadEvent
         targetLaser.transform.position = pos;
         Vector2 dir = (player.transform.position - transform.position).normalized;
 
+        AudioManager.PlaySound(LaserAlertSound);
         float time = 0;
         while (time < 1.0f)
         {
@@ -277,6 +300,7 @@ public class BossCircle : EnemyBase, IHasDeadEvent
 
         rb.constraints = RigidbodyConstraints2D.None;
         // 발사하기
+        AudioManager.PlaySound(DashSound);
         rb.AddForce(dir * moveSpeed * 2f, ForceMode2D.Impulse);
         IsAttacking = true;
 
