@@ -18491,6 +18491,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerController
       objectReference: {fileID: 0}
+    - target: {fileID: 2923158321109337923, guid: f7e0022c9a970d949900df099c34f468, type: 3}
+      propertyPath: IsTrueCircle
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3165607184694871868, guid: f7e0022c9a970d949900df099c34f468, type: 3}
       propertyPath: m_IsActive
       value: 1
@@ -70017,7 +70021,7 @@ Transform:
   m_GameObject: {fileID: 1526568400}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.24561214, y: -6.1154, z: -10}
+  m_LocalPosition: {x: 0.756196, y: -6.11584, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -74978,6 +74982,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0082ffa801369434b8618056a04a070d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  collectSound: coin_11
 --- !u!68 &2028965826
 EdgeCollider2D:
   m_ObjectHideFlags: 0

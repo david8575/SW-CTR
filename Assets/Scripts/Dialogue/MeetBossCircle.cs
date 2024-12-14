@@ -25,8 +25,9 @@ public class MeetBossCircle : MonoBehaviour
     public Dialogue smallCircleDialogue;
     public GameObject bigCircle;
     public GameObject smallCircle;
-    public GameObject square;
-    public GameObject triangle;
+    public GameObject enemy1;
+    public GameObject enemy2;
+    public GameObject effect;
     public int targetBuildIndex = 1; 
 
     private Queue<string> bigCircleSentences;
@@ -41,8 +42,8 @@ public class MeetBossCircle : MonoBehaviour
         smallCircleSentences = new Queue<string>();
         dialoguePanel.SetActive(false);
         fadePanel.SetActive(false);
-        square.SetActive(false);
-        triangle.SetActive(false);
+        enemy1.SetActive(false);
+        enemy2.SetActive(false);
         FadeManager.Instance.FadeOut();
 
         StartCoroutine(StartDialogueOnce());
@@ -158,13 +159,28 @@ public class MeetBossCircle : MonoBehaviour
         namePanel.SetActive(false);
 
         yield return StartCoroutine(ShrinkAndDisappear(bigCircle));
+        yield return StartCoroutine(EnlargeAndShow(enemy1));
+        yield return StartCoroutine(EnlargeAndShow(enemy2));
 
-        yield return StartCoroutine(EnlargeAndShow(square));
-        yield return StartCoroutine(EnlargeAndShow(triangle));
+        dialoguePanel.SetActive(true);
+        namePanel.SetActive(true);
+        nameText.text = smallCircleDialogue.characterName;
+        characterImage.sprite = smallCircleDialogue.characterSprite;
+
+        yield return StartCoroutine(TypeSentence("원은 무한한 각을 가지는 도형이라고....?"));
+        yield return new WaitForSeconds(1f);
+        yield return StartCoroutine(TypeSentence("어 내몸이...?"));
+        yield return new WaitForSeconds(1f);
+        
+        dialoguePanel.SetActive(false);
+        namePanel.SetActive(false);
+
+        effect.SetActive(true);
+        yield return new WaitForSeconds(1f);
 
         yield return StartCoroutine(FadeIn());
 
-        SceneManager.LoadScene(targetBuildIndex); // 빌드 인덱스로 이동
+        SceneManager.LoadScene(targetBuildIndex); 
     }
 
     IEnumerator ShrinkAndDisappear(GameObject obj)
@@ -220,3 +236,4 @@ public class MeetBossCircle : MonoBehaviour
         fadePanel.SetActive(false);
     }
 }
+

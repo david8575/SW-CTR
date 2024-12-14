@@ -89,6 +89,12 @@ public class StageBase : MonoBehaviour
             Debug.Log("Square ability unlocked");
         }
 
+        if (stageNumber == 6 && !saveData.UnlockTrueCircle)
+        {
+            saveData.UnlockTrueCircle = true;
+            Debug.Log("True Circle ability unlocked");
+        }
+
         if (saveData.Stages[stageNumber].isClear == true)
             saveData.Stages[stageNumber].bestTime = Mathf.Min(saveData.Stages[stageNumber].bestTime, StageTimer.time);
         else
