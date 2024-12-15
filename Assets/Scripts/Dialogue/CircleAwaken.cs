@@ -32,9 +32,15 @@ public class CircleAwaken : MonoBehaviour
         sentences = new Queue<string>();
         dialoguePanel.SetActive(false);
 
-        player = GameObject.FindWithTag("Player");
-
         StartDialogue();
+
+        StartCoroutine(wait());
+    }
+    IEnumerator wait()
+    {
+        yield return new WaitForSeconds(0.1f);
+        PlayerController.Instance.SetInputSystem(false);
+        PlayerController.Instance.SetShapeType(PlayerController.ShapeType.Square);
     }
 
     void Update()
@@ -104,17 +110,13 @@ public class CircleAwaken : MonoBehaviour
         dialoguePanel.SetActive(false);
         nameBox.SetActive(false);
 
-        if (player != null)
-        {
-            player.SetActive(true); 
-        }
-
         if (additionalCanvas != null)
         {
             additionalCanvas.SetActive(true); 
         }
 
         isDialogueActive = false;
+        PlayerController.Instance.SetInputSystem(true);
 
         // 10초 뒤에 다음 씬으로 넘어감
         StartCoroutine(LoadNextSceneAfterDelay(10f));

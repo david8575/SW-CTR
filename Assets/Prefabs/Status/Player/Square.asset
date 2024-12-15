@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: Square
   m_EditorClassIdentifier: 
   maxHp: 100
-  attack: 30
-  defense: 10
+  attack: 10
+  defense: 5
   speed: 3
-  cooldown: 3
-  maxSpeed: 100
+  cooldown: 5
+  maxSpeed: 50
   jumpPower: 10
   specialPower: 20

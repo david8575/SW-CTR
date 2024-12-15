@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4536956515806833036}
   - component: {fileID: 8790848995116784431}
   - component: {fileID: 5942799100914637736}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: isoscelesTriangle
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -109,6 +109,7 @@ MonoBehaviour:
   attackCoolDown: 1.5
   detectionRange: 12
   attackRange: 8
+  isDead: 0
   EnemyEnabled: 1
   healingAmount: 0
   distance: 0

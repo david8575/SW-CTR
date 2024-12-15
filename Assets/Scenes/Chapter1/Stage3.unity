@@ -455,7 +455,7 @@ Transform:
   m_GameObject: {fileID: 270569347}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 6.5256424, y: -5.676778, z: -11}
+  m_LocalPosition: {x: -0.28717995, y: -5.685319, z: -11}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5853,7 +5853,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stageNumber: 3
   clearPoint: {fileID: 0}
-  clearTime: 60
+  clearTime: 180
   puzzleClear: 0
   isBoss: 0
   stageUI: {fileID: 1939820880}

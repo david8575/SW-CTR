@@ -199,7 +199,7 @@ GameObject:
   - component: {fileID: 6970834927239286812}
   - component: {fileID: 9027073454300775867}
   - component: {fileID: 2830925071626086559}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Rhombus
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -393,6 +393,8 @@ MonoBehaviour:
   attackImage: {fileID: 6472214375116714802}
   jumpHeight: 5
   attackForce: 7
+  DashSound: Shoot17
+  JumpSound: jump_6
 --- !u!1001 &8313641513718326664
 PrefabInstance:
   m_ObjectHideFlags: 0

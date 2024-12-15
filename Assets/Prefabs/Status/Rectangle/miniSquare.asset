@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: miniSquare
   m_EditorClassIdentifier: 
   health: 10
-  attackPower: 10
+  attackPower: 7
   jumpPower: 7
   moveSpeed: 2
   defense: 0
@@ -21,3 +21,7 @@ MonoBehaviour:
   detectionRange: 100
   attackRange: 5
   healingAmount: 10
+  attackSound: jump_13
+  hitSound: hit_1
+  dieSound: explosion_2
+  volume: 0.2

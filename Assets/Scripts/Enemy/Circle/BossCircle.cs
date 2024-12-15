@@ -48,6 +48,8 @@ public class BossCircle : EnemyBase, IHasDeadEvent
     public string MissileSound = "Shoot20";
     public string ChargeSound = "Machine22";
 
+    public int DeactivateCount = 1;
+
     protected override void Start()
     {
         base.Start();
@@ -71,6 +73,13 @@ public class BossCircle : EnemyBase, IHasDeadEvent
 
     protected override IEnumerator Attack()
     {
+        if (DeactivateCount > 0)
+        {
+            DeactivateCount--;
+            yield break;
+            
+        }
+
         int randomAttack = Random.Range(25, 100); // 확률 선택
 
         if (randomAttack < 25)
@@ -107,7 +116,7 @@ public class BossCircle : EnemyBase, IHasDeadEvent
         Debug.Log("Summoning random enemy and Wait");
         GameObject randomEnemy = enemyPrefabs[Random.Range(0, enemyPrefabs.Length)];
         AudioManager.PlaySound(SummonSound);
-        var s = Instantiate(randomEnemy, transform.position + (Vector3)Random.insideUnitCircle * 2f, Quaternion.identity);
+        var s = Instantiate(randomEnemy, transform.position + Vector3.up, Quaternion.identity);
         s.layer = layerNumber;
         yield return new WaitForSeconds(0.3f);
     }
@@ -143,7 +152,7 @@ public class BossCircle : EnemyBase, IHasDeadEvent
         // 원래 크기로 돌아가기
         for (float t = 0; t < 1f; t += Time.deltaTime)
         {
-            transform.localScale = Vector3.Lerp(transform.localScale, originalScale, 0.01f);
+            transform.localScale = Vector3.Lerp(transform.localScale, originalScale, 0.02f);
             yield return null;
         }
         IsAttacking = false;

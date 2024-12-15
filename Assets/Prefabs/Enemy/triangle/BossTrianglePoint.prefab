@@ -331,7 +331,7 @@ GameObject:
   - component: {fileID: 8166607775361178623}
   - component: {fileID: 4068764920459777421}
   - component: {fileID: 5143683303909871636}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: equilateralTriangle
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -480,6 +480,8 @@ MonoBehaviour:
   AlertSound: Alert13
   ExplosionSound: 8bit_expl_short_22
   LaserAlertSound: Alert07
+  SummonSound: Pickup_01
+  LaserAttackSound: laser_shot_2
 --- !u!60 &5143683303909871636
 PolygonCollider2D:
   m_ObjectHideFlags: 0

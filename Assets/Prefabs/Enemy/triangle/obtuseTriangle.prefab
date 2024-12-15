@@ -97,7 +97,7 @@ GameObject:
   - component: {fileID: 4682016106993291138}
   - component: {fileID: 3397919282328002028}
   - component: {fileID: 2278057142998387196}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: obtuseTriangle
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -194,6 +194,7 @@ MonoBehaviour:
   attackCoolDown: 2
   detectionRange: 8
   attackRange: 5
+  isDead: 0
   EnemyEnabled: 1
   healingAmount: 0
   distance: 0

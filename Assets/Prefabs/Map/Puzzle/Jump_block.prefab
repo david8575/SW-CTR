@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 1203370981050260635}
   - component: {fileID: 4904343687922378788}
   - component: {fileID: -287441327979378981}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Jump_block
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

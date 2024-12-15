@@ -97,7 +97,7 @@ GameObject:
   - component: {fileID: 5682740472372881703}
   - component: {fileID: 7759349561942144315}
   - component: {fileID: 4526599603605536438}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: MiniPentagon
   m_TagString: Enemy
   m_Icon: {fileID: 0}

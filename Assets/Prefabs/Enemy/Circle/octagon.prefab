@@ -199,7 +199,7 @@ GameObject:
   - component: {fileID: -570215504148411323}
   - component: {fileID: 1394388883926628821}
   - component: {fileID: -3184529738877136963}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: octagon
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -357,6 +357,8 @@ MonoBehaviour:
   attackImage: {fileID: 4052177995497556392}
   normalSprite: {fileID: 21300000, guid: d239669c205d72840bbec7392f48605a, type: 3}
   poweredUpSprite: {fileID: 21300000, guid: bb1776dc57cc1a94cbe4514e6fafb4fc, type: 3}
+  DashSound: Shoot17
+  PowerUpSound: MotionTracker_Scan1
 --- !u!50 &-3184529738877136963
 Rigidbody2D:
   serializedVersion: 4

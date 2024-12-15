@@ -46,6 +46,8 @@ public abstract class EnemyBase : MonoBehaviour
     public HpBar hpBar;
     public GameObject attackImage;
 
+    public bool IsStageEnemy = true;
+
     protected virtual void Start()
     {
         SetStat();
@@ -60,7 +62,8 @@ public abstract class EnemyBase : MonoBehaviour
         if (healingAmount < 10)
             healingAmount = 10;
 
-        GameManager.Instance.EnemieCount++;
+        if (IsStageEnemy)
+            GameManager.Instance.EnemieCount++;
     }
 
     void SetStat()

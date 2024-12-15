@@ -44,6 +44,10 @@ public class DestroyWall : MonoBehaviour
                     StartCoroutine(DestroyCoroutine(boostedVelocity, playerRb));
                 }
             }
+            else
+            {
+                PlayerController.Instance.canJump = true;
+            }
         }
     }
 

@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ff80b3ec1766ce4888fd5caaf79489c, type: 3}
   m_Name: TrueCircle
   m_EditorClassIdentifier: 
-  maxHp: 1000
-  attack: 50
-  defense: 0
+  maxHp: 200
+  attack: 30
+  defense: 2
   speed: 10
-  cooldown: 1
+  cooldown: 2
   maxSpeed: 100
   jumpPower: 10
-  specialPower: 30
+  specialPower: 25

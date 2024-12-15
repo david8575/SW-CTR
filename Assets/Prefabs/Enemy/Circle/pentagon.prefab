@@ -199,7 +199,7 @@ GameObject:
   - component: {fileID: -3422536628540326559}
   - component: {fileID: 4503862292670973546}
   - component: {fileID: 9135666692735537969}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: pentagon
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -385,6 +385,12 @@ MonoBehaviour:
   missilePrefab: {fileID: 2878925395404246839, guid: 33ad6af328b6ed04495ac84d87087fcc, type: 3}
   cornerPositions: []
   missileSpawnPoint: {fileID: 3236855727375929308, guid: 7e87ffe8c1ee8c449a47499ec8dd9bf0, type: 3}
+  SummonSound: Pickup_01
+  SummonSound2: Pickup_00
+  JumpSound: jump_13
+  DashSound: Shoot17
+  DashSound2: explosion_12
+  MissileSound: Hit7
 --- !u!1001 &7191868234867652686
 PrefabInstance:
   m_ObjectHideFlags: 0

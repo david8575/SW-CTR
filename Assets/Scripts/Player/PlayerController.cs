@@ -78,8 +78,8 @@ public class PlayerController : MonoBehaviour
     public enum ShapeType
     {
         Circle = 0,
-        Square,
-        Triangle
+        Triangle,
+        Square
     }
 
     public CinemachineVirtualCamera vcam;
@@ -99,8 +99,8 @@ public class PlayerController : MonoBehaviour
         playerInputActions.PlayerActions.Jump.performed += OnJump;
 
         playerInputActions.PlayerActions.ChangeCircle.performed += (x) => SetShapeType(ShapeType.Circle);
-        playerInputActions.PlayerActions.ChangeSquare.performed += (x) => SetShapeType(ShapeType.Triangle);
-        playerInputActions.PlayerActions.ChangeTriangle.performed += (x) => SetShapeType(ShapeType.Square);
+        playerInputActions.PlayerActions.ChangeSquare.performed += (x) => SetShapeType(ShapeType.Square);
+        playerInputActions.PlayerActions.ChangeTriangle.performed += (x) => SetShapeType(ShapeType.Triangle);
 
         playerInputActions.PlayerActions.Special.started += OnSpecialStarted;
         playerInputActions.PlayerActions.Special.canceled += OnSpecialCanceled;
@@ -140,10 +140,10 @@ public class PlayerController : MonoBehaviour
     void SetStat()
     {
         GameData data = DataManager.Instance.SaveData;
-        attack += attack * ((float)data.attackStat / GameData.maxStatPoint);
-        defense += defense * ((float)data.defenseStat / GameData.maxStatPoint);
-        speed += speed * ((float)data.speedStat / GameData.maxStatPoint);
-        cooldown -= cooldown * ((float)data.cooldownStat / GameData.maxStatPoint);
+        attack = attack + attack * ((float)data.attackStat / GameData.maxStatPoint);
+        defense = defense + data.defenseStat;
+        speed = speed + speed * ((float)data.speedStat / GameData.maxStatPoint);
+        cooldown = cooldown - cooldown * ((float)data.cooldownStat / GameData.maxStatPoint);
 
         if (cooldown < 0.1f)
             cooldown = 0.1f;
@@ -343,6 +343,15 @@ public class PlayerController : MonoBehaviour
 
         StartCoroutine(ShapeInfo.Invincible(1.0f));
 
+        if (damage > defense)
+        {
+            damage -= defense;
+        }
+        else
+        {
+            damage = 1;
+        }
+
         hp -= damage;
         if (hp <= 0)
         {
@@ -354,6 +363,7 @@ public class PlayerController : MonoBehaviour
 
     public void Heal(float heal)
     {
+        heal += heal * ((float)DataManager.Instance.SaveData.healthStat / GameData.maxStatPoint);
         hp += heal;
         if (hp > maxHp)
             hp = maxHp;

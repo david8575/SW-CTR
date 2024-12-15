@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
 using UnityEngine.SceneManagement;
+using System;
 
 public interface IHasDeadEvent
 {
@@ -13,6 +14,7 @@ public class StageT3Manager : StageBase
 {
     public CinemachineVirtualCamera bossCam;
     public GameObject bossTriangle;
+    public bool AddBossToDeadEvent = true;
 
     protected override void Awake()
     {
@@ -20,9 +22,15 @@ public class StageT3Manager : StageBase
 
         isBoss = true;
 
-        bossTriangle.transform.GetChild(0).GetComponent<IHasDeadEvent>().DeadEvent += StageClear;
+        if (AddBossToDeadEvent)
+            AddBossDeadEvent(StageClear);
 
         StartCoroutine(StartCutscene());
+    }
+
+    public void AddBossDeadEvent(Action addFunc)
+    {
+        bossTriangle.transform.GetChild(0).GetComponent<IHasDeadEvent>().DeadEvent += addFunc;
     }
 
     IEnumerator StartCutscene()

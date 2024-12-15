@@ -97,7 +97,7 @@ GameObject:
   - component: {fileID: -406550764748794076}
   - component: {fileID: 3813602736150487252}
   - component: {fileID: 498431187898900006}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: miniTriangle
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -193,6 +193,7 @@ MonoBehaviour:
   attackCoolDown: 1.5
   detectionRange: 100
   attackRange: 4
+  isDead: 0
   EnemyEnabled: 1
   healingAmount: 0
   distance: 0

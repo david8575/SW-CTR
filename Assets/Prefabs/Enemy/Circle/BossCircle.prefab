@@ -751,7 +751,7 @@ GameObject:
   - component: {fileID: 1054705504266095030}
   - component: {fileID: 942712560237503274}
   - component: {fileID: 4106390514750937466}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: BossCircleObject
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -859,6 +859,7 @@ MonoBehaviour:
   distance: 0
   hpBar: {fileID: 3921555799469130467}
   attackImage: {fileID: 8222476949557196194}
+  IsStageEnemy: 1
   enemyPrefabs:
   - {fileID: 7147933750946490294, guid: 61caaef006bacf046ba30c14c2ffd735, type: 3}
   - {fileID: 4523145390560691120, guid: e8537e8614daeb14da23ab283443252a, type: 3}
@@ -883,6 +884,18 @@ MonoBehaviour:
   mapCenter: {fileID: 5923420108296608488}
   missilePrefab: {fileID: 563264528702098573, guid: e5796f6561cac87438e24cf690a18976, type: 3}
   lineRenderer: {fileID: 2841813814795093228}
+  AlertSound: Alert13
+  ExplosionSound: explosion_21
+  LaserAlertSound: Alert07
+  LaserSound: laser_shot_8
+  LaserSound2: laser_shot_12
+  SummonSound: Pickup_00
+  TeleportSound: Shoot04
+  DashSound: explosion_12
+  SizeUpSound: powerup_36
+  MissileSound: Shoot20
+  ChargeSound: Machine22
+  DeactivateCount: 1
 --- !u!50 &942712560237503274
 Rigidbody2D:
   serializedVersion: 4
@@ -971,7 +984,7 @@ Transform:
   m_GameObject: {fileID: 8222476949557196194}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 1}
   m_LocalScale: {x: 0.9, y: 0.9, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

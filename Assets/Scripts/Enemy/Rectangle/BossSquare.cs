@@ -245,6 +245,7 @@ public class BossSquare : EnemyBase, IHasDeadEvent
         if (PlayerController.Instance == null)
             return;
         DeadEvent?.Invoke();
+        prisonPrefab.gameObject.SetActive(false);
         Destroy(transform.parent.gameObject);
     }
 }

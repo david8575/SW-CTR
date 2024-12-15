@@ -36,6 +36,8 @@ public class MeetBossCircle : MonoBehaviour
     private bool isTyping = false;
     private bool isDialogueActive = false;
 
+    public int stageIndex = 7;
+
     void Start()
     {
         bigCircleSentences = new Queue<string>();
@@ -179,6 +181,17 @@ public class MeetBossCircle : MonoBehaviour
         yield return new WaitForSeconds(1f);
 
         yield return StartCoroutine(FadeIn());
+
+        var data = DataManager.Instance.SaveData;
+        if (data.Stages[stageIndex].isClear == false)
+        {
+            data.Stages[stageIndex].isClear = true;
+            data.Stages[stageIndex].isPuzzleClear = true;
+            data.Stages[stageIndex].isTimeClear = true;
+            data.Stages[stageIndex].isAllKill = true;
+            data.leftStatPoint += 3;
+            DataManager.Instance.SaveGameData();
+        }
 
         SceneManager.LoadScene(targetBuildIndex); 
     }

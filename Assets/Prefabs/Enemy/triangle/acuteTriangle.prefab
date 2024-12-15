@@ -199,7 +199,7 @@ GameObject:
   - component: {fileID: 1907851122764509191}
   - component: {fileID: 5189377992017718149}
   - component: {fileID: 8642588534164542715}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: acuteTriangle
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -296,6 +296,7 @@ MonoBehaviour:
   attackCoolDown: 1
   detectionRange: 8
   attackRange: 4
+  isDead: 0
   EnemyEnabled: 1
   healingAmount: 0
   distance: 0

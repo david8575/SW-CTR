@@ -16,13 +16,24 @@ public class MainMenuManager : MonoBehaviour
     {
         if (DataManager.Instance.SaveData.IsTutorialClear == false)
         {
-            SceneManager.LoadScene(2);
+            StartCoroutine(LoadScene(2));
         }
         else
         {
-            SceneManager.LoadScene(1);
+            StartCoroutine(LoadScene(1));
         }
     }
+
+    IEnumerator LoadScene(int idx)
+    {
+        var load = SceneManager.LoadSceneAsync(idx);
+        load.allowSceneActivation = false;
+
+        yield return FadeManager.Instance.FadeIn();
+
+        load.allowSceneActivation = true;
+    }
+
     public void OnResetButton()
     {
         DataManager.Instance.RemoveGameData();

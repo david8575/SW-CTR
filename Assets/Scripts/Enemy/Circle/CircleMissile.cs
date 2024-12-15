@@ -36,7 +36,7 @@ public class CircleMissile : BulletBase
     protected override void OnTriggerEnter2D(Collider2D collision)
     {
         base.OnTriggerEnter2D(collision);
-        if (collision.gameObject.CompareTag("Bullet") == false && collision.gameObject.CompareTag("Enemy") == false)
+        if (collision.gameObject.CompareTag("Bullet") == false && collision.gameObject.CompareTag("Enemy") == false && collision.gameObject.CompareTag("Camera")== false)
         {
             gameObject.SetActive(false);
             Destroy(gameObject);

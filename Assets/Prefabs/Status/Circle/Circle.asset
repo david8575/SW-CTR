@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 305c9a3d504e9b64aa76c206c66514af, type: 3}
   m_Name: Circle
   m_EditorClassIdentifier: 
-  health: 1000
-  attackPower: 10
+  health: 3000
+  attackPower: 30
   jumpPower: 5
   moveSpeed: 50
   defense: 5
@@ -21,3 +21,7 @@ MonoBehaviour:
   detectionRange: 1000
   attackRange: 1000
   healingAmount: 0
+  attackSound: jump_13
+  hitSound: hit_1
+  dieSound: explosion_2
+  volume: 1

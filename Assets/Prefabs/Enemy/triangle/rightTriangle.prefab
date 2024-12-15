@@ -199,7 +199,7 @@ GameObject:
   - component: {fileID: 6092586016878262339}
   - component: {fileID: 8833811581672372132}
   - component: {fileID: 7824541855097891711}
-  m_Layer: 7
+  m_Layer: 8
   m_Name: rightTriangle
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -296,12 +296,14 @@ MonoBehaviour:
   attackCoolDown: 1.5
   detectionRange: 10
   attackRange: 5
+  isDead: 0
   EnemyEnabled: 1
   healingAmount: 0
   distance: 0
   hpBar: {fileID: 5124361841976638880}
   attackImage: {fileID: 4551276686728255995}
   dashSpeed: 15
+  DashSound: Shoot17
 --- !u!50 &8833811581672372132
 Rigidbody2D:
   serializedVersion: 4

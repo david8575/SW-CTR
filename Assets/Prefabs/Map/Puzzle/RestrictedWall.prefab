@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7760198239561832347}
   - component: {fileID: 6714273384452685147}
   - component: {fileID: 2334129471912179963}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: RestrictedWall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -62,7 +62,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: -0.0000019073486, y: -0.028105974}

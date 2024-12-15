@@ -61,7 +61,8 @@ public class BossPentagon : EnemyBase
         AudioManager.PlaySound(SummonSound);
         for (int i = 0; i < 3; i++)
         {
-            Instantiate(miniPentagonPrefab, transform.position + (Vector3)(Random.insideUnitCircle * 2f), Quaternion.identity);
+            var obj = Instantiate(miniPentagonPrefab, transform.position + (Vector3)(Random.insideUnitCircle * 2f), Quaternion.identity);
+            obj.GetComponent<EnemyBase>().IsStageEnemy = false;
             yield return new WaitForSeconds(0.3f);
         }
     }
@@ -102,9 +103,11 @@ public class BossPentagon : EnemyBase
     private IEnumerator SummonShapes()
     {
         AudioManager.PlaySound(SummonSound2);
-        Instantiate(trianglePrefab, transform.position + Vector3.left * 2, Quaternion.identity);
+        var obj = Instantiate(trianglePrefab, transform.position + Vector3.left * 2, Quaternion.identity);
+        obj.GetComponent<EnemyBase>().IsStageEnemy = false;
         yield return new WaitForSeconds(0.5f);
         AudioManager.PlaySound(SummonSound2);
-        Instantiate(squarePrefab, transform.position + Vector3.right * 2, Quaternion.identity);
+        obj = Instantiate(squarePrefab, transform.position + Vector3.right * 2, Quaternion.identity);
+        obj.GetComponent<EnemyBase>().IsStageEnemy = false;
     }
 }

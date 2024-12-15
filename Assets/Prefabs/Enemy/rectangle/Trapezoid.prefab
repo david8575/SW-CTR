@@ -97,7 +97,7 @@ GameObject:
   - component: {fileID: 7162381304184331699}
   - component: {fileID: -2949334151929785685}
   - component: {fileID: -4801358946425535592}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Trapezoid
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -283,6 +283,7 @@ MonoBehaviour:
   attackImage: {fileID: 2965990602798016527}
   jumpForce: 10
   slamForce: 20
+  JumpSound: jump_13
 --- !u!1 &4054213758973859295
 GameObject:
   m_ObjectHideFlags: 0

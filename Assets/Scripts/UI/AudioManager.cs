@@ -25,7 +25,8 @@ public class AudioManager : MonoBehaviour
 
         foreach (var clip in soundClips)
         {
-            soundLibrary.Add(clip.name, clip);
+            if (soundLibrary.ContainsKey(clip.name) == false)
+                soundLibrary.Add(clip.name, clip);
         }
     }
 

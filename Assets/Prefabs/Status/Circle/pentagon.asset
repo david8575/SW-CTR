@@ -12,11 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 305c9a3d504e9b64aa76c206c66514af, type: 3}
   m_Name: pentagon
   m_EditorClassIdentifier: 
-  health: 100
-  attackPower: 10
+  health: 500
+  attackPower: 50
   jumpPower: 5
   moveSpeed: 2
   defense: 5
   attackCoolDown: 1.5
-  detectionRange: 9
-  attackRange: 5
+  detectionRange: 100
+  attackRange: 10
+  healingAmount: 0
+  attackSound: jump_13
+  hitSound: hit_1
+  dieSound: explosion_2
+  volume: 1

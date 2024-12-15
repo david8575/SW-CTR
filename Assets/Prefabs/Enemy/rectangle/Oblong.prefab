@@ -199,7 +199,7 @@ GameObject:
   - component: {fileID: -1911121898159929291}
   - component: {fileID: -5208556634578815204}
   - component: {fileID: -4969152574598457642}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Oblong
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -380,6 +380,9 @@ MonoBehaviour:
   attackImage: {fileID: 6655450158761861167}
   jumpForce: 10
   slamForce: 20
+  DashSound: Shoot17
+  JumpSound: jump_6
+  ScaleChangeSound: powerup_36
 --- !u!1001 &3380275472194471557
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -1538,6 +1538,7 @@ MonoBehaviour:
   enemy2: {fileID: 178334446}
   effect: {fileID: 1406405206}
   targetBuildIndex: 1
+  stageIndex: 7
 --- !u!1 &693712841
 GameObject:
   m_ObjectHideFlags: 0

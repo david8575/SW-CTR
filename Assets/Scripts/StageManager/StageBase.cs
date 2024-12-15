@@ -69,7 +69,7 @@ public class StageBase : MonoBehaviour
         {
             GameManager.Instance.CollectStar();
             stageUI.puzzleText.text = "Boss Clear";
-            startinfo = new bool[] { true, true, true };
+            startinfo = new bool[] { true, true, StageTimer.time < clearTime, };
         }
         else
         { 

@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -7,16 +8,11 @@ public class SceneTransition : MonoBehaviour
 
     private void Start()
     {
-        InvokeRepeating(nameof(CheckEnemies), checkInterval, checkInterval);
+        FindObjectOfType<StageT3Manager>().AddBossDeadEvent(GoToEnding);
     }
 
-    private void CheckEnemies()
+    private void GoToEnding()
     {
-        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
-
-        if (enemies.Length == 0)
-        {
-            SceneManager.LoadScene(14);
-        }
+        SceneManager.LoadScene(14);
     }
 }
