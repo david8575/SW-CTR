@@ -3,18 +3,24 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Ground
+  - Enemy
+  - Bullet
+  - Star
+  - telepoint
+  - Camera
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Invinsible
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
+  - Wall
+  - IgnoreAll
+  - Enemy
+  - OnlyPlayer
   - 
   - 
   - 
